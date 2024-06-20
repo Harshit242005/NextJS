@@ -1,0 +1,112 @@
+.membersOptions
+{
+    width: 500px;
+    height: 400px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.316);
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 999;
+    position: absolute;
+    left: 35%;
+    top: 10%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.searchBar
+{
+    width: 400px;
+    height: 50px;
+    background-color: white;
+    text-align: left;
+    padding-left: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.searchBar:focus
+{
+    outline: none;
+}
+
+.closeButton
+{
+    width: 400px;
+    height: 50px;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.closeButton:focus
+{
+    outline: none;
+}
+
+.membersList
+{
+    height: 250px;
+    overflow-y: auto;
+    scroll-behavior: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.membersList::-webkit-scrollbar {
+    display: none;
+}
+
+.memberTile
+{
+    display: flex;
+    flex-direction: row;
+    align-items:  center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.227);
+    border-radius: 5px;
+    gap: 10px;
+    width: 400px;
+    height: fit-content;
+    padding: 5px;
+}
+
+.memberTileData
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: last baseline;
+    align-items: center;
+    gap: 10px;
+}
+
+.selectedUser
+{
+    background-color: black;
+    color: white;
+}
+
+.memberName
+{
+    font-weight: 400;
+    font-size: 16px;
+    margin-top: 15px;
+    font-family: 'ReadexPro';
+}
+
+.memberImage
+{
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+}

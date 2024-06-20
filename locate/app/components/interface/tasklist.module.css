@@ -1,0 +1,107 @@
+.TaskList
+{
+    width: 800px;
+    height: 400px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    border-radius: 10px;
+
+    position: absolute;
+    top: 16%;
+    left: 22.5%;
+}
+
+.TaskListHeader
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: last baseline;
+    align-items: last baseline;
+    gap: 575px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    
+}
+
+.taskListHeading
+{
+    font-family: 'ReadexPro';
+    font-size: 18px;
+    padding-left: 10px;
+    font-weight: 400;
+}
+
+.closeTaskListButton
+{
+    background-color: black;
+    border: none;
+    border-top-right-radius: 10px;
+    height: fit-content;
+    width: 100px;
+    margin-left: 15px;
+    height: 55px;
+}
+
+.taskColumn
+{
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    height: 200px;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: auto;
+    
+}
+
+.taskColumn::-webkit-scrollbar
+{
+    display: none;
+}
+
+.tasks
+{
+    display: flex;
+    flex-direction: row;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    padding-left: 10px;
+    justify-content: center;
+    align-items: last baseline;
+    padding-right: 10px;
+    gap: 600px;
+    overflow-x: auto;
+    scroll-behavior: auto;
+    background-color: #F7F7F7;
+}
+
+.CompletedTasks
+{
+    display: flex;
+    flex-direction: row;
+    border-top: 1px solid rgba(0, 0, 0, 0.50);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.50);
+    padding-left: 10px;
+    justify-content: center;
+    align-items: last baseline;
+    padding-right: 10px;
+    gap: 600px;
+    overflow-x: auto;
+    scroll-behavior: auto;
+    background-color: #5fff7f;
+}
+
+.taskHeading
+{
+    font-family: 'ReadexPro';
+    margin-top: 12.5px;
+    font-weight: 400;
+}
+
+.taskDeadline {
+    font-family: 'ReadexPro';
+    margin-top: 12.5px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.468);
+}

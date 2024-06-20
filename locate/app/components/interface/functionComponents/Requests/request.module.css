@@ -1,0 +1,80 @@
+.heading
+{
+    font-family: 'ReadexPro';
+    font-size: 20px;
+    font-weight: 400;
+
+}
+
+.requests
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10;
+    height: 400px;
+    max-height: 400px;
+    justify-content: left;
+    align-items: center;
+    overflow-y: auto;
+    scroll-behavior: auto;
+}
+
+.requests::-webkit-scrollbar
+{
+    display: none;
+}
+
+.requestMemberData
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
+
+.buttons
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.button
+{
+    width: 150px;
+    height: 50px;
+    background-color: transparent;
+    color: black;
+    font-family: 'ReadexPro';
+    transition: 0.3s;
+    border: 1px solid rgba(0, 0, 0, 0.396);
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.button:hover
+{
+    background-color: black;
+    color: white;
+}
+
+.requestData
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.requestName
+{
+    font-family: 'ReadexPro';
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 10px;
+}

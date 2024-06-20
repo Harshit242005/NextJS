@@ -1,0 +1,165 @@
+.messageinputBox
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.sendChatButton
+{
+    width: fit-content;
+    height: fit-content;
+    padding: 7px;
+    border: 1px solid #D99BFF;
+    background-color: transparent;
+    border-radius: 50%;
+}
+
+.sendChatButton:focus
+{
+    outline: none;
+}
+
+.chatMessageInput
+{
+    height: 60px;
+    width: 1000px;
+    font-family: 'ReadexPro';
+    color: rgba(0, 0, 0, 0.75);
+    padding-left: 20px;
+    border-radius: 30px;
+    font-weight: 400;
+    font-size: 16px;
+    border: 1px solid #D99BFF;
+}
+
+.chatMessageInput::placeholder
+{
+    color: rgba(0, 0, 0, 0.50);
+    font-size: 18px;
+    font-weight: 100;
+    padding-left: 10px;
+}
+
+.chatMessageInput:focus
+{
+    outline: none;
+}
+
+.body
+{
+    height: 100%;
+    max-height: 100%;
+    overflow-y: hidden;
+    scroll-behavior: auto;
+}
+
+/* .messageBox
+{
+    height: 375px;
+    max-height: 375px;
+    overflow: hidden;
+    scroll-behavior: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+ 
+}
+
+.messageBox::-webkit-scrollbar
+{
+    display: none;
+} */
+
+.messageBox {
+    height: 375px;
+    max-height: 375px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.messageBox::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+
+.myMessage
+{
+    background-color: black;
+    color: white;
+    width: 250px;
+    height: fit-content;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+    position: relative;
+    text-align: right;
+    margin-left: 850px;
+   
+}
+
+.highlightMessage
+{
+    background-color: #dbdbdb74;
+    color: black;
+}
+
+.otherMessage
+{
+    background-color: #dbdbdb74;
+    color: black;
+    text-align: left;
+    width: 250px;
+    height: fit-content;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+}
+
+.chatMessageData
+{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.myChatMessageData
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    gap: 10px;
+    margin-top: -10px;
+}
+
+.otherPersonImage
+{
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    margin-top: -10px;
+}
+
+
+.dateHeader
+{
+    font-family: 'ReadexPro';
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+}

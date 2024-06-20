@@ -1,0 +1,20 @@
+
+.signupButton
+{
+  cursor: pointer;
+  position: relative;
+  top: 100px;
+  width: 250px;
+  height: 50px;
+  font-weight: 600;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.518);
+  border-radius: 5px;
+  font-family: 'ReadexPro';
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+

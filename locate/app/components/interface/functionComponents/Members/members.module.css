@@ -1,0 +1,524 @@
+
+
+.members
+{
+    display: flex;
+    flex-direction: column;
+    
+    gap: 10px;
+    height: 100%;
+    max-height: 100%;
+   
+}
+
+.ChatInterface {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    max-height: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: hidden; 
+}
+
+.LeftContainer {
+    width: 20%;
+    height: 100vh;
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
+    max-height: 100%; /* Ensure this is set for proper scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.LeftContainer::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.RightContainer {
+    width: 80%; /* Adjust width to ensure it takes the remaining space */
+    display: flex;
+    height: 100vh;
+    max-height: 100vh;
+    flex-direction: column;
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+}
+
+.RightContainer::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.chatBox {
+    height: 73vh;
+    max-height: 73vh;
+    width: 100%;
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+}
+
+.chatBox::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.chatReferenceCreated {
+    height: 80%;
+    max-height: 80%;
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+}
+
+.chatReferenceCreated::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+
+.chatInput
+{
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 100%;
+}
+
+.chatInputReference
+{
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 100%;
+}
+
+
+.activeChat
+{
+    background-color: #F2F2F2;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.active{
+    width: 15px;
+    height: 15px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgb(87, 255, 87);
+    margin-left: -10px;
+}
+
+.inactive {
+    width: 15px;
+    height: 15px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgb(223, 222, 222);;
+    margin-left: -10px;
+}
+
+.userImage
+{
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    z-index: 999;
+}
+
+
+.MemberRow
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items:  center;
+    gap: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.memberData
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items:  center;
+    gap: 25px;
+    
+  
+}
+
+.userStatusRow
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: last baseline;
+    
+}
+
+.userName
+{
+    font-family: 'ReadexPro';
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 15px;
+    color: rgba(0, 0, 0, 0.435);
+}
+
+
+.chatButton
+{
+    border: none;
+    width: 100%;
+    height: 50px;
+    font-family: 'ReadexPro';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.chatMessageInputBox
+{
+    width: 800px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    padding-left: 10px;
+    font-family: 'ReadexPro';
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.chatMessageInputBox::placeholder
+{
+    font-family: 'ReadexPro';
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.chatMessageInputBox:focus
+{
+    outline: none;
+}
+
+.sendChatButton
+{
+    width: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: transparent;
+    text-align: center;
+    height: 50px;
+    font-family: 'ReadexPro';
+}
+
+.sendChatButton:focus
+{
+    outline: none;
+}
+
+
+/* reference manager */
+.chatMessageReference
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.referenceData
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.referenceDiv
+{
+    background-color: #FFF3F3;
+    z-index: 999;
+    height: 50%;
+
+    display: flex;
+    flex-direction: row;
+    gap: 561px;
+}
+
+
+.referenceTaskName
+{
+    font-family: 'ReadexPro';
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.referenceTaskId
+{
+    font-family: 'ReadexPro';
+    font-size: 10px;
+    margin-top: -20px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.cancelReferenceButton
+{
+    background-color: black;
+    border: none;
+    width: 50px;
+}
+
+.cancelReferenceButton:focus
+{
+    outline: none;
+}
+
+/* Designing the styles for the group chat messages */
+.dateHeader
+{
+    text-align: center;
+    font-family: 'ReadexPro';
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+
+.myMessage
+{
+    background-color: black;
+    color: white;
+    width: 250px;
+    height: fit-content;
+    padding: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+    position: relative;
+    text-align: right;
+    margin-left: 650px;
+}
+
+
+
+
+.otherMessage
+{
+    background-color: #dbdbdb74;
+    color: black;
+    text-align: left;
+    width: 250px;
+    
+    height: fit-content;
+    /* padding: 10px; */
+    border: none;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+    margin-left: 15px;
+}
+
+.normalMessageHeader
+{
+    display: flex;
+    flex-direction: row;
+    align-items: last baseline;
+    gap: 10px;
+    justify-content: last baseline;
+}
+
+.noramlMessageHeaderImage
+{
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+}
+
+.viewedByImage
+{
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    margin-left: -10px;
+}
+
+.normalMessageBottom
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    gap: 10px;   
+}
+
+.normalMyMessageBottom
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    gap: 10px;      
+}
+
+.senderName
+{
+    font-weight: 400;
+}
+
+.messageTimestamp
+{
+    font-weight: bold;
+    font-family: 'ReadexPro';
+    margin-top: -2px;
+}
+
+.messageTimestampMyReference
+{
+    font-weight: bold;
+    font-family: 'ReadexPro';
+    margin-top: -2px;
+    color: black;
+}
+
+.viewedByImages
+{
+    display: flex;
+    flex-direction: row;
+   
+}
+
+.viewedByImagesCollection
+{
+    margin-left: 10px;
+    
+}
+
+.viewedByItem
+{
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    padding-left: 25px;
+    justify-content: left;
+    align-items: center;
+    gap: 50px;
+}
+
+.viewedByColumn
+{
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    height: 100%;
+    max-height: 100%;
+    overflow-y: hidden;
+    scroll-behavior: auto;
+}
+
+.viewedByColumn::-webkit-scrollbar
+{
+    display: none;
+}
+
+.viewedByItemName
+{
+    font-weight: 100;
+    font-family: 'ReadexPro';
+    margin-top: 15px;
+}
+
+.viewedByDiv
+{
+    width: 400px;
+    height: 250px;
+    border: 0px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
+    font-family: 'ReadexPro';
+    position: absolute;
+    background-color: white;
+    z-index: 999;
+    left: 45%;
+    top: 25%;
+}
+
+.viewedByDivHeader
+{
+    height: 20%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    display: flex;
+    padding-left: 10px;
+    flex-direction: row;
+    justify-content: left;
+    align-items: baseline;
+    gap: 253px;
+}
+
+.viewedByItemImage
+{
+    border: none;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+}
+
+.viewedByCloseButton
+{
+    height: 100%;
+    width: 55px;
+    background-color: black;
+    border: none;
+    border-top-right-radius: 10px;
+}
+
+.viewedByCloseButton:focus
+{
+    outline: none;
+}
+
+
+
+.referenceMessageHeader
+{
+    background-color: #FFF3F3;
+    width: 100%;
+    padding: 5px;
+}
+
+.referenceMessageBottom
+{
+    background-color: white;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.referenceMessage
+{
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.referenceMessageHeader
+{
+    width: 100%;
+}
+
+.myReferenceMessage
+{
+    font-weight: 100;
+    font-family: 'ReadexPro';
+    color: black;
+    padding-right: 20px;
+    text-align: right;
+    width: 250px;
+}

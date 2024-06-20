@@ -1,0 +1,111 @@
+.creatorData
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: last baseline;
+    gap: 25px;
+}
+
+.creatorImgae
+{
+    width: 75px;
+    height: 75px;
+    border: none;
+    border-radius: 50%;
+}
+
+.taskDescription
+{
+    font-family: 'ReadexPro';
+    font-size: 17px;
+    max-width: 500px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.75);
+}
+
+.assigneeMap
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 200px;
+    max-height: 200px;
+    overflow: auto;
+    scroll-behavior: auto;
+}
+
+.assigneeMap::-webkit-scrollbar
+{
+    display: none;
+}
+
+.assigneeMapRow
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.assigneeImage
+{
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+}
+
+.assigneeButton
+{
+    background-color: black;
+    color: white;
+    font-family: 'ReadexPro';
+    font-size: 16px;
+    font-weight: 100;
+    width: 150px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+}
+
+.editButton
+{
+    background-color: black;
+    width: 150px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+    font-family: 'ReadexPro';
+}
+
+.taskButtons
+{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.finishButton
+{
+    background-color: transparent;
+    width: 150px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    text-align: center;
+    color: black;
+    font-family: 'ReadexPro';
+    transition: 0.3s;
+}
+
+.finishButton:hover
+{
+    background-color: #D99BFF;
+    border: none;
+}

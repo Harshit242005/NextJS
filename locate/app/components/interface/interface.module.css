@@ -1,0 +1,750 @@
+.profileDescription {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: last baseline;
+    padding: 10px;
+
+}
+
+.sidebarProfileImage
+{
+    width: 75px;
+    height: 75px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0px 2px 16px 0px rgb(255, 224, 224);
+}
+
+.profileImage {
+    width: 50px;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+
+.showProfile {
+    width: 600px;
+    height: 300px;
+    position: absolute;
+    left: 30%;
+    margin-top: 7%;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+   
+    color: black;
+    font-family: 'ReadexPro';
+    box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.leaveProject {
+    width: 100%;
+    border: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 50px;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    font-weight: 200;
+    font-size: 17px;
+   
+    margin-top: 115px;
+}
+
+.profileDescriptionHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    height: 20%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    width: 100%;
+    gap: 300px;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding-left: 10px;
+}
+
+.cancelButton {
+    width: 70px;
+    height: 100%;
+    border: none;
+    border-top-right-radius: 5px;
+    background-color: black;
+}
+
+.projectName {
+    font-size: 18px;
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    color: rgb(0, 0, 0);
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.108);
+    margin-top: 20px;
+    width: 170px;
+}
+
+.functionButtons {
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+
+    margin-top: 25px;
+}
+
+.functionButton {
+    width: 100%;
+    height: 50px;
+    background-color: rgb(0, 0, 0);
+    color: rgba(255, 255, 255, 0.555);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    text-align: center;
+    font-family: 'ReadexPro';
+    font-weight: normal;
+    transition: 1s;
+}
+
+.SettingButton {
+    width: 100%;
+    height: 50px;
+    background-color: white;
+    color: black;
+    border: none;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'ReadexPro';
+    font-weight: 600;
+    top: 77%;
+    
+}
+
+.SettingButtonExtra {
+    width: 100%;
+    height: 50px;
+    background-color: white;
+    color: black;
+    border: none;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'ReadexPro';
+    font-weight: 600;
+    top: 120%;
+}
+
+.clickedButton {
+    background-color: white;
+    color: black;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.243);
+    border-radius: 10px;
+    color: black;
+    width: 95%;
+    font-weight: 600;
+    transition: 1s;
+}
+
+.messageHeader {
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    width: 100%;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 0px;
+    display: flex;
+    flex-direction: row;
+}
+
+.messageImage {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    z-index: 999;
+}
+
+.messageHeaderData {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center;
+    align-items: center; */
+    gap: 10px;
+}
+
+.messageUserName {
+    font-size: 18px;
+    font-family: 'ReadexPro';
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.backButton {
+    background-color: transparent;
+    border: none;
+}
+
+.messageHeaderStatus {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    height: fit-content;
+    padding: 2px;
+    font-family: 'ReadexPro';
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+}
+
+.taskHeadingText {
+    font-size: 20px;
+    font-weight: 600;
+    text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.273);
+    margin-top: 12.5px;
+}
+
+.backButton:focus {
+    outline: none;
+}
+
+.headerBar {
+    background-color: #F1F1F1;
+    border: none;
+    width: 100%;
+    height: 10%;
+    gap: 925px;
+    border-radius: 0px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.distanceButton {
+    width: fit-content;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: fit-content;
+    background-color: #D99BFF;
+    color: black;
+    font-family: 'ReadexPro';
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+    border: none;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 1px 8px 0px rgb(255, 255, 255);
+    margin-left: 960px;
+}
+
+.ShareButton {
+    width: fit-content;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: fit-content;
+    background-color: #D99BFF;
+    color: black;
+    font-family: 'ReadexPro';
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+    border: none;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 1px 8px 0px rgb(255, 255, 255);
+}
+
+.MainContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    /* overflow: none; */
+}
+
+
+.mainBody {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    height: 100%;
+    overflow: none;
+}
+
+.sidebarColumn {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 15%;
+
+    align-items: flex-start;
+    background-color: #000000;
+    /* padding: 10px; */
+}
+
+
+
+.shareProject {
+    width: fit-content;
+    height: fit-content;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    position: absolute;
+    left: 900px;
+    top: 50px;
+}
+
+.inviteHeading {
+    font-size: 24px;
+    font-weight: 400;
+    color: black;
+    font-family: 'ReadexPro';
+}
+
+.InviteEmailSection {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 25px;
+}
+
+.InviteEmail {
+    width: 250px;
+    height: 50px;
+    font-family: 'ReadexPro';
+    padding-left: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.253);
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.InviteEmail:focus {
+    outline: none;
+}
+
+.InviteEmailButton {
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    font-family: 'ReadexPro';
+}
+
+.selectAccessLevel {
+    font-family: 'ReadexPro';
+    background-color: black;
+    color: white;
+    transition: 0.1s;
+}
+
+
+.selectAccessLevel:hover {
+    color: green;
+    background-color: black;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.selectLevel:focus {
+    outline: none;
+}
+
+
+.blurBack {
+    backdrop-filter: blur(5px);
+    /* Adjust the blur strength as needed */
+    background-color: rgba(255, 255, 255, 0.5);
+    /* Adjust the background color and opacity */
+}
+
+
+
+.successfullyInvited {
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    background-color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 80%;
+    top: -25%;
+    color: white;
+    float: right;
+    text-align: center;
+    font-family: 'ReadexPro';
+    animation: successfulInvite 1s 1;
+    z-index: 999;
+}
+
+@keyframes successfulInvite {
+    from {
+
+        top: -25%;
+        left: 80%;
+    }
+
+    to {
+
+        top: 20%;
+        left: 80%;
+        display: flex;
+    }
+}
+
+.activeMessageUser {
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    margin-left: -12px;
+    background-color: rgb(118, 255, 118);
+
+}
+
+.inactiveMessageUser {
+    width: 20px;
+    height: 20px;
+    border: none;
+    margin-left: -12px;
+    border-radius: 50%;
+    background-color: rgb(178, 178, 178);
+}
+
+.messageUserStatus {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: last baseline;
+}
+
+.userFunctions {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: left;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+
+
+.showList {
+    width: 200px;
+    height: 50px;
+    background-color: #F2F2F2;
+    border: none;
+    border-radius: 5px;
+    font-family: 'ReadexPro';
+    color: black;
+    font-weight: 200;
+    font-size: 16px;
+}
+
+
+
+.deleteButton {
+    background-color: transparent;
+    border: none;
+}
+
+
+.editTaskHeading {
+    width: 200px;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.loadComponent {
+    height: 470px;
+    max-height: 470px;
+    overflow-y: hidden;
+   
+}
+
+.messageHeaderStatus
+{
+    border: none;
+}
+
+
+/* personal profile header button */
+.personalProfile
+{
+    width: 600px;
+    height: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: white;
+    font-family: 'ReadexPro';
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 25%;
+    left: 35%;
+    border-radius: 5px;
+}
+
+.personalProfileHeader
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    gap: 275px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    height: 20%;
+}
+
+.personalProfileHeaderData
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    padding-left: 10px;
+   
+    gap: 10px;
+}
+
+.personalProfileImage
+{
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+}
+
+.personalProfileName
+{
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    margin-top: 15px;
+    width: 200px;
+}
+
+.personalProfileHeaderDeleteButton
+{
+    height: 100%;
+    background-color: black;
+    border: none;
+    width: 70px;
+    border-top-right-radius: 5px;
+}
+
+.personalDataBlock
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.personalImageChangeData
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+.changeImageIcon
+{
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-top: 50px;
+    margin-left: -25px;
+    z-index: 999;
+}
+
+.personalData
+{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.personalUserNameInput
+{
+    font-family: 'ReadexPro';
+    width: 200px;
+    height: 40px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-weight: 200;
+}
+
+.personalUserNameInput:focus
+{
+    outline: 1px solid #D99BFF;
+}
+
+.personalProfileButtons
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 50px;
+}
+
+.personalProfileButton
+{
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #D99BFF;
+    color: white;
+    text-align: center;
+    border: none;
+    font-family: 'ReadexPro';
+    box-shadow: none;
+    transition: 0.3s;
+    font-weight: 200;
+}
+
+.personalProfileButton:hover
+{
+    box-shadow: 0px 1px 10px 0px #D99BFF;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 400;
+}
+
+/* task list to show */
+.completedTask
+{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    position: absolute;
+    top: 25%;
+    left: 35%;
+    font-family: 'ReadexPro';
+    background-color: white;
+    z-index: 999;
+}
+
+.completedTaskHeader
+{
+    height: 15%;
+    display: flex;
+    flex-direction: row;
+    gap: 410px;
+    flex-direction: left;
+    align-items: center;
+    
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.taskNameDialogHeading
+{
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    padding-left: 10px;
+    margin-top: 10px;
+    width: 200px;
+}
+
+.closeCompletedTaskButton
+{
+    background-color: black;
+    border: none;
+    width: 70px;
+    height: 100%;
+    border-top-right-radius: 5px;
+}
+
+.closeCompletedTaskButton:focus
+{
+    outline: none;
+}
+
+.completedTaskNames {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    gap: 5px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+    max-height: 200px; /* Adjust this value as needed to limit the height */
+}
+
+.completedTaskNames::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+}
+
+.taskName
+{
+    font-family: 'ReadexPro';
+    font-weight: 400;
+    background-color: #e8e8e86d;
+    padding-left: 10px;
+    
+}
