@@ -3,7 +3,7 @@
 // get the uid from the context and check for the Projects array and if their exist one or not 
 import { useGlobalUidContext } from "@/app/context/uid"
 import { useGlobalProjectIdContext } from "@/app/context/projectId";
-import { collection, getDocs, getFirestore, where, addDoc, doc, query, arrayUnion, updateDoc, } from "firebase/firestore";
+import { collection, getDocs, getFirestore, where, addDoc, doc, query, arrayUnion, updateDoc, onSnapshot, } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import styles from './landing.module.css';
 import { firestore } from "@/app/firebase";
@@ -25,55 +25,42 @@ export default function landing() {
     const { projectId, projectName, setProjectId, setProjectName } = useGlobalProjectIdContext();
     console.log('uid value is', uid);
     console.log('image url is', imageUrl);
+
     const [projects, setProjects] = useState([]);
     const [userPreference, SetUserPreference] = useState('Create')
     const [projectNameCreate, setProjectNameCreate] = useState<string>('');
     const [requestsMap, setRequestsMap] = useState<RequestsMap>({});
     const [showRequest, setShowRequest] = useState<boolean>(false);
-    const [isMember, setIsMember] = useState<boolean>(false);
-    const [projectMember, setProjectMember] = useState('');
+
+   
+
     const [successfulJoinRequest, setSuccessfulJoinRequest] = useState<boolean>(false);
 
     useEffect(() => {
-        async function getProjects() {
-            try {
+        const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid));
 
-                // Construct a reference to the collection
-                const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid));
-                const userdocs = await getDocs(collectionRef);
-
-                if (!userdocs.empty) {
-                    const documentData = userdocs.docs[0].data();
-                    // Check if the 'Uid' field in the document matches the provided UID
-                    if (documentData.Uid === uid) {
-
-                        
-
-                        if (documentData.Projects.length > 0) {
-                            setProjects(documentData.Projects);
-                        }
-
-
-                        // get the Member variable check up
-                        const Member = documentData.Member;
-                        console.log('Uid is the member of the project', Member);
-                        if (Member != '') {
-                            setIsMember(true);
-                            setProjectMember(Member);
-                        }
+        // Set up a real-time listener
+        const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
+            console.log('Executing the query');
+            if (!querySnapshot.empty) {
+                const documentData = querySnapshot.docs[0].data();
+                // Check if the 'Uid' field in the document matches the provided UID
+                if (documentData.Uid === uid) {
+                    if (documentData.Projects.length > 0) {
+                        setProjects(documentData.Projects);
                     }
+                    console.log(projects);
+                  
                 }
-
-
-
-            } catch (error) {
-                console.error('Error fetching document:', error);
-
+            } else {
+                console.log('No matching documents.');
             }
-        }
+        }, (error) => {
+            console.error('Error fetching documents: ', error);
+        });
 
-        getProjects();
-
+        // Clean up the listener when the component unmounts or uid changes
+        return () => unsubscribe();
 
     }, [uid]);
 
@@ -352,8 +339,10 @@ export default function landing() {
                 </div>
                 :
                 <div>
-                    {isMember ? '' : <div>
-                        <h3 className={styles.projectsStatus}>Oops! No project exist yet!</h3></div>}
+                    {projects.length == 0 ?
+                        <div>
+                            <h3 className={styles.projectsStatus}>Oops! No project exist yet!</h3></div> : ''
+                    }
                     <div className="d-flex flex-row justify-center align-center" style={{ gap: 10 }}>
                         <button className={`${styles.userPreferenceButton} ${userPreference === 'Create' ? styles.preferred : ''}`} onClick={() => SetUserPreference('Create')}>Create one</button>
                         <button className={`${styles.userPreferenceButton} ${userPreference === 'Join' ? styles.preferred : ''}`} onClick={() => SetUserPreference('Join')}>Join one</button>
@@ -373,7 +362,9 @@ export default function landing() {
                             // this would be conditionally shown if the member does exist then hide this and how that project itself
 
                             <div style={{ marginTop: 25 }}>
-                                {!isMember ? <div>
+
+
+                                <div>
                                     <div className={styles.createProject}>
                                         <p>Project name</p>
                                         <input type="text" className={styles.projectName} placeholder="Type name of project..." onChange={(e) => setJoinProject(e.target.value)} />
@@ -383,11 +374,12 @@ export default function landing() {
                                         <button onClick={showOldRequests} className={styles.requestButton}>Old Requests</button>
                                     </div>
                                 </div>
-                                    : <div>
-                                        <button onClick={() => navigateProject(projectMember)} className={styles.projectMember}>{projectMember}</button>
-                                        <button onClick={showOldRequests} className={styles.requestButton}>Old Requests</button>
-                                    </div>
-                                }
+
+                                <div>
+
+                                    <button onClick={showOldRequests} className={styles.requestButton}>Old Requests</button>
+                                </div>
+
                             </div>
 
                     }
