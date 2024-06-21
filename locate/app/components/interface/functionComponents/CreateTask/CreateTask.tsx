@@ -155,7 +155,23 @@ export default function CreateTask() {
         return imageUrls;
     }
 
+    const fetchUuid = async () => {
+        try {
+            const uuid_response = await axios.get('http://localhost:5000/getUuid');
+            
+            if (uuid_response.status === 200) {
+                const uid = uuid_response.data.UID;
+                return uid
+            }
+            
+        } catch (error) {
+            console.error('Error fetching UUID:', error);
+        }
+    };
+
     const createTaskFunction = async () => {
+
+        const UID = await fetchUuid();
 
         console.log('file objects are', fileObject);
         console.log('assignies are', assignies);
@@ -178,7 +194,9 @@ export default function CreateTask() {
             'Project': projectId,
             'Files': fileObject,  // associated files 
             'CreatorImage': await getCreatorImage(uid),
-            'AssignieesImages': await getAssignieesImageUrls(assignies)
+            'AssignieesImages': await getAssignieesImageUrls(assignies),
+            'Status': 'Assigned',
+            'TaskId': UID
         };
 
         console.log('Task we are adding is', task);
@@ -312,21 +330,9 @@ export default function CreateTask() {
             <div className={styles.topBar}>
 
                 <input type="text" className={styles.TaskHeading} placeholder='Type heading...' onChange={(e) => setHeading(e.target.value)} />
-                {/* 
-                <button className={styles.deadline} onClick={selectDeadline}>
-
-                    <img src="/Deadline.png" alt="Calendar icon" />
-                    Select deadline
-
-                    <input type="date" id='deadline' style={{ display: 'none' }} onChange={()=>handleDeadlineChange} placeholder='Select Deadline' />
-                </button>
-                */}
+                
                 <div className={styles.datepickerContainer}>
-                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                        <DatePicker className={styles.datepicker} label="Select deadline" />
-
-                    </LocalizationProvider> */}
+                   
 
                     <input type="date" onChange={handleDateChange} className={styles.datepicker}  />
                 </div>

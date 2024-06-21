@@ -6,7 +6,7 @@ import { useGlobalProjectIdContext } from '@/app/context/projectId';
 import { firestore } from '@/app/firebase';
 import { doc, getDoc, updateDoc, query, collection, where, getDocs } from 'firebase/firestore';
 import styles from './assignies.module.css';
-import useBeforeUnload from '@/app/inactive';
+
 interface memberData {
     imageUrl: string,
     name: string,
@@ -28,7 +28,7 @@ export default function Assignies({ showAssignOption, setShowAssignOption, assig
     const [selectedId, setSelectedUid] = useState<string[]>([]);
 
     useEffect(() => {
-    
+
 
 
         const loadMembers = async () => {
@@ -87,7 +87,7 @@ export default function Assignies({ showAssignOption, setShowAssignOption, assig
         const searchTerm = event.target.value.toLowerCase();
         if (searchTerm.length > 0) {
             const filteredMembers = memberData.filter(member => member.name.toLowerCase().includes(searchTerm));
-          
+
             setFilteredMembers(filteredMembers);
         } else {
             setFilteredMembers([]);
@@ -97,37 +97,42 @@ export default function Assignies({ showAssignOption, setShowAssignOption, assig
     return (
         <main>
             <div className={styles.membersOptions}>
+
+                <div className={styles.membersOptionsHeader}>
+                    <p style={{paddingLeft: 10, marginTop: 10}}>Members for assginees</p>
+                    <button onClick={closeMemberOptions} className={styles.memberOptionCloseButton}><img src="/Cross.png" alt="close icon" /></button>
+                </div>
+
                 <input type="text" placeholder='Search member...' className={styles.searchBar} onChange={filterMembers} />
-                
+
                 <div className={styles.membersList}>
                     {filteredMembers.length > 0 ? (
-                        
+
                         filteredMembers.map(member => (
-                            
+
                             <div key={member.uid} className={`${styles.memberTile} ${member.selected ? styles.selectedUser : ''}`} onClick={() => addUid(member.uid)} onDoubleClick={() => removeUid(member.uid)}>
                                 <div className={styles.memberTileData}>
-                                <img src={member.imageUrl} className={styles.memberImage} alt={member.name} />
-                                <p className={styles.memberName}>{member.name}</p>
+                                    <img src={member.imageUrl} className={styles.memberImage} alt={member.name} />
+                                    <p className={styles.memberName}>{member.name}</p>
                                 </div>
                             </div>
-                            
+
                         ))
 
                     ) : (
-                        
+
                         memberData.map(member => (
-                            
+
                             <div key={member.uid} className={`${styles.memberTile} ${member.selected ? styles.selectedUser : ''}`} onClick={() => addUid(member.uid)} onDoubleClick={() => removeUid(member.uid)}>
                                 <div className={styles.memberTileData}>
-                                <img src={member.imageUrl} className={styles.memberImage} alt={member.name} />
-                                <p className={styles.memberName}>{member.name}</p>
+                                    <img src={member.imageUrl} className={styles.memberImage} alt={member.name} />
+                                    <p className={styles.memberName}>{member.name}</p>
                                 </div>
                             </div>
 
                         ))
                     )}
                 </div>
-                <button onClick={closeMemberOptions} className={styles.closeButton}>Close</button>
             </div>
         </main>
     )
