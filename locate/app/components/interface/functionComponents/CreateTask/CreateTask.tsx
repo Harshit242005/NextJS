@@ -43,14 +43,37 @@ export default function CreateTask() {
     const [openAttachmentView, setOpenAttachmentView] = useState(false);
 
 
+    // unmount the component 
+    useState(() => {
+        return () => {
+            SetShowAssigniesOption(false);
+            setAttachedFiles(false);
+            setHeading('');
+            setDescription('');
+            setDeadline('');
+            setAssignies([]);
+            setFileObject(null);
+            setFileObjectForView({});
+            setOpenAttachmentView(false);
+        }
+    })
+
+
 
     const askForFile = () => {
-        // Get the file input element
-        const fileInput: any = document.getElementById('attachments');
-        // Set up an event listener for the change event on the file input
-        fileInput.addEventListener('change', handleFileUpload);
-        // Trigger a click event on the file input element
-        fileInput.click();
+        if (fileObjectView != null) {
+            setOpenAttachmentView(true);
+        }
+        else {
+             
+            console.log('file object is not null and looking for more files');
+            // Get the file input element
+            const fileInput: any = document.getElementById('attachments');
+            // Set up an event listener for the change event on the file input
+            fileInput.addEventListener('change', handleFileUpload);
+            // Trigger a click event on the file input element
+            fileInput.click();
+        }
 
     }
 
@@ -106,6 +129,7 @@ export default function CreateTask() {
             return;
         }
         setAttachedFiles(true);
+        
 
         try {
             // Convert FileList to array of File objects
@@ -158,12 +182,12 @@ export default function CreateTask() {
     const fetchUuid = async () => {
         try {
             const uuid_response = await axios.get('http://localhost:5000/getUuid');
-            
+
             if (uuid_response.status === 200) {
                 const uid = uuid_response.data.UID;
                 return uid
             }
-            
+
         } catch (error) {
             console.error('Error fetching UUID:', error);
         }
@@ -178,7 +202,7 @@ export default function CreateTask() {
 
         const created_at = getCurrentDate();
         // construct the map
-        const assigneeMap: { [key: string] : boolean} = {};
+        const assigneeMap: { [key: string]: boolean } = {};
         for (const assigneeId of assignies) {
             assigneeMap[assigneeId] = false;
         }
@@ -293,24 +317,13 @@ export default function CreateTask() {
     };
 
 
-    // const selectDeadline = () => {
-    //     const deadlineInput = document.getElementById('deadline') as HTMLInputElement;
-    //     if (deadlineInput) {
-    //         deadlineInput.focus();
-    //     }
-    // };
 
-
-    // const handleDeadlineChange = (event: Event) => {
-    //     const target = event.target as HTMLInputElement;
-    //     setDeadline(target.value);
-    // };
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const date = event.target.value; // This will give you the date as a string in YYYY-MM-DD format
         setDeadline(date);
         console.log('Selected Date type:', typeof date); // Log the selected date
-      };
+    };
 
     const handleDeleteFile = (fileName: string) => {
         // Create a copy of the fileObjectForView state
@@ -330,11 +343,11 @@ export default function CreateTask() {
             <div className={styles.topBar}>
 
                 <input type="text" className={styles.TaskHeading} placeholder='Type heading...' onChange={(e) => setHeading(e.target.value)} />
-                
-                <div className={styles.datepickerContainer}>
-                   
 
-                    <input type="date" onChange={handleDateChange} className={styles.datepicker}  />
+                <div className={styles.datepickerContainer}>
+
+
+                    <input type="date" onChange={handleDateChange} className={styles.datepicker} />
                 </div>
 
             </div>
@@ -351,27 +364,35 @@ export default function CreateTask() {
                     {/* onChange={handleFileSelection} */}
                     <input type="file" id='attachments' multiple style={{ display: 'none' }} />
 
-                    <button className={styles.attachmentButton} style={{ height: 50, marginTop: 5 }}
-                        // define the function call for asking for the file input
-                        onClick={askForFile}>
-                        <img src="/Attach.png" alt="Attachement icon" />
-                        Attach Files
+                    <button
+                        className={fileObjectView == null ? styles.attachmentButton : styles.fileObjectButton}
+                        style={{ height: 50, marginTop: 5 }}
+                        onClick={askForFile}
+                    >
+                        {fileObjectView == null ? (
+                            <>
+                                <img src="/Attach.png" alt="Attachment icon" />
+                                Attach Files
+                            </>
+                        ) : (
+                            'Attachments'
+                        )}
                     </button>
-
-                    <div>
-                        {/* onClick={showAttachementFiles} */}
+                    {/* <div>
+                        
                         {attachedFiles && <button onClick={() => setOpenAttachmentView(true)} className={styles.attachments} >Attachments</button>}
-                    </div>
+                    </div> */}
                 </div>
 
+                {/* shoowing up the attachments for the user profile */}
                 {
                     openAttachmentView &&
-                    // show the attachment for the view of the task 
+
 
                     <div className={styles.attachementViewPopup}>
-                        <div className={styles.attachmentHeder}>
-                            <h3>Files to upload</h3>
-                            <button className={styles.closeButton} onClick={() => setOpenAttachmentView(false)}>Close</button>
+                        <div className={styles.attachmentHeader}>
+                            <p className={styles.attachmentHeaderHeading}>Files to upload</p>
+                            <button className={styles.closeButton} onClick={() => setOpenAttachmentView(false)}><img src='/Cross.png' /></button>
                         </div>
                         <div className={styles.files}>
                             {Object.keys(fileObjectView).map((fileName, index) => (
@@ -382,8 +403,8 @@ export default function CreateTask() {
                             ))}
                         </div>
                         <div className={styles.fileHandlingButtons}>
-                            <button onClick={addFiles} className={styles.fileHandlingButton}>Add</button>
-                            <button onClick={uploadFiles} className={styles.fileHandlingButton}>Upload</button>
+                            <button style={{ borderBottomLeftRadius: 10 }} onClick={addFiles} className={styles.fileHandlingButton}>Add</button>
+                            <button style={{ borderBottomRightRadius: 10 }} onClick={uploadFiles} className={styles.fileHandlingButton}>Upload</button>
                         </div>
                     </div>
                 }

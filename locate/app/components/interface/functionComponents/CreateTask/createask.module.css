@@ -144,34 +144,51 @@
     font-weight: 400;
 }
 
-.files {
+/* .files {
     display: flex;
     flex-direction: column;
-
-    height: 100px;
-    max-height: 100px;
+    height: 70%;
+    max-height: 70%;
     scroll-behavior: auto;
     overflow-y: auto;
 }
 
+.files::-webkit-scrollbar {
+    display: none;
+} */
+
+.files {
+    display: flex;
+    flex-direction: column;
+    height: 70%;
+    max-height: 70%;
+    overflow-y: scroll; /* Use 'scroll' to ensure it scrolls */
+    -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+  }
+  
+  /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+  .files::-webkit-scrollbar {
+    display: none;
+  }
+  
+
 .fileHandlingButtons {
     display: flex;
     flex-direction: row;
-    justify-content: right;
-    align-items: flex-end;
-    gap: 10px;
-    margin-right: 12px;
-    margin-top: 25px;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
 }
 
 .fileHandlingButton {
-    width: 100px;
+    width: 300px;
     font-size: 15px;
     font-weight: 100;
     height: 40px;
     background-color: black;
-    border-radius: 5px;
-    box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.24);
+    border-radius: 0px;
+    
     color: white;
     font-family: 'ReadexPro';
     border: none;
@@ -181,42 +198,49 @@
     outline: none;
 }
 
-.files::-webkit-scrollbar {
-    display: none;
-}
+
 
 .attachementViewPopup {
     background-color: white;
     z-index: 999;
     position: absolute;
     margin-left: auto;
-    width: 500px;
-    height: 250px;
+    width: 600px;
+    height: 300px;
     border: 1px solid rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     margin-right: auto;
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.534);
     font-family: 'ReadexPro';
-    padding: 10px;
     top: 100px;
 }
 
-.attachmentHeder {
+.attachmentHeader {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: left;
     align-items: last baseline;
-    gap: 150px;
+    gap: 350px;
+    height: 20%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.attachmentHeaderHeading
+{
+    padding-left: 10px;
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    font-size: 20px;
+    width: 200px;
 }
 
 .closeButton {
-    width: 100px;
-    height: 40px;
-    background-color: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    border-radius: 5px;
-    font-size: 15px;
-    font-family: 'ReadexPro';
+    width: 60px;
+    height: 100%;
+    background-color: black;
+    border: none;
+    border-top-right-radius: 10px;
+    
 }
 
 .fileData {
@@ -260,3 +284,21 @@
     outline: 1px solid #D99BFF;
 }
 
+.fileObjectButton
+{
+    width: 450px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    display: flex;
+
+    color: white;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background-color: black;
+    font-family: 'ReadexPro';
+    font-size: 16px;
+    font-weight: 400;
+}
