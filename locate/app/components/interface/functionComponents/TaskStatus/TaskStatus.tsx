@@ -51,9 +51,28 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
         const year = currentDate.getFullYear();
 
         return `${day}/${month}/${year}`;
+
     }
 
+    const getCurrentDateResult = (deadline: string) => {
+        const current_date_str = getCurrentDate();
+        console.log(current_date_str, deadline);
     
+        // Function to parse date string in dd/MM/yyyy format to a Date object
+        const parseDate = (dateStr: string) => {
+            const [day, month, year] = dateStr.split('/').map(Number);
+            return new Date(year, month - 1, day); // month is 0-indexed in Date object
+        }
+    
+        // Parse current date and deadline into Date objects
+        const currentDate = parseDate(current_date_str);
+        const deadlineDate = parseDate(deadline);
+    
+        // Compare the dates
+        return currentDate < deadlineDate;
+    }
+
+
 
     useEffect(() => {
         // Reference to the Firestore collection you want to listen to
@@ -66,8 +85,8 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                 const updatedDocuments: any = [];
                 querySnapshot.forEach(async (doc) => {
                     console.log('The doc is', doc.data());
-                    
-                 
+
+
                     // Convert the document to JSON and add it to the updatedDocuments array
                     updatedDocuments.push({
                         id: doc.id,
@@ -85,7 +104,7 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
         // Return a cleanup function to unsubscribe from the listener when the component unmounts
         return () => {
             unsubscribe();
-           
+
         }
     }, [projectId]); // Add projectId to the dependency array
 
@@ -101,7 +120,7 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
             const anchor = document.createElement('a');
             anchor.href = fileUrl;
             anchor.target = '_blank'; // Open in a new tab
-            
+
             anchor.click();
 
         } catch (error) {
@@ -138,7 +157,7 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                         <div className={styles.bottomBar}>
 
                             <div className={styles.AssigneeDescription}>
-                                <p>Assigniees</p>
+                                <p>Assignees</p>
                                 {/* image would be shown here in this  */}
                                 <div className={styles.taskAssigneesImages}>
                                     {document.data.AssignieesImages.slice(0, 2).map((image, index) => (
@@ -154,7 +173,7 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                                 </div>
                                 <div className={styles.deadline}>
                                     <h4>Deadline</h4>
-                                    <p className={getCurrentDate() > document.data.Deadline ? styles.invalidDate : styles.validDate}
+                                    <p className={getCurrentDateResult(document.data.Deadline) ? styles.invalidDate : styles.validDate}
                                     >{document.data.Deadline}</p>
                                 </div>
                             </div>
@@ -171,24 +190,24 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                         <button onClick={() => setShowFileDialog(false)} className={styles.cancelFileDialogButton}><img src='/Cross.png' alt='Close button' /></button>
                     </div>
                     <div className={styles.fileDialogBottom}>
-                    {/* showing files map with the download button with their names  */}
-                    {Object.keys(filesToShow).length > 0 ?
-                        <div>
-                            <div className={styles.filesColumn}>
-                                {Object.keys(filesToShow).map((fileName, index) => (
-                                    <div key={index} className={styles.fileRow}>
-                                        <p className={styles.fileName}>{fileName}</p>
-                                        <button className={styles.downloadFileButton} onClick={() => downloadFile(filesToShow[fileName])}><img src="/download.png" /></button>
-                                    </div>
-                                ))}
+                        {/* showing files map with the download button with their names  */}
+                        {Object.keys(filesToShow).length > 0 ?
+                            <div>
+                                <div className={styles.filesColumn}>
+                                    {Object.keys(filesToShow).map((fileName, index) => (
+                                        <div key={index} className={styles.fileRow}>
+                                            <p className={styles.fileName}>{fileName}</p>
+                                            <button className={styles.downloadFileButton} onClick={() => downloadFile(filesToShow[fileName])}><img src="/download.png" /></button>
+                                        </div>
+                                    ))}
+                                </div>
+
                             </div>
-                           
-                        </div>
-                        :
-                        <div>
-                            <p className={styles.noFileExist}>No files to show!</p>
-                        </div>
-                    }
+                            :
+                            <div>
+                                <p className={styles.noFileExist}>No files to show!</p>
+                            </div>
+                        }
                     </div>
                 </div>
             }

@@ -61,19 +61,14 @@ export default function CreateTask() {
 
 
     const askForFile = () => {
-        if (fileObjectView != null) {
-            setOpenAttachmentView(true);
-        }
-        else {
-             
-            console.log('file object is not null and looking for more files');
-            // Get the file input element
-            const fileInput: any = document.getElementById('attachments');
-            // Set up an event listener for the change event on the file input
-            fileInput.addEventListener('change', handleFileUpload);
-            // Trigger a click event on the file input element
-            fileInput.click();
-        }
+        console.log('file object is not null and looking for more files');
+        // Get the file input element
+        const fileInput: any = document.getElementById('attachments');
+        // Set up an event listener for the change event on the file input
+        fileInput.addEventListener('change', handleFileUpload);
+        // Trigger a click event on the file input element
+        fileInput.click();
+
 
     }
 
@@ -112,11 +107,15 @@ export default function CreateTask() {
         setOpenAttachmentView(false);
     };
 
-
-
+    const askForAttachment = () => {
+        // condition based opening of the asking for the attachement 
+        if (fileObjectView != null) {
+            setOpenAttachmentView(true);
+        }
+    }
 
     const addFiles = () => {
-        askForFile(); // call for the file input and select more files 
+        askForFile();
     }
 
     const handleFileUpload = async () => {
@@ -129,7 +128,7 @@ export default function CreateTask() {
             return;
         }
         setAttachedFiles(true);
-        
+
 
         try {
             // Convert FileList to array of File objects
@@ -181,7 +180,7 @@ export default function CreateTask() {
 
     const fetchUuid = async () => {
         try {
-            const uuid_response = await axios.get('http://localhost:5000/getUuid');
+            const uuid_response = await axios.get('https://fern-ivory-lint.glitch.me/getUuid');
 
             if (uuid_response.status === 200) {
                 const uid = uuid_response.data.UID;
@@ -194,12 +193,11 @@ export default function CreateTask() {
     };
 
     const createTaskFunction = async () => {
-
+        // a check should be added in this to get the details of the deadline and task heading which are not none 
         const UID = await fetchUuid();
-
         console.log('file objects are', fileObject);
         console.log('assignies are', assignies);
-
+        console.log('uid is', UID);
         const created_at = getCurrentDate();
         // construct the map
         const assigneeMap: { [key: string]: boolean } = {};
@@ -213,14 +211,14 @@ export default function CreateTask() {
             'Description': description,
             'CreatedBy': uid,
             'Deadline': deadline,
-            'CreatedAt': created_at,  // current date in dd/mm/yy format
+            'CreatedAt': created_at,
             'Assignies': assigneeMap,
             'Project': projectId,
-            'Files': fileObject,  // associated files 
+            'Files': fileObject,
             'CreatorImage': await getCreatorImage(uid),
             'AssignieesImages': await getAssignieesImageUrls(assignies),
             'Status': 'Assigned',
-            'TaskId': UID
+            'TaskID': UID
         };
 
         console.log('Task we are adding is', task);
@@ -263,14 +261,25 @@ export default function CreateTask() {
 
 
 
-        const response = await axios.post('http://localhost:5000/sendTaskCreate', {
+        const response = await axios.post('https://fern-ivory-lint.glitch.me/sendTaskCreate', {
             'Headline': heading,
             'Deadline': deadline,
             'CreatedAt': created_at,
             'CreatedBy': userName,
             'Members': userGmails
         });
-        console.log(response)
+        console.log(response);
+
+        // let releve the useState variable 
+        SetShowAssigniesOption(false);
+        setAttachedFiles(false);
+        setHeading('');
+        setDescription('');
+        setDeadline('');
+        setAssignies([]);
+        setFileObject(null);
+        setFileObjectForView({});
+        setOpenAttachmentView(false);
     }
 
     // update the list
@@ -367,7 +376,7 @@ export default function CreateTask() {
                     <button
                         className={fileObjectView == null ? styles.attachmentButton : styles.fileObjectButton}
                         style={{ height: 50, marginTop: 5 }}
-                        onClick={askForFile}
+                        onClick={askForAttachment}
                     >
                         {fileObjectView == null ? (
                             <>
@@ -378,10 +387,7 @@ export default function CreateTask() {
                             'Attachments'
                         )}
                     </button>
-                    {/* <div>
-                        
-                        {attachedFiles && <button onClick={() => setOpenAttachmentView(true)} className={styles.attachments} >Attachments</button>}
-                    </div> */}
+
                 </div>
 
                 {/* shoowing up the attachments for the user profile */}
@@ -397,7 +403,7 @@ export default function CreateTask() {
                         <div className={styles.files}>
                             {Object.keys(fileObjectView).map((fileName, index) => (
                                 <div key={index} className={styles.fileData}>
-                                    <span>{fileName}</span>
+                                    <p style={{ width: 150 }}>{fileName}</p>
                                     <button className={styles.deleteFileButton} onClick={() => handleDeleteFile(fileName)}><FontAwesomeIcon icon={faTrash} /></button>
                                 </div>
                             ))}
