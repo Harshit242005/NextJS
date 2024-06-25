@@ -322,12 +322,12 @@ export default function landing() {
                     {/* building map button for the project */}
 
 
-                    <div className="container" style={{ marginLeft: -10 }}>
+                    <div className="container">
                         <div className="row">
                             {projects.map((element, index) => (
                                 <div className="col-md-4 mb-3" key={index}>
                                     <button className="btn btn-dark btn-lg btn-block"
-                                        style={{ fontSize: 16 }}
+                                        style={{ fontSize: 16, width: 200, marginLeft: 25 }}
                                         onClick={() => navigateProject(element)}
                                     >{element}</button>
                                 </div>
@@ -413,18 +413,19 @@ export default function landing() {
             {/* for creating new project */}
             {showNewProject &&
                 <div className={styles.NewProjectPopup}>
-                    <div className={styles.createProject}>
-                        <p>Project name</p>
-                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                            <input type="text" placeholder="Type name of project..." onChange={(e) => setProjectNameCreate(e.target.value)} />
 
-                            <div style={{ display: 'flex', gap: 10, flexDirection: 'row' }}>
-                                <button className={styles.projectButton} onClick={() => setShowCreateNewProject(false)}>cancel</button>
-                                <button onClick={createProject} className={styles.projectButton}>Create</button>
-                            </div>
-                        </div>
-
+                    <div className={styles.NewProjectPopupHeader}>
+                        
+                        <p className={styles.popupHeaderHeading}>Create Project</p>
+                        <button  onClick={() => setShowCreateNewProject(false)} className={styles.NewProjectPopupCloseButton}><img src="/Cross.png" alt="close icon" /></button>
+                    
                     </div>
+
+                    <input type="text" className={styles.NewProjectInput} placeholder="Type name of project..." onChange={(e) => setProjectNameCreate(e.target.value)} />
+                    <button onClick={createProject} className={styles.NewProjectCreateButton}>Create</button>
+
+
+                    
                 </div>
             }
 
