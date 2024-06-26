@@ -37,7 +37,7 @@ export default function Home() {
       setImageUrl(result.user.photoURL);
     }
     setEmail(result.user.email);
-    setUserName(result.user.displayName);
+    // setUserName(result.user.displayName);
 
     // Fetch the document corresponding to the user's UID
     const userDocRef = collection(firestore, 'Users');
@@ -47,6 +47,10 @@ export default function Home() {
     if (!userDocSnapshot.empty) {
       // Set the status to true while signing up 
       const userDocId = userDocSnapshot.docs[0].id;
+      const user_name =  userDocSnapshot.docs[0].data()['Name'] || '';
+      const user_image =  userDocSnapshot.docs[0].data()['ImageUrl'] || '';
+      setUserName(user_name);
+      setImageUrl(user_image);
       const docRef = doc(firestore, 'Users', userDocId);
       await updateDoc(docRef, { 'Status': true });
 
