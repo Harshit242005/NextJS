@@ -38,11 +38,29 @@ export default function Requests() {
                 // Add MemberId to members list if not already present
                 const updatedMembers = arrayUnion(...members, MemberId);
 
+
                 // Update the document
                 await updateDoc(docRef, {
                     requests: updatedRequests,
                     members: updatedMembers
                 });
+
+                // let's add the projectName in the project array of the user
+                const userDocRef = query(collection(firestore, 'Users'), where('Uid', "==", MemberId));
+                const userDocRefSnapshot = await getDocs(userDocRef);
+                if (!userDocRefSnapshot.empty) {
+                    const existingProjects = userDocRefSnapshot.docs[0].data()['Projects'] || [];
+                    // Only update if the projectName is not already in the array
+                    if (!existingProjects.includes(projectName)) {
+                        await updateDoc(docRef, {
+                            Projects: arrayUnion(projectName)
+                        });
+                        console.log('Project name added successfully!');
+                    } else {
+                        console.log('Project name already exists in the array.');
+                    }
+
+                }
 
                 console.log('Member request accepted successfully.');
             } else {
@@ -158,36 +176,7 @@ export default function Requests() {
     };
 
 
-    // useEffect(() => {
 
-    //     console.log('project id is', projectId);
-    //     const getMembersIds = async () => {
-    //         const docRef = doc(firestore, 'Projects', projectId);
-    //         const docSnap = await getDoc(docRef);
-    //         const requestMembers = docSnap.data()!.requests;
-    //         console.log(requestMembers);
-    //         setRequestMembersIds(requestMembers);
-    //         const membersData = [];
-    //         for (const requestMemberId of requestMembers) {
-    //             // get the document using the where 
-    //             console.log('request member id is', requestMemberId);
-    //             const q = query(collection(firestore, 'Users'), where('Uid', '==', requestMemberId));
-    //             const querySnapshot = await getDocs(q);
-
-    //             if (!querySnapshot.empty) {
-    //                 const documentData = querySnapshot.docs[0].data();
-    //                 console.log('document data is', documentData);
-    //                 const { Uid, ImageUrl, Name } = documentData;
-    //                 const memberObject = { Uid, ImageUrl, Name };
-    //                 membersData.push(memberObject);
-    //             }
-    //         }
-    //         setRequestMembersData(membersData);
-
-    //     }
-
-    //     getMembersIds();
-    // }, [projectId]);
 
     useEffect(() => {
         console.log('project id is', projectId);
@@ -224,7 +213,7 @@ export default function Requests() {
 
     return (
         <main className={styles.body}>
-            
+
             {/* load the uid from the requests list  */}
             {requestMembersData.length > 0 ?
                 <div className={styles.requests}>
@@ -241,7 +230,7 @@ export default function Requests() {
                         </div>
                     ))}
                 </div>
-                 : 
+                :
                 <div className={styles.noRequest}>
                     <p>No requests yet!</p>
                 </div>

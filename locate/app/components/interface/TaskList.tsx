@@ -93,8 +93,7 @@ export default function TaskList({ setShowTaskList }: TaskListProps) {
                 <button className={styles.closeTaskListButton} onClick={() => setShowTaskList(false)}><img src="/Cross.png" alt='Close icon' /></button>
             </div>
             <div className={styles.taskColumn}>
-                {/* here i would show the assigned tasks */}
-                {/* looping over the map and the ids to show task */}
+               
                 {taskDocument.map(task => (
                     // had to add a onclick for the each task assigned to the user so can some details about the task
                     <div onClick={selectedTask} key={task.DocId} className={`${task.Status == 'Completed' ? styles.CompletedTasks : styles.tasks}`}>

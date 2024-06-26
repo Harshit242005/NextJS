@@ -32,9 +32,9 @@ export default function landing() {
     const [requestsMap, setRequestsMap] = useState<RequestsMap>({});
     const [showRequest, setShowRequest] = useState<boolean>(false);
 
-   
-
     const [successfulJoinRequest, setSuccessfulJoinRequest] = useState<boolean>(false);
+
+
 
     useEffect(() => {
         const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid));
@@ -44,14 +44,15 @@ export default function landing() {
             console.log('Executing the query');
             if (!querySnapshot.empty) {
                 const documentData = querySnapshot.docs[0].data();
+
                 // Check if the 'Uid' field in the document matches the provided UID
-                if (documentData.Uid === uid) {
-                    if (documentData.Projects.length > 0) {
-                        setProjects(documentData.Projects);
-                    }
-                    console.log(projects);
-                  
+
+
+                if (documentData.Projects.length > 0) {
+                    setProjects(documentData.Projects);
                 }
+                console.log(projects);
+
             } else {
                 console.log('No matching documents.');
             }
@@ -358,8 +359,7 @@ export default function landing() {
                                 </div>
                                 <button onClick={createProject} className={styles.createButton}>Create</button>
                             </div> :
-                            // then show join
-                            // this would be conditionally shown if the member does exist then hide this and how that project itself
+
 
                             <div style={{ marginTop: 25 }}>
 
@@ -375,7 +375,7 @@ export default function landing() {
                                     </div>
                                 </div>
 
-                              
+
                             </div>
 
                     }
@@ -387,15 +387,15 @@ export default function landing() {
                 <div className={styles.showRequestsDialog}>
                     <div className={styles.showRequestHeader}>
                         <p className={styles.showRequestHeaderHeading}>Project requests</p>
-                        <button className={styles.cancelButton} onClick={() => setShowRequest(false)}><img src="/Cross.png"/></button>
+                        <button className={styles.cancelButton} onClick={() => setShowRequest(false)}><img src="/Cross.png" /></button>
                     </div>
                     <div className={styles.requestsData}>
                         {/* show the map data */}
                         {Object.entries(requestsMap).map(([projectName, value]) => (
-                           <div 
-                           key={projectName} 
-                           className={`${styles.requestDataRow} ${value ? styles.Accepted : styles.Waiting}`}
-                         >
+                            <div
+                                key={projectName}
+                                className={`${styles.requestDataRow} ${value ? styles.Accepted : styles.Waiting}`}
+                            >
                                 <p className={styles.requestDataRowName}>{projectName} </p>
                                 <div key={projectName} style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'baseline', justifyContent: 'center' }}>
                                     <button onClick={() => DeleteRequest(projectName)} className={styles.deleteButton}><FontAwesomeIcon icon={faTrash} /></button>
@@ -413,17 +413,17 @@ export default function landing() {
                 <div className={styles.NewProjectPopup}>
 
                     <div className={styles.NewProjectPopupHeader}>
-                        
+
                         <p className={styles.popupHeaderHeading}>Create Project</p>
-                        <button  onClick={() => setShowCreateNewProject(false)} className={styles.NewProjectPopupCloseButton}><img src="/Cross.png" alt="close icon" /></button>
-                    
+                        <button onClick={() => setShowCreateNewProject(false)} className={styles.NewProjectPopupCloseButton}><img src="/Cross.png" alt="close icon" /></button>
+
                     </div>
 
                     <input type="text" className={styles.NewProjectInput} placeholder="Type name of project..." onChange={(e) => setProjectNameCreate(e.target.value)} />
                     <button onClick={createProject} className={styles.NewProjectCreateButton}>Create</button>
 
 
-                    
+
                 </div>
             }
 
