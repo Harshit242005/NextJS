@@ -375,11 +375,7 @@ export default function landing() {
                                     </div>
                                 </div>
 
-                                <div>
-
-                                    <button onClick={showOldRequests} className={styles.requestButton}>Old Requests</button>
-                                </div>
-
+                              
                             </div>
 
                     }
@@ -390,16 +386,18 @@ export default function landing() {
             {showRequest &&
                 <div className={styles.showRequestsDialog}>
                     <div className={styles.showRequestHeader}>
-                        <p>Project requests</p>
-                        <button className={styles.cancelButton} onClick={() => setShowRequest(false)}>Close</button>
+                        <p className={styles.showRequestHeaderHeading}>Project requests</p>
+                        <button className={styles.cancelButton} onClick={() => setShowRequest(false)}><img src="/Cross.png"/></button>
                     </div>
                     <div className={styles.requestsData}>
                         {/* show the map data */}
                         {Object.entries(requestsMap).map(([projectName, value]) => (
-                            <div key={projectName} style={{ display: 'flex', flexDirection: 'row', gap: 100, alignItems: 'baseline', justifyContent: 'center' }}>
-                                <p style={{ fontFamily: 'ReadexPro', fontSize: 18, color: 'black' }}>{projectName} </p>
+                           <div 
+                           key={projectName} 
+                           className={`${styles.requestDataRow} ${value ? styles.Accepted : styles.Waiting}`}
+                         >
+                                <p className={styles.requestDataRowName}>{projectName} </p>
                                 <div key={projectName} style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'baseline', justifyContent: 'center' }}>
-                                    <p style={{ color: value ? 'green' : 'grey', fontSize: 16 }}>{value ? 'Accepted' : 'Waiting'}</p>
                                     <button onClick={() => DeleteRequest(projectName)} className={styles.deleteButton}><FontAwesomeIcon icon={faTrash} /></button>
                                 </div>
                             </div>

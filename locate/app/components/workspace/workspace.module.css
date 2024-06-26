@@ -49,7 +49,7 @@
     margin-top: 25px;
 }
 
-.typeName input:focus
+.typeName:focus
 {
     outline: none;
 }

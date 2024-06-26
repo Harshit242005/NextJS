@@ -7,7 +7,9 @@ import { useGlobalProjectIdContext } from '@/app/context/projectId';
 import { useGlobalUidContext } from '@/app/context/uid';
 import { useEffect, useState } from 'react';
 import { firestore } from '@/app/firebase';
-import { collection, doc, getDoc, where, query, getDocs, arrayUnion, updateDoc, arrayRemove } from 'firebase/firestore';
+import { collection, doc, getDoc, where, query, getDocs, arrayUnion, updateDoc, arrayRemove, onSnapshot } from 'firebase/firestore';
+
+
 export default function Requests() {
 
     interface requestMemberData {
@@ -50,9 +52,6 @@ export default function Requests() {
             console.error('Error accepting member request:', error);
         }
 
-
-        // second step
-        // update the user request map for the project name with true value 
 
         try {
             // Query the user document
@@ -159,35 +158,68 @@ export default function Requests() {
     };
 
 
+    // useEffect(() => {
+
+    //     console.log('project id is', projectId);
+    //     const getMembersIds = async () => {
+    //         const docRef = doc(firestore, 'Projects', projectId);
+    //         const docSnap = await getDoc(docRef);
+    //         const requestMembers = docSnap.data()!.requests;
+    //         console.log(requestMembers);
+    //         setRequestMembersIds(requestMembers);
+    //         const membersData = [];
+    //         for (const requestMemberId of requestMembers) {
+    //             // get the document using the where 
+    //             console.log('request member id is', requestMemberId);
+    //             const q = query(collection(firestore, 'Users'), where('Uid', '==', requestMemberId));
+    //             const querySnapshot = await getDocs(q);
+
+    //             if (!querySnapshot.empty) {
+    //                 const documentData = querySnapshot.docs[0].data();
+    //                 console.log('document data is', documentData);
+    //                 const { Uid, ImageUrl, Name } = documentData;
+    //                 const memberObject = { Uid, ImageUrl, Name };
+    //                 membersData.push(memberObject);
+    //             }
+    //         }
+    //         setRequestMembersData(membersData);
+
+    //     }
+
+    //     getMembersIds();
+    // }, [projectId]);
+
     useEffect(() => {
-
         console.log('project id is', projectId);
-        const getMembersIds = async () => {
-            const docRef = doc(firestore, 'Projects', projectId);
-            const docSnap = await getDoc(docRef);
-            const requestMembers = docSnap.data()!.requests;
-            console.log(requestMembers);
-            setRequestMembersIds(requestMembers);
-            const membersData = [];
-            for (const requestMemberId of requestMembers) {
-                // get the document using the where 
-                console.log('request member id is', requestMemberId);
-                const q = query(collection(firestore, 'Users'), where('Uid', '==', requestMemberId));
-                const querySnapshot = await getDocs(q);
 
-                if (!querySnapshot.empty) {
-                    const documentData = querySnapshot.docs[0].data();
-                    console.log('document data is', documentData);
-                    const { Uid, ImageUrl, Name } = documentData;
-                    const memberObject = { Uid, ImageUrl, Name };
-                    membersData.push(memberObject);
+        const unsubscribe = onSnapshot(doc(firestore, 'Projects', projectId), async (docSnap) => {
+            if (docSnap.exists()) {
+                const requestMembers = docSnap.data().requests;
+                console.log(requestMembers);
+                setRequestMembersIds(requestMembers);
+
+                const membersData = [];
+                for (const requestMemberId of requestMembers) {
+                    console.log('request member id is', requestMemberId);
+                    const q = query(collection(firestore, 'Users'), where('Uid', '==', requestMemberId));
+                    const querySnapshot = await getDocs(q);
+
+                    if (!querySnapshot.empty) {
+                        const documentData = querySnapshot.docs[0].data();
+                        console.log('document data is', documentData);
+                        const { Uid, ImageUrl, Name } = documentData;
+                        const memberObject = { Uid, ImageUrl, Name };
+                        membersData.push(memberObject);
+                    }
                 }
+                setRequestMembersData(membersData);
             }
-            setRequestMembersData(membersData);
+        });
 
-        }
-
-        getMembersIds();
+        // Cleanup listener on component unmount
+        return () => {
+            unsubscribe();
+        };
     }, [projectId]);
 
     return (
@@ -199,7 +231,7 @@ export default function Requests() {
                     {requestMembersData.map((userData, index) => (
                         <div key={userData.Uid} className={styles.requestMemberData}>
                             <div className={styles.requestData}>
-                                <img src={userData.ImageUrl} style={{ width: 50, height: 50, border: 'none', 'borderRadius': '50%' }} alt={userData.Name} />
+                                <img className={styles.ImageUrl} src={userData.ImageUrl} alt={userData.Name} />
                                 <p className={styles.requestName}>{userData.Name}</p>
                             </div>
                             <div className={styles.buttons}>
@@ -208,7 +240,8 @@ export default function Requests() {
                             </div>
                         </div>
                     ))}
-                </div> : 
+                </div>
+                 : 
                 <div className={styles.noRequest}>
                     <p>No requests yet!</p>
                 </div>

@@ -16,12 +16,16 @@ export default function workspace() {
             'Name': Name,
             'Uid': uid,
             'Email': email,
-            'ImageUrl': imageUrl
+            'ImageUrl': imageUrl,
+            'Status': false,
+            'Tasks': [],
+            'Projects': [],
+            'CompletedTasks': []
         });
 
 
         // navigate to the main landing page which would be kind of dashboard like feel
-        router.push('/componenets/landing')
+        router.push('/components/landing')
     }
 
     return (
