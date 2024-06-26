@@ -359,7 +359,7 @@
     justify-content: center;
     align-items: center;
     position: absolute;
-    left: 80%;
+    left: 90%;
     top: -25%;
     color: white;
     float: right;
@@ -373,13 +373,13 @@
     from {
 
         top: -25%;
-        left: 80%;
+        left: 90%;
     }
 
     to {
 
         top: 20%;
-        left: 80%;
+        left: 90%;
         display: flex;
     }
 }

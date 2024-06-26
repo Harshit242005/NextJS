@@ -45,9 +45,7 @@ export default function landing() {
             if (!querySnapshot.empty) {
                 const documentData = querySnapshot.docs[0].data();
 
-                // Check if the 'Uid' field in the document matches the provided UID
-
-
+                console.log(documentData['Projects']);
                 if (documentData.Projects.length > 0) {
                     setProjects(documentData.Projects);
                 }
@@ -60,8 +58,7 @@ export default function landing() {
             console.error('Error fetching documents: ', error);
         });
 
-        // Clean up the listener when the component unmounts or uid changes
-        return () => unsubscribe();
+        return() => unsubscribe();
 
     }, [uid]);
 

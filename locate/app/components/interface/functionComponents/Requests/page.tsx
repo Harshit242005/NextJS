@@ -48,10 +48,17 @@ export default function Requests() {
                 // let's add the projectName in the project array of the user
                 const userDocRef = query(collection(firestore, 'Users'), where('Uid', "==", MemberId));
                 const userDocRefSnapshot = await getDocs(userDocRef);
+                // Check if the query returned any documents
                 if (!userDocRefSnapshot.empty) {
-                    const existingProjects = userDocRefSnapshot.docs[0].data()['Projects'] || [];
-                    // Only update if the projectName is not already in the array
+                    // Get the first document (assuming Uid is unique)
+                    const userDoc = userDocRefSnapshot.docs[0];
+                    const userData = userDoc.data();
+                    const existingProjects = userData['Projects'] || [];
+
+                    // Check if projectName is already in the Projects array
                     if (!existingProjects.includes(projectName)) {
+                        // Update the Projects array using arrayUnion
+                        const docRef = doc(firestore, 'Users', userDoc.id);
                         await updateDoc(docRef, {
                             Projects: arrayUnion(projectName)
                         });
@@ -59,14 +66,12 @@ export default function Requests() {
                     } else {
                         console.log('Project name already exists in the array.');
                     }
-
+                } else {
+                    console.log('User document not found.');
                 }
-
-                console.log('Member request accepted successfully.');
-            } else {
-                console.log('Project document does not exist.');
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Error accepting member request:', error);
         }
 
@@ -90,7 +95,7 @@ export default function Requests() {
                     requestsMap[projectName] = true;
 
                     // Update the user document with the modified Requests map and Member
-                    await updateDoc(doc(firestore, 'Users', userDoc.id), { Requests: requestsMap, Member: projectName });
+                    await updateDoc(doc(firestore, 'Users', userDoc.id), { Requests: requestsMap });
 
                     console.log(`Member updated to ${projectName} successfully.`);
                 } else {
