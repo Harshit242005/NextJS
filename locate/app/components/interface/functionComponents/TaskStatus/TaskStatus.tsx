@@ -193,7 +193,8 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                     </div>
                     <div className={styles.fileDialogBottom}>
                         {/* showing files map with the download button with their names  */}
-                        {Object.keys(filesToShow).length > 0 ?
+                        {
+                        filesToShow && Object.keys(filesToShow).length > 0 ?
                             <div>
                                 <div className={styles.filesColumn}>
                                     {Object.keys(filesToShow).map((fileName, index) => (
