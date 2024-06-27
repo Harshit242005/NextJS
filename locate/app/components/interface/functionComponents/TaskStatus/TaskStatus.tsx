@@ -55,23 +55,48 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
 
     }
 
+    const replaceHyphensWithSlashes = (dateStr: string) => {
+
+        const modifiedStr = dateStr.replace(/-/g, '/');
+        console.log(modifiedStr);
+        console.log(modifiedStr.split('/'));
+        const [year, month, day] = modifiedStr.split('/');
+
+        return `${day}/${month}/${year}`;
+    };
+
     const getCurrentDateResult = (deadline: string) => {
         const current_date_str = getCurrentDate();
-        console.log(current_date_str, deadline);
-    
+
+        console.log("Current Date String:", current_date_str);
+        const replaced_deadline = replaceHyphensWithSlashes(deadline);
+        console.log(replaced_deadline);
+
         // Function to parse date string in dd/MM/yyyy format to a Date object
         const parseDate = (dateStr: string) => {
             const [day, month, year] = dateStr.split('/').map(Number);
             return new Date(year, month - 1, day); // month is 0-indexed in Date object
         }
-    
+
         // Parse current date and deadline into Date objects
         const currentDate = parseDate(current_date_str);
-        const deadlineDate = parseDate(deadline);
-    
+        const deadlineDate = parseDate(replaced_deadline);
+
+        console.log("Parsed Current Date:", currentDate);
+        console.log("Parsed Deadline Date:", deadlineDate);
+
+        // Check if parsed dates are valid
+        if (isNaN(currentDate.getTime()) || isNaN(deadlineDate.getTime())) {
+            console.error("Invalid Date Parsing");
+            return false;
+        }
+
         // Compare the dates
-        return currentDate < deadlineDate;
+        const result_date = currentDate < deadlineDate;
+        console.log("Comparison Result:", result_date);
+        return result_date;
     }
+
 
 
 
@@ -194,22 +219,22 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                     <div className={styles.fileDialogBottom}>
                         {/* showing files map with the download button with their names  */}
                         {
-                        filesToShow && Object.keys(filesToShow).length > 0 ?
-                            <div>
-                                <div className={styles.filesColumn}>
-                                    {Object.keys(filesToShow).map((fileName, index) => (
-                                        <div key={index} className={styles.fileRow}>
-                                            <p className={styles.fileName}>{fileName}</p>
-                                            <button className={styles.downloadFileButton} onClick={() => downloadFile(filesToShow[fileName])}><img src="/download.png" /></button>
-                                        </div>
-                                    ))}
-                                </div>
+                            filesToShow && Object.keys(filesToShow).length > 0 ?
+                                <div>
+                                    <div className={styles.filesColumn}>
+                                        {Object.keys(filesToShow).map((fileName, index) => (
+                                            <div key={index} className={styles.fileRow}>
+                                                <p className={styles.fileName}>{fileName}</p>
+                                                <button className={styles.downloadFileButton} onClick={() => downloadFile(filesToShow[fileName])}><img src="/download.png" /></button>
+                                            </div>
+                                        ))}
+                                    </div>
 
-                            </div>
-                            :
-                            <div>
-                                <p className={styles.noFileExist}>No files to show!</p>
-                            </div>
+                                </div>
+                                :
+                                <div>
+                                    <p className={styles.noFileExist}>No files to show!</p>
+                                </div>
                         }
                     </div>
                 </div>
