@@ -33,11 +33,12 @@ interface documentStructure {
 interface TaskStatusProps {
     setOpenTask: React.Dispatch<React.SetStateAction<boolean>>;
     setTaskHeading: React.Dispatch<React.SetStateAction<string>>;
+    setTaskAuthor: React.Dispatch<React.SetStateAction<string>>;
     setTaskDocumentId: React.Dispatch<React.SetStateAction<string>>;
     setCurrentComponenet: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumentId, setCurrentComponenet }: TaskStatusProps) {
+export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumentId, setCurrentComponenet, setTaskAuthor }: TaskStatusProps) {
     // Define state to store the documents
     const [documents, setDocuments] = useState<documentStructure[]>([]);
     const { projectId } = useGlobalProjectIdContext();
@@ -128,11 +129,12 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
         }
     }
 
-    const setTaskValues = (taskHeading: string, documentId: string) => {
+    const setTaskValues = (taskHeading: string, documentId: string, createdBy: string) => {
         setOpenTask(true);
         setTaskHeading(taskHeading);
         setTaskDocumentId(documentId);
-        setCurrentComponenet('EditTask')
+        setCurrentComponenet('EditTask');
+        setTaskAuthor(createdBy);
     }
 
 
@@ -151,7 +153,7 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                                 <p>{document.data.Description}</p>
                             </div>
                             <button
-                                onClick={() => setTaskValues(document.data.Heading, document.id)}
+                                onClick={() => setTaskValues(document.data.Heading, document.id, document.data.CreatedBy)}
                                 className={styles.taskStatus}>{document.data.Status}</button>
                         </div>
                         <div className={styles.bottomBar}>

@@ -20,7 +20,7 @@ import { FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 // import mailgun from 'mailgun-js';
 import axios from 'axios';
 
-import { collection, where, query, getDocs, updateDoc, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { collection, where, query, getDocs, updateDoc, doc, getDoc, onSnapshot, deleteDoc } from "firebase/firestore";
 import { firestore, storage } from "@/app/firebase";
 import { arrayBuffer } from "stream/consumers";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -57,9 +57,52 @@ export default function Interface() {
     const [openTask, setOpenTask] = useState(false);
     const [taskHeading, setTaskHeading] = useState('');
     const [taskDocumentId, setTaskDocumentId] = useState('');
+    const [taskAuthor, setTaskAuthor] = useState('');
+
+    const deleteTask = async () => {
+        // delete the task for the user 
+        const assigniees_email = [];
+        const docRef = doc(firestore, 'Tasks', taskDocumentId);
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+            const assignees = docSnapshot.data().Assignies;
+            console.log(assignees);
+            for (const [id, boolean_value] of Object.entries(assignees)) {
+                const assignee_docRef = query(collection(firestore, 'Users'), where('Uid', "==", id));
+                const assignee_docSnapshot = await getDocs(assignee_docRef);
+                if (!assignee_docSnapshot.empty) {
+                    assigniees_email.push(assignee_docSnapshot.docs[0].data()['Email']);
+                }
+            }
+        }
+
+        // send this to the glitch server to get the notification
+        const response = await axios.post('https://fern-ivory-lint.glitch.me/sendTaskDelete', {
+            'Headline': taskHeading,
+            'Members': assigniees_email
+        });
+        console.log(response);
+
+
+        // deleting the document itself 
+        deleteDoc(docRef)
+            .then(() => {
+                console.log("Entire Document has been deleted successfully.")
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+        // removing the current details for the user 
+        RemoveTask();
+    }
+
+
+
     const RemoveTask = () => {
         setTaskHeading('');
         setOpenTask(false);
+        setTaskAuthor('');
         setTaskDocumentId('');
         setCurrentComponenet('Task status');
     }
@@ -520,24 +563,41 @@ export default function Interface() {
                             </div>
 
 
-                        </div>) : openTask ? (
-                            <div className={styles.messageHeaderStatus}>
-                                <button className={styles.backButton} onClick={RemoveTask}><img src="/Back.png" alt="Back image" /></button>
-                                <div className={styles.messageHeaderData}>
-                                    {/* here we would pass down the heading of the task to show  */}
-                                    <p className={styles.taskHeadingText}>{taskHeading}</p>
+
+                        </div>) :
+                        // header according to the openTask if this is open or not
+                        openTask ?
+                            (
+                                <div className={styles.messageHeaderStatus}>
+                                    <button className={styles.backButton} onClick={RemoveTask}><img src="/Back.png" alt="Back image" /></button>
+                                    <div className={styles.messageHeaderData}>
+                                        {/* here we would pass down the heading of the task to show  */}
+                                        <p className={styles.taskHeadingText}>{taskHeading}</p>
+                                        {
+                                            taskAuthor == uid ?
+                                                <button onClick={deleteTask} className={styles.deleteTaskButton}><img src="/Delete.png" alt="delete icon" /></button>
+                                                :
+                                                ''
+                                        }
+                                    </div>
                                 </div>
-                            </div>) :
-                        <div className={styles.headerBar}>
-                            {currentComponent == 'Task' || currentComponent == 'EditTask' && <img onClick={backMemberPage} src="/Back.png" />}
-                            {/* showing the task heading to reflect about which task we are talking about */}
-                            {currentComponent == 'EditTask' && <div style={{ marginLeft: -900, fontSize: 18, fontFamily: 'ReadexPro', fontWeight: 200 }}> <p className={styles.editTaskHeading}>{taskHeading} </p></div>}
-                            <button className={` ${currentComponent != 'Task' ? styles.distanceButton : styles.ShareButton}`}
-                                onClick={changeShare}
-                            >Share
-                                <img src="/Share.png" alt="share icon" />
-                            </button>
-                        </div>
+                            )
+                            :
+                            <div className={styles.headerBar}>
+                                {currentComponent == 'Task' || currentComponent == 'EditTask' && <img onClick={backMemberPage} src="/Back.png" />}
+                                {/* showing the task heading to reflect about which task we are talking about */}
+                                {currentComponent == 'EditTask' &&
+                                    <div style={{ marginLeft: -900, fontSize: 18, fontFamily: 'ReadexPro', fontWeight: 200 }}>
+                                        <p className={styles.editTaskHeading}>{taskHeading} </p>
+
+                                    </div>
+                                }
+                                <button className={` ${currentComponent != 'Task' ? styles.distanceButton : styles.ShareButton}`}
+                                    onClick={changeShare}
+                                >Share
+                                    <img src="/Share.png" alt="share icon" />
+                                </button>
+                            </div>
 
                 }
 
@@ -560,7 +620,7 @@ export default function Interface() {
                                 <div>
                                     {/* here the component should be rendered  */}
                                     {currentComponent === 'Create task' && <CreateTask />}
-                                    {currentComponent === 'Task status' && <TaskStatus setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} setTaskHeading={setTaskHeading} setTaskDocumentId={setTaskDocumentId} />}
+                                    {currentComponent === 'Task status' && <TaskStatus setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} setTaskHeading={setTaskHeading} setTaskDocumentId={setTaskDocumentId} setTaskAuthor={setTaskAuthor} />}
                                     {currentComponent === 'Members' && <Members setTaskId={setTaskId} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessage={false} setMessageUid={setMessageUid} />}
                                     {/* this should be load conditionally */}
 
