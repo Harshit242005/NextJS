@@ -42,6 +42,13 @@ export default function CreateTask() {
 
     const [openAttachmentView, setOpenAttachmentView] = useState(false);
 
+    const isDisabled = () => {
+        if (description == '' || heading == '' || deadline == '') {
+            return true;
+        }
+        return false;
+    }
+
 
     // unmount the component 
     useState(() => {
@@ -260,7 +267,7 @@ export default function CreateTask() {
         }
 
 
-
+        
         const response = await axios.post('https://fern-ivory-lint.glitch.me/sendTaskCreate', {
             'Headline': heading,
             'Deadline': deadline,
@@ -354,8 +361,6 @@ export default function CreateTask() {
                 <input type="text" className={styles.TaskHeading} placeholder='Type heading...' onChange={(e) => setHeading(e.target.value)} />
 
                 <div className={styles.datepickerContainer}>
-
-
                     <input type="date" onChange={handleDateChange} className={styles.datepicker} />
                 </div>
 
@@ -416,8 +421,7 @@ export default function CreateTask() {
                 }
 
                 {/* button to add assignies */}
-                <div >
-
+                <div style={{marginTop: 5}}>
                     <button onClick={() => SetShowAssigniesOption(true)} className={styles.assignButton}>
                         <img src="/Peoples.png" alt="Peoples icon" />
                         {assignies.length} Assign</button>
@@ -431,7 +435,11 @@ export default function CreateTask() {
                 <Assignies setShowAssignOption={SetShowAssigniesOption} showAssignOption={showAssignOption} setAssignies={setAssignies} assignies={assignies} />
             }
 
-            <button onClick={createTaskFunction} style={{ width: 915, border: 'none', borderRadius: 5, marginTop: 10, height: 50, fontSize: 20, fontFamily: 'ReadexPro', backgroundColor: 'black', color: 'whitesmoke' }}>Create</button>
+            {
+                isDisabled() ?
+                <button onClick={createTaskFunction} disabled  style={{ width: 915, border: 'none', borderRadius: 5, marginTop: 10, height: 50, fontSize: 20, fontFamily: 'ReadexPro', backgroundColor: 'black', color: 'whitesmoke' }}>Create</button> :
+                <button onClick={createTaskFunction}  style={{ width: 915, border: 'none', borderRadius: 5, marginTop: 10, height: 50, fontSize: 20, fontFamily: 'ReadexPro', backgroundColor: 'black', color: 'whitesmoke' }}>Create</button>
+            }
         </main>
     )
 }
