@@ -335,12 +335,16 @@ export default function EditTask({ taskDocumentId }: EditTask) {
                     </div>
                     {/* using the map to show the data */}
                     <div className={styles.fileColumn}>
-                        {Object.entries(taskFileData).map(([key, value]) => (
+                        {
+                            taskFileData ?
+                        Object.entries(taskFileData).map(([key, value]) => (
                             <div className={styles.fileRow}>
                                 <p className={styles.fileName}>{key}</p>
                                 <button onClick={() => handleDeleteFile(key)} className={styles.fileDeleteButton}><img src='/deleteIcon.png' /></button>
                             </div>
-                        ))}
+                        )) :
+                        <p className={styles.noFileToShow}>No file to show!</p>
+                        }
                         <input type="file"
                             style={{ display: 'none' }}
                             ref={fileInputRef}
@@ -367,7 +371,7 @@ export default function EditTask({ taskDocumentId }: EditTask) {
                                     <img className={styles.assignieImage} src={value[1]} />
                                     <p className={styles.assignieName}>{value[0]}</p>
                                 </div>
-                                <button onClick={() => deleteAssignee(key)} className={styles.fileDeleteButton}><img src='/deleteIcon.png' /></button>
+                                <button onClick={() => deleteAssignee(key)} className={` ${uid != createdBy ? styles.noDeleteAssigneeButton : styles.fileDeleteButton}`}><img src='/deleteIcon.png' /></button>
                             </div>
                         ))}
                         <button onClick={() => setOpenOptionAssignie(true)} className={`${uid == createdBy ? styles.addFileButton : styles.noAddFileButton}`}>Add Assignies</button>
