@@ -105,14 +105,6 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
     };
 
 
-    // code for the update of the status of the chat message 
-    // const markMessageAsSeen = async (messageId: string) => {
-    //     console.log('changing the message seen for the message doc id is', messageId);
-    //     const docRef = doc(firestore, 'Chats', messageId);
-    //     await updateDoc(docRef, {Status: true});
-    // };
-
-
 
     function getCurrentDate() {
         const currentDate = new Date();

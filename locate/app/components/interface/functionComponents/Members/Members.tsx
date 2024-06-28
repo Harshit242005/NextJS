@@ -5,7 +5,7 @@ import { useState, useEffect, SetStateAction, useRef } from "react"
 import { useGlobalProjectIdContext } from "@/app/context/projectId"
 import { useGlobalUidContext } from "@/app/context/uid"
 import { firestore } from "@/app/firebase"
-import { where, doc, getDoc, collection, query, onSnapshot, getDocs, orderBy, addDoc } from "firebase/firestore"
+import { where, doc, getDoc, collection, query, onSnapshot, getDocs, orderBy, addDoc, updateDoc } from "firebase/firestore"
 import styles from './members.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faL, faMessage } from '@fortawesome/free-solid-svg-icons';
@@ -92,8 +92,35 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
                     docData: doc.data() as messageDoc['docData']
                 });
             });
+
+            // should add a for loop to iterate over the array to get the new userId added in the chatmessage viewedby
+            for (const message of messages) {
+                const viewed_by = message.docData.ViewedBy || [];
+                const message_from = message.docData.From;
+                if (uid && !viewed_by.includes(uid) && message_from != uid) {
+                    viewed_by.push(uid);
+                }
+
+
+                console.log(message.messageDoc, viewed_by);
+                // update the message in the Firestore core itself
+                const docRef = doc(firestore, 'GroupChat', message.messageDoc);
+                updateDoc(docRef, { ViewedBy: viewed_by })
+                    .then(() => {
+                        console.log('updated the viewedby array of the doc');
+                    })
+                    .catch((error) => {
+                        console.error('facing error while updating the viewedby', error);
+                    });
+
+            }
+
+
+
             setChatMessages(messages);
-            console.log(chatMessages);
+            // console.log(chatMessages);
+
+
             // store the message in the dict and then in the useState hook
             const isReference: { [key: string]: boolean } = {};
             for (const message of messages) {
@@ -107,8 +134,8 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
             // set the boolean state
             setIsReferenceMessage(isReference);
 
+
             // Fetch viewedBy images for each message
-            // const limitedMessages = messages.slice(0, 3);
             for (const message of messages) {
                 await fetchViewedByImages(message.messageDoc, message.docData.ViewedBy);
             }
@@ -462,7 +489,7 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
         setCurrentComponenet('Task'); // set the current component blank
 
 
-        // router.push(`/components/Task/${taskId}`);   
+
     }
 
 
@@ -609,13 +636,15 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
                                                     <div className={styles.normalMessageBottom}>
                                                         <div className={styles.viewedByImagesCollection}>
                                                             {/* list to show the message is viewed by the person as image */}
-                                                            {viewedByImages[message.messageDoc] && (
-                                                                <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
-                                                                    {viewedByImages[message.messageDoc].map((imageUrl, index) => (
-                                                                        <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
-                                                                    ))}
-                                                                </div>
-                                                            )}
+                                                            {
+                                                                viewedByImages[message.messageDoc] && (
+                                                                    <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
+                                                                        {viewedByImages[message.messageDoc].map((imageUrl, index) => (
+                                                                            <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
+                                                                        ))}
+                                                                    </div>
+                                                                )
+                                                            }
                                                         </div>
                                                         <p className={styles.messageTimestamp}>{message.docData.TimeStamp}</p>
                                                     </div>
