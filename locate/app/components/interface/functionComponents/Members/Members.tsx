@@ -257,6 +257,9 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
     };
 
     const groupedMessages = groupMessagesByDate(chatMessages);
+    const closeTaskReference = () => {
+        setTaskDocument(null);
+    }
 
     const sendMessage = async () => {
         if (messageText.trim() !== "") {
@@ -281,7 +284,10 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
             await addDoc(collectionRef, messageData);
 
         }
-
+        closeTaskReference();
+        if (taskDocument) {
+            setTaskDocument(null);
+        }
         setMessageText('');
         const messageBox = messageBoxRef.current;
         if (messageBox) {
@@ -324,9 +330,7 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
         }
     };
 
-    const closeTaskReference = () => {
-        setTaskDocument(null);
-    }
+    
 
     const [storeMessageForReference, setStoreMessageForReference] = useState<{ [key: string]: string[] }>({});
     // a useState hook based dict to store the boolean value with the message doc id and the nature of being a reference either true or false 
@@ -591,8 +595,8 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
                                                 </div>
                                                 :
                                                 // styles for the text which is sent by me
-                                                <div className={styles.referenceMessageMy} >
-                                                    <div className={styles.referenceMessageHeader}>
+                                                <div className={styles.referenceMessageMy}>
+                                                    <div className={styles.referenceMessageHeader} >
                                                         {storeMessageForReference[message.messageDoc] && (
                                                             <div className={styles.taskDetails}>
                                                                 {storeMessageForReference[message.messageDoc].map((detail, index) => (
@@ -651,7 +655,7 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
                                                 </div>
                                                 :
                                                 // message sent by me should be 
-                                                <div style={{ marginRight: 25 }}>
+                                                <div style={{ marginRight: 25, padding: 10 }}>
                                                     <p>{message.docData.Message}</p>
                                                     <div className={styles.normalMyMessageBottom}>
                                                         <p className={styles.messageTimestamp}>{message.docData.TimeStamp}</p>
