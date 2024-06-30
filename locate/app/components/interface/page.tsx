@@ -52,6 +52,7 @@ export default function Interface() {
     }
     // to hold the function that i am going to call for the deletion of the chat
     const [deleteFunction, setDeleteFunction] = useState<(() => void) | undefined>(undefined);
+    const [openMessageMenu, setOpenMessageMenu] = useState<boolean>(false);
 
     // for the task status 
     const [openTask, setOpenTask] = useState(false);
@@ -544,22 +545,26 @@ export default function Interface() {
                         <div className={styles.messageHeader}>
                             { /* show the profile header for the user */}
                             <div className={styles.messageHeaderStatus}>
-                                <button className={styles.backButton} onClick={RemoveMessage}><img src="/Back.png" alt="Back image" /></button>
-                                <div className={styles.messageHeaderData}>
-                                    <div className={styles.messageUserStatus}>
-                                        <img className={styles.messageImage} src={messageImageUrl} alt="message user image" />
 
-                                        <div className={`${messageUserStatus ? styles.activeMessageUser : styles.inactiveMessageUser}`}></div>
+                                <button className={styles.backButton} onClick={RemoveMessage}><img src="/Back.png" alt="Back image" /></button>
+                                <div className={styles.messageHeaderMenuRow}>
+                                    <div className={styles.messageHeaderData}>
+
+                                        <div className={styles.messageUserStatus}>
+
+                                            <img className={styles.messageImage} src={messageImageUrl} alt="message user image" />
+
+                                            <div className={`${messageUserStatus ? styles.activeMessageUser : styles.inactiveMessageUser}`}></div>
+
+                                        </div>
+
+                                        <p className={styles.messageUserName}>{messageName}</p>
                                     </div>
-                                    <p className={styles.messageUserName}>{messageName}</p>
+                                   
+
+                                    {/* menu button for the member */}
+                                    <button onClick={() => setOpenMessageMenu(!openMessageMenu)}  className={styles.menuButtonMessage}><img src="/MenuVertical.png" alt="Menu button" /></button>
                                 </div>
-                                {/* delete button to delete the selected chat with a click of a button */}
-                                {
-                                    showDeleteButton ?
-                                        <button className={styles.deleteButton} onClick={deleteFunction}><img src="/Delete.png" alt="Delete image" /></button>
-                                        :
-                                        <div></div>
-                                }
                             </div>
 
 
@@ -583,6 +588,7 @@ export default function Interface() {
                                 </div>
                             )
                             :
+                            // styling the headbar for the task related components  
                             <div className={styles.headerBar}>
                                 {currentComponent == 'Task' || currentComponent == 'EditTask' && <img onClick={backMemberPage} src="/Back.png" />}
                                 {/* showing the task heading to reflect about which task we are talking about */}
@@ -607,15 +613,17 @@ export default function Interface() {
                         openMessage ? (
                             <div>
                                 {/* showing the chat message box  */}
-                                <Chat setOpenMessage={setOpenMessage} openMessage={false} messageUid={messageUid} changeDeleteButtonShow={changeDeleteButtonShow} onDelete={setDeleteFunction} />
-                            </div>) :
-                            openTask ? (
-                                // component to show the task details 
-                                <div>
-                                    <EditTask taskDocumentId={taskDocumentId} />
-                                    {/* <TaskDetails taskDocumentId={taskDocumentId} setOpenTask={setOpenTask} setCurrentComponenet={setCurrentComponenet} /> */}
-                                </div>
-                            )
+                                <Chat setOpenMessage={setOpenMessage} openMessage={false} messageUid={messageUid} changeDeleteButtonShow={changeDeleteButtonShow} onDelete={setDeleteFunction} openMessageMenu={openMessageMenu} RemoveMessage={RemoveMessage} />
+                            </div>
+                        ) :
+                            openTask ?
+                                (
+                                    // component to show the task details 
+                                    <div>
+                                        <EditTask taskDocumentId={taskDocumentId} />
+                                        {/* <TaskDetails taskDocumentId={taskDocumentId} setOpenTask={setOpenTask} setCurrentComponenet={setCurrentComponenet} /> */}
+                                    </div>
+                                )
                                 :
                                 <div>
                                     {/* here the component should be rendered  */}

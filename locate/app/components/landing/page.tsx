@@ -3,7 +3,7 @@
 // get the uid from the context and check for the Projects array and if their exist one or not 
 import { useGlobalUidContext } from "@/app/context/uid"
 import { useGlobalProjectIdContext } from "@/app/context/projectId";
-import { collection, getDocs, getFirestore, where, addDoc, doc, query, arrayUnion, updateDoc, onSnapshot, } from "firebase/firestore";
+import { collection, getDocs, getFirestore, where, addDoc, doc, query, arrayUnion, updateDoc, onSnapshot, getDoc, } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import styles from './landing.module.css';
 import { firestore } from "@/app/firebase";
@@ -22,7 +22,7 @@ export default function landing() {
     const [joinProjectName, setJoinProject] = useState('');
     const [showNewProject, setShowCreateNewProject] = useState<boolean>(false);
     const { uid, imageUrl, userName } = useGlobalUidContext();
-    const { projectId, projectName, setProjectId, setProjectName } = useGlobalProjectIdContext();
+    const { projectId, projectName, setProjectId, setProjectName, setProjectCreator } = useGlobalProjectIdContext();
     console.log('uid value is', uid);
     console.log('image url is', imageUrl);
 
@@ -300,6 +300,15 @@ export default function landing() {
         // defining the project id for the name 
         const projectDocumentId = await getDocumentId(projectName);
         setProjectId(projectDocumentId);
+
+        // get the creatorid from the document of the project
+        const projectDocRef = doc(firestore, 'Projects', projectDocumentId);
+        const docSnapshot = await getDoc(projectDocRef);
+        if (docSnapshot.exists()) {
+            const creator = docSnapshot.data().createdBy;
+            setProjectCreator(creator)
+        }
+
         // navigating the landing pagr
         router.push(`/components/interface`);
     }

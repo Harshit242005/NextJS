@@ -194,7 +194,7 @@
     display: flex;
     flex-direction: row;
     
-    gap: 850px;
+    gap: 10px;
 }
 
 .deleteTaskButton
@@ -207,7 +207,7 @@
     font-size: 18px;
     font-family: 'ReadexPro';
     font-weight: 600;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .backButton {
@@ -225,6 +225,13 @@
     font-family: 'ReadexPro';
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
+}
+
+.messageHeaderMenuRow
+{
+    display: flex;
+    flex-direction: row;
+    gap: 850px;
 }
 
 .taskHeadingText {
@@ -752,4 +759,10 @@
     background-color: #e8e8e86d;
     padding-left: 10px;
     
+}
+
+.menuButtonMessage
+{
+    border: none;
+    background-color: transparent;
 }

@@ -5,6 +5,8 @@ interface MemberFunctionProps {
     messageUid: string;
     changeDeleteButtonShow: () => void;
     onDelete: React.Dispatch<React.SetStateAction<any>>;
+    openMessageMenu: boolean;
+    RemoveMessage: () => void;
 }
 
 interface messageDoc {
@@ -24,13 +26,14 @@ import styles from './chat.module.css';
 import { useGlobalUidContext } from "@/app/context/uid";
 import { useGlobalProjectIdContext } from "@/app/context/projectId";
 import { firestore } from "@/app/firebase";
-import { collection, addDoc, onSnapshot, getDocs, query, where, updateDoc, doc, deleteDoc, orderBy } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, getDocs, query, where, updateDoc, doc, deleteDoc, orderBy, getDoc, DocumentSnapshot } from "firebase/firestore";
 import Image from "next/image";
+import axios from "axios";
 
 
-export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonShow, onDelete }: MemberFunctionProps) {
-    const { } = useGlobalProjectIdContext();
-    const { uid } = useGlobalUidContext();
+export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonShow, onDelete, openMessageMenu, RemoveMessage }: MemberFunctionProps) {
+    const { projectCreator, projectId, projectName } = useGlobalProjectIdContext();
+    const { uid, email } = useGlobalUidContext();
     const [messageText, setMessaeText] = useState<string>('');
     const [chatMessages, setChatMessages] = useState<messageDoc[]>([]);
     const [otherPersonImageUrl, setOtherPersonImageUrl] = useState('');
@@ -198,6 +201,40 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
 
     const groupedMessages = groupMessagesByDate(chatMessages);
 
+    // function to delete the user 
+    const deleteUser = async () => {
+        // remove the member id from the projects and also from the user section as well
+        const projectDoc = doc(firestore, 'Projects', projectId);
+        const projectDocSnapshot = await getDoc(projectDoc);
+        if (projectDocSnapshot.exists()) {
+            const members = projectDocSnapshot.data().members || [];
+            // filter the members to remove the member id 
+            const removed_member = members.filter((mem : string) => mem != messageUid);
+            await updateDoc(projectDoc, {members: removed_member});
+            console.log('members are now updated');
+        }
+
+        let removedUserEmail = '';
+        // removing project name from the project list from the user doc as well
+        const userDocRef = query(collection(firestore, 'Users'), where('Uid', "==", messageUid));
+        const docSnapshot = await getDocs(userDocRef);
+        if (!docSnapshot.empty) {
+            const userDocId = docSnapshot.docs[0].id;
+            const user_doc = doc(firestore, 'Users', userDocId);
+            const userProjects = docSnapshot.docs[0].data()['Projects'];
+            removedUserEmail = docSnapshot.docs[0].data()['Email'];
+            const removed_project = userProjects.filter((project: string) => project != projectName);
+            await updateDoc(user_doc, {Projects: removed_project});
+        }
+
+        // send an notice to the user about the project removal 
+        const response = await axios.post('https://fern-ivory-lint.glitch.me/removeMember', {
+            ownerEmail: email, MemberEmail: removedUserEmail, projectName: projectName });
+            console.log(response);
+        // navigate back to the members chat
+        RemoveMessage();
+    }
+
 
 
     return (
@@ -232,6 +269,16 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
                 <input type="text" className={styles.chatMessageInput} value={messageText} placeholder="Type message..." onChange={(e) => setMessaeText(e.target.value)} />
                 <button className={styles.sendChatButton} onClick={sendMessage}><img src="/Send.png" alt="send button icon" /></button>
             </div>
+
+            {openMessageMenu && 
+            <div className={styles.MessageMenuButtons}>
+                {
+                    projectCreator == uid ?
+                    <button onClick={deleteUser} className={styles.messageMenuButton}>Remove User</button> : ''
+                }
+                <button className={styles.messageMenuButton}>Delete Messages</button>
+            </div>
+            }
         </main>
     )
 }

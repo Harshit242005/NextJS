@@ -163,3 +163,36 @@
     font-size: 15px;
     text-align: center;
 }
+
+.MessageMenuButtons
+{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 100px;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    top: 8%;
+    left: 82.5%;
+    position: absolute;
+    z-index: 999;
+}
+
+.messageMenuButton
+{
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    font-family: 'ReadexPro';
+    font-weight: 100;
+    font-size: 18px;
+    width: 100%;
+    height: 50px;
+    color: rgba(255, 255, 255, 0.5);
+    transition: 0.3s;
+}
+
+.messageMenuButton:hover
+{
+    color: white;
+}
