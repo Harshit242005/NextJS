@@ -3,8 +3,7 @@ interface MemberFunctionProps {
     setOpenMessage: React.Dispatch<React.SetStateAction<boolean>>;
     openMessage: boolean;
     messageUid: string;
-    changeDeleteButtonShow: () => void;
-    onDelete: React.Dispatch<React.SetStateAction<any>>;
+
     openMessageMenu: boolean;
     RemoveMessage: () => void;
 }
@@ -31,7 +30,7 @@ import Image from "next/image";
 import axios from "axios";
 
 
-export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonShow, onDelete, openMessageMenu, RemoveMessage }: MemberFunctionProps) {
+export default function Chat({ setOpenMessage, messageUid, openMessageMenu, RemoveMessage }: MemberFunctionProps) {
     const { projectCreator, projectId, projectName } = useGlobalProjectIdContext();
     const { uid, email } = useGlobalUidContext();
     const [messageText, setMessaeText] = useState<string>('');
@@ -43,8 +42,8 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
 
 
     useEffect(() => {
-        onDelete(deleteChatMessageDocId);
-        // Set up listener for real-time updates to chat messages
+
+        // Set up listener for real-time updates to chat messages 
         const q = query(
             collection(firestore, 'Chats'),
             orderBy('Date', 'asc')
@@ -85,7 +84,7 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
             unsubscribe();
             getOtherPersonImageUrl();
         };
-    }, [chatMessages, otherPersonImageUrl, onDelete]); // Empty dependency array to run only once when component mounts
+    }, [chatMessages, otherPersonImageUrl]); // Empty dependency array to run only once when component mounts
 
     const messageBoxRef = useRef<HTMLDivElement>(null);
     const isAtBottomRef = useRef<boolean>(true);
@@ -114,17 +113,6 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
         return currentDate.toISOString(); // returns the date in ISO 8601 format
     }
 
-    const selectChatMessage = (messageFromId: string, selectChatMessage: string) => {
-
-
-        addInSelectedChats(messageFromId, selectChatMessage); // start the populating of the list that hold message doc id 
-        if (enableClickSelection) { // hide the button and selection functionality if it's true 
-            setEnableClickSelection(!enableClickSelection); //  do not have to contain an extra button at the header for deselection
-            changeDeleteButtonShow(); // show and hide the delete button     
-
-            setSelectedChatsAfterDoubleClicks([]); // clear the selected chat's from the list
-        }
-    }
 
     // function to delete the chat messages list
     const deleteChatMessageDocId = async () => {
@@ -132,14 +120,20 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
             const docRef = doc(firestore, "Chats", messageDocID);
             await deleteDoc(docRef);
         }
+
+        setEnableClickSelection(false);
+        
     }
 
     // function to add the chat message doc id in the list of ids
     const addInSelectedChats = (messageFrom: string, messageDocId: string) => {
+        console.log('clicked');
+        console.log(selectedChatsAfterDoubleClicks);
         if (messageFrom == uid && enableClickSelection) {
             // add the messageDocId in the list
             setSelectedChatsAfterDoubleClicks(prevState => {
                 if (prevState.includes(messageDocId)) {
+                    setEnableClickSelection(!enableClickSelection);
                     // Remove the messageDocId if it already exists
                     return prevState.filter(id => id !== messageDocId);
                 } else {
@@ -209,8 +203,8 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
         if (projectDocSnapshot.exists()) {
             const members = projectDocSnapshot.data().members || [];
             // filter the members to remove the member id 
-            const removed_member = members.filter((mem : string) => mem != messageUid);
-            await updateDoc(projectDoc, {members: removed_member});
+            const removed_member = members.filter((mem: string) => mem != messageUid);
+            await updateDoc(projectDoc, { members: removed_member });
             console.log('members are now updated');
         }
 
@@ -224,13 +218,14 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
             const userProjects = docSnapshot.docs[0].data()['Projects'];
             removedUserEmail = docSnapshot.docs[0].data()['Email'];
             const removed_project = userProjects.filter((project: string) => project != projectName);
-            await updateDoc(user_doc, {Projects: removed_project});
+            await updateDoc(user_doc, { Projects: removed_project });
         }
 
         // send an notice to the user about the project removal 
         const response = await axios.post('https://fern-ivory-lint.glitch.me/removeMember', {
-            ownerEmail: email, MemberEmail: removedUserEmail, projectName: projectName });
-            console.log(response);
+            ownerEmail: email, MemberEmail: removedUserEmail, projectName: projectName
+        });
+        console.log(response);
         // navigate back to the members chat
         RemoveMessage();
     }
@@ -243,13 +238,13 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
 
             <div className={styles.messageBox} id="messageBox" ref={messageBoxRef} onScroll={handleScroll}>
 
-               
+
 
                 {Object.keys(groupedMessages).map(date => (
                     <div key={date}>
                         <div className={styles.dateHeader}>{date}</div>
                         {groupedMessages[date].map((message) => (
-                            <div style={{marginTop:10}} key={message.messageDocId} onClick={() => addInSelectedChats(message.docData.From, message.messageDocId)} onDoubleClick={() => selectChatMessage(message.docData.From, message.messageDocId)} className={`${message.docData.From === uid ? styles.myMessage : styles.otherMessage} ${selectedChatsAfterDoubleClicks.includes(message.messageDocId) ? styles.highlightMessage : ''}`} id={message.messageDocId}>
+                            <div style={{ marginTop: 10 }} key={message.messageDocId} onDoubleClick={() => addInSelectedChats(message.docData.From, message.messageDocId)} className={`${message.docData.From === uid ? styles.myMessage : styles.otherMessage} ${selectedChatsAfterDoubleClicks.includes(message.messageDocId) ? styles.highlightMessage : ''}`} id={message.messageDocId}>
                                 <p>{message.docData.MessageText}</p>
                                 <div className={`${message.docData.From === uid ? styles.myChatMessageData : styles.chatMessageData}`}>
                                     <p>{message.docData.Timestamp}</p>
@@ -265,19 +260,23 @@ export default function Chat({ setOpenMessage, messageUid, changeDeleteButtonSho
 
             {/* message input box  */}
             <div className={styles.messageinputBox}>
-              
+
                 <input type="text" className={styles.chatMessageInput} value={messageText} placeholder="Type message..." onChange={(e) => setMessaeText(e.target.value)} />
                 <button className={styles.sendChatButton} onClick={sendMessage}><img src="/Send.png" alt="send button icon" /></button>
             </div>
 
-            {openMessageMenu && 
-            <div className={styles.MessageMenuButtons}>
-                {
-                    projectCreator == uid ?
-                    <button onClick={deleteUser} className={styles.messageMenuButton}>Remove User</button> : ''
-                }
-                <button className={styles.messageMenuButton}>Delete Messages</button>
-            </div>
+            {openMessageMenu &&
+                <div className={styles.MessageMenuButtons}>
+                    {
+                        projectCreator == uid ?
+                            <button onClick={deleteUser} className={styles.messageMenuButton}>Remove User</button> : ''
+                    }
+                    {
+                            enableClickSelection ? <button onClick={deleteChatMessageDocId} className={styles.messageMenuButton}>Delete Messages</button>
+                            : 
+                            <button disabled className={styles.messageMenuButton}>Delete Messages</button>
+                    }
+                </div>
             }
         </main>
     )

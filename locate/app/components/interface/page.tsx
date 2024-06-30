@@ -613,7 +613,7 @@ export default function Interface() {
                         openMessage ? (
                             <div>
                                 {/* showing the chat message box  */}
-                                <Chat setOpenMessage={setOpenMessage} openMessage={false} messageUid={messageUid} changeDeleteButtonShow={changeDeleteButtonShow} onDelete={setDeleteFunction} openMessageMenu={openMessageMenu} RemoveMessage={RemoveMessage} />
+                                <Chat setOpenMessage={setOpenMessage} openMessage={false} messageUid={messageUid} openMessageMenu={openMessageMenu} RemoveMessage={RemoveMessage} />
                             </div>
                         ) :
                             openTask ?
