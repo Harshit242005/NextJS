@@ -1,4 +1,4 @@
-
+'use client';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '@/app/firebase';
 import { useGlobalUidContext } from '@/app/context/uid';
