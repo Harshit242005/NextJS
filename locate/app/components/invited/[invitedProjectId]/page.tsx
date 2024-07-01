@@ -8,12 +8,13 @@ import { firestore } from '@/app/firebase';
 import { arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import axios from 'axios';
 
 
 export default function invited({ params }: { params: { invitedProjectId: string } }) {
     const [projectName, setProjectNameFromId] = useState<string>('');
     const { setUserId } = useGlobalSocketContext();
-    const { setProjectCreator, setProjectId, setProjectName } = useGlobalProjectIdContext();
+    const { setProjectCreator, setProjectId, setProjectName, projectCreator } = useGlobalProjectIdContext();
 
     useEffect(() => {
         const getProjectName = async () => {
@@ -33,7 +34,7 @@ export default function invited({ params }: { params: { invitedProjectId: string
 
 
     const router = useRouter();
-    const { setUid, setEmail, setImageUrl, setUserName, uid } = useGlobalUidContext();
+    const { setUid, setEmail, setImageUrl, setUserName, uid, email } = useGlobalUidContext();
     // function to handle google signup
     const googleSignIn = async () => {
         const provider = new GoogleAuthProvider();
@@ -93,13 +94,35 @@ export default function invited({ params }: { params: { invitedProjectId: string
 
     }
 
-    
+    const rejectInvite = async () => {
+        // get the email of the creator who has invited the user 
+        const creator_ref = query(collection(firestore, 'Users'), where('Uid', "==", projectCreator));
+        const creator_snapshot = await getDocs(creator_ref);
+        let creator_email = ''
+        if (!creator_snapshot.empty) {
+            const creator_data = creator_snapshot.docs[0].data();
+            creator_email = creator_data['Email'];
+        }
+        const response = await axios.post('https://fern-ivory-lint.glitch.me/rejectInvite', {
+            'projectCreatorEmail': creator_email,
+            'rejectorEmail': email,
+            'projectName': projectName
+        })
+        .then(() => {
+            console.log(response);
+        })
+        .catch((error: any) => {
+            console.log(error);
+        })
+    }
+
+
     return
     <div>
         <p>You have been invited to join the project {projectName}</p>
         <div>
             <button onClick={googleSignIn}>Accept</button>
-            <button>Reject</button>
+            <button onClick={rejectInvite}>Reject</button>
         </div>
     </div>
 }
