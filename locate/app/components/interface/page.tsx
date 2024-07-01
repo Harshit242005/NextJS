@@ -278,7 +278,7 @@ export default function Interface() {
         const unique_url = `https://locatetest.netlify.app/components/invited/${projectId}`;
         // inviteViaEmail(unique_url);
 
-        const response = await axios.post('https://fern-ivory-lint.glitch.me/sendTaskCreate', {
+        const response = await axios.post('https://fern-ivory-lint.glitch.me/sendInvite', {
             'inviteFrom': email,
             'inviteTo': inviteEmailUser,
             'projectName': projectName,
@@ -645,9 +645,6 @@ export default function Interface() {
             {showShare &&
                 <div className={styles.shareProject}>
                     <p className={styles.inviteHeading}>Share your project</p>
-
-                    
-
                     <div className={styles.InviteEmailSection}>
                         <input className={styles.InviteEmail} type="email" placeholder="Type email" onChange={(e) => setInviteEmailUser(e.target.value)} />
                         <button className={styles.InviteEmailButton} onClick={Invite}>Invite</button>
