@@ -33,7 +33,7 @@ export default function Interface() {
 
     const [inviteEmailUser, setInviteEmailUser] = useState<string>('');
     const { projectId, projectName, setProjectId, setProjectName } = useGlobalProjectIdContext();
-    const { uid, setImageUrl, imageUrl, userName, setIsProjectMember, isProjectMember } = useGlobalUidContext();
+    const { uid, setImageUrl, imageUrl, userName, email, setIsProjectMember, isProjectMember } = useGlobalUidContext();
     const [currentComponent, setCurrentComponenet] = useState<string>('Create task');
     const [openProfile, setOpenProfile] = useState<boolean>(false);
     const [showShare, setshowShare] = useState<boolean>(false);
@@ -275,11 +275,13 @@ export default function Interface() {
 
         // let's see how to run a nodemailer service to send the mail
         // for the unique URL formation
-        const unique_url = `http://localhost:3000/components/invitation?projectId=${encodeURIComponent(projectId)}&gmail=${encodeURIComponent(inviteEmailUser)}&accessLevel=${encodeURIComponent(accessLevel)}`;
+        const unique_url = `https://locatetest.netlify.app/components/invited/${projectId}`;
         // inviteViaEmail(unique_url);
 
-        const response = await axios.post('http://localhost:5000/sendInvite', {
+        const response = await axios.post('https://fern-ivory-lint.glitch.me/sendTaskCreate', {
+            'inviteFrom': email,
             'inviteTo': inviteEmailUser,
+            'projectName': projectName,
             'UniqueUrl': unique_url
         });
 
@@ -644,24 +646,7 @@ export default function Interface() {
                 <div className={styles.shareProject}>
                     <p className={styles.inviteHeading}>Share your project</p>
 
-                    <FormControl fullWidth >
-                        <InputLabel id="demo-simple-select-label"
-                            className={styles.selectLevel}
-                        >Access level</InputLabel>
-                        <Select
-
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={accessLevel}
-                            label="Access level"
-                            onChange={handleChange}
-
-                        >
-                            <MenuItem value={'Viewer'} className={styles.selectAccessLevel}>Viewer</MenuItem>
-                            <MenuItem value={'Member'} className={styles.selectAccessLevel}>Member</MenuItem>
-
-                        </Select>
-                    </FormControl>
+                    
 
                     <div className={styles.InviteEmailSection}>
                         <input className={styles.InviteEmail} type="email" placeholder="Type email" onChange={(e) => setInviteEmailUser(e.target.value)} />
