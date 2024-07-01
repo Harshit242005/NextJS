@@ -36,6 +36,7 @@ export default function CreateTask() {
     const [deadline, setDeadline] = useState<string>('');
 
     const [assignies, setAssignies] = useState<string[]>([]);
+    const [selectedId, setSelectedUid] = useState<string[]>([]);
 
     const [fileObject, setFileObject] = useState<any>(null);
     const [fileObjectView, setFileObjectForView] = useState<any>({});
@@ -62,6 +63,7 @@ export default function CreateTask() {
             setFileObject(null);
             setFileObjectForView({});
             setOpenAttachmentView(false);
+            setSelectedUid([]);
         }
     })
 
@@ -432,7 +434,7 @@ export default function CreateTask() {
             {
                 showAssignOption &&
                 // call a component to show up
-                <Assignies setShowAssignOption={SetShowAssigniesOption} showAssignOption={showAssignOption} setAssignies={setAssignies} assignies={assignies} />
+                <Assignies setShowAssignOption={SetShowAssigniesOption} showAssignOption={showAssignOption} setAssignies={setAssignies} setSelectedUid={setSelectedUid} selectedId={selectedId} assignies={assignies} />
             }
 
             {

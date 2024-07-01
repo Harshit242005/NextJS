@@ -1,6 +1,6 @@
 
 
-
+import { useGlobalUidContext } from '@/app/context/uid';
 import { useEffect, useState } from 'react';
 import { useGlobalProjectIdContext } from '@/app/context/projectId';
 import { firestore } from '@/app/firebase';
@@ -11,7 +11,7 @@ interface memberData {
     imageUrl: string,
     name: string,
     uid: string,
-    selected: boolean
+  
 }
 
 interface AssigniesProps {
@@ -19,27 +19,30 @@ interface AssigniesProps {
     setAssignies: React.Dispatch<React.SetStateAction<string[]>>;
     showAssignOption: boolean;
     setShowAssignOption: React.Dispatch<React.SetStateAction<boolean>>;
+    setSelectedUid: React.Dispatch<React.SetStateAction<string[]>>;
+    selectedId: string[];
 }
 
-export default function Assignies({ showAssignOption, setShowAssignOption, assignies, setAssignies }: AssigniesProps) {
+export default function Assignies({  setShowAssignOption, selectedId, setSelectedUid,  setAssignies }: AssigniesProps) {
     const { projectId } = useGlobalProjectIdContext();
+    const { uid } = useGlobalUidContext();
     const [memberData, setMemberData] = useState<memberData[]>([]);
     const [filteredMembers, setFilteredMembers] = useState<memberData[]>([]);
-    const [selectedId, setSelectedUid] = useState<string[]>([]);
+    
 
     useEffect(() => {
 
-
-
+        console.log(selectedId);
         const loadMembers = async () => {
             const documentRef = doc(firestore, 'Projects', projectId);
             const document = await getDoc(documentRef);
 
             if (document.exists()) {
                 const members = document.data().members || [];
+                const filtered_members = members.filter((member: string) => member != uid)
                 const userDataArray: memberData[] = [];
 
-                for (const ID of members) {
+                for (const ID of filtered_members) {
                     const q = query(collection(firestore, 'Users'), where('Uid', "==", ID));
                     const documents = await getDocs(q);
 
@@ -63,22 +66,25 @@ export default function Assignies({ showAssignOption, setShowAssignOption, assig
         loadMembers();
     }, [projectId, firestore]);
 
-    const addUid = (uid: string) => {
-        setSelectedUid(selectedId => [...selectedId, uid]);
 
-        setMemberData(prevMembers => prevMembers.map(member => member.uid === uid ? { ...member, selected: true } : member));
 
+    const addUid = (selectedUid: string) => {
+        if (!selectedId.includes(selectedUid)) {
+        setSelectedUid(selectedId => [...selectedId, selectedUid]);
+        }
+        else {
+            removeUid(selectedUid);
+        }
     }
 
-    const removeUid = (uid: string) => {
-        setSelectedUid(selectedId => selectedId.filter(id => id !== uid));
-
-        setMemberData(prevMembers => prevMembers.map(member => member.uid === uid ? { ...member, selected: false } : member));
-
-
+    const removeUid = (selectedUid: string) => {
+        console.log(selectedUid);
+        setSelectedUid(selectedId => selectedId.filter(id => id !== selectedUid));
+        console.log(selectedId);
     }
 
     const closeMemberOptions = () => {
+        console.log(selectedId);
         setAssignies(selectedId);
         setShowAssignOption(false);
     }
@@ -110,7 +116,7 @@ export default function Assignies({ showAssignOption, setShowAssignOption, assig
 
                         filteredMembers.map(member => (
 
-                            <div key={member.uid} className={`${styles.memberTile} ${member.selected ? styles.selectedUser : ''}`} onClick={() => addUid(member.uid)} onDoubleClick={() => removeUid(member.uid)}>
+                            <div key={member.uid} className={`${styles.memberTile} ${selectedId.includes(member.uid) ? styles.selectedUser : ''}`} onClick={() => addUid(member.uid)} >
                                 <div className={styles.memberTileData}>
                                     <img src={member.imageUrl} className={styles.memberImage} alt={member.name} />
                                     <p className={styles.memberName}>{member.name}</p>
@@ -123,7 +129,7 @@ export default function Assignies({ showAssignOption, setShowAssignOption, assig
 
                         memberData.map(member => (
 
-                            <div key={member.uid} className={`${styles.memberTile} ${member.selected ? styles.selectedUser : ''}`} onClick={() => addUid(member.uid)} onDoubleClick={() => removeUid(member.uid)}>
+                            <div key={member.uid} className={`${styles.memberTile} ${selectedId.includes(member.uid) ? styles.selectedUser : ''}`} onClick={() => addUid(member.uid)}>
                                 <div className={styles.memberTileData}>
                                     <img src={member.imageUrl} className={styles.memberImage} alt={member.name} />
                                     <p className={styles.memberName}>{member.name}</p>

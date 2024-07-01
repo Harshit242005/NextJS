@@ -42,24 +42,6 @@
 }
 
 
-
-/* .membersList
-{
-    height: 100%;
-    overflow-y: auto;
-    scroll-behavior: auto;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    
-}
-
-.membersList::-webkit-scrollbar {
-    display: none;
-} */
-
 .membersList {
     height: 100%;
     overflow-y: scroll; /* Use 'scroll' instead of 'auto' to ensure the scrollbar is always present */
@@ -103,6 +85,7 @@
 {
     background-color: black;
     color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .memberName
