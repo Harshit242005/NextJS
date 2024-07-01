@@ -9,9 +9,9 @@ import { arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where }
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import styles from './page.module.css';
 
-
-export default function invited({ params }: { params: { invitedProjectId: string } }) {
+export default function invited( { params }: { params: { invitedProjectId: string } }) {
     const [projectName, setProjectNameFromId] = useState<string>('');
     const { setUserId } = useGlobalSocketContext();
     const { setProjectCreator, setProjectId, setProjectName, projectCreator } = useGlobalProjectIdContext();
@@ -117,12 +117,14 @@ export default function invited({ params }: { params: { invitedProjectId: string
     }
 
 
-    return
-    <div>
-        <p>You have been invited to join the project {projectName}</p>
-        <div>
-            <button onClick={googleSignIn}>Accept</button>
-            <button onClick={rejectInvite}>Reject</button>
+    return (
+        <div className={styles.mainContainer}>
+            <p className={styles.description}>You have been invited to join the project <span className={styles.projectName}>{projectName}</span></p>
+            <div className={styles.acceptedButtons}>
+                <button className={styles.acceptedButton} onClick={googleSignIn}>Accept</button>
+                <button className={styles.acceptedButton} onClick={rejectInvite}>Reject</button>
+            </div>
         </div>
-    </div>
+    );
+    
 }
