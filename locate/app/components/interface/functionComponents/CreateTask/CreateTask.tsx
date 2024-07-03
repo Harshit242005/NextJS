@@ -439,8 +439,8 @@ export default function CreateTask() {
 
             {
                 isDisabled() ?
-                <button onClick={createTaskFunction} disabled  style={{ width: 915, border: 'none', borderRadius: 5, marginTop: 10, height: 50, fontSize: 20, fontFamily: 'ReadexPro', backgroundColor: 'black', color: 'whitesmoke' }}>Create</button> :
-                <button onClick={createTaskFunction}  style={{ width: 915, border: 'none', borderRadius: 5, marginTop: 10, height: 50, fontSize: 20, fontFamily: 'ReadexPro', backgroundColor: 'black', color: 'whitesmoke' }}>Create</button>
+                <button onClick={createTaskFunction} disabled  className={styles.createButton}>Create</button> :
+                <button onClick={createTaskFunction}  className={styles.createButton}>Create</button>
             }
         </main>
     )

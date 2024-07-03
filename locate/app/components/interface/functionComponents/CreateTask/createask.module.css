@@ -189,7 +189,17 @@
     outline: none;
 }
 
-
+.createButton {
+    width: 915px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    height: 50px;
+    font-size: 20px;
+    font-family: 'ReadexPro', sans-serif;
+    background-color: black;
+    color: whitesmoke;
+}
 
 .attachementViewPopup {
     background-color: white;
@@ -301,4 +311,111 @@
     font-family: 'ReadexPro';
     font-size: 16px;
     font-weight: 400;
+}
+
+
+/* media queries */
+@media (min-width: 320px) and (max-width: 425px) {
+
+    .topBar {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+
+    }
+
+    .TaskHeading {
+        width: 280px;
+        height: 40px;
+        padding-left: 10px;
+        border: 0.5px solid rgba(0, 0, 0, 0.343);
+        border-radius: 5px;
+        margin-top: 5px;
+        font-family: 'ReadexPro';
+        transition: 0.3s;
+    }
+
+    .TaskHeading:focus {
+        outline: 1px solid #D99BFF;
+    }
+
+    .TaskHeading::placeholder,
+    .datepicker::placeholder,
+    .TaskDescription::placeholder {
+        color: rgba(0, 0, 0, 0.262);
+        font-weight: 400;
+        font-size: 14px;
+    }
+
+    .TaskDescription {
+        min-width: 280px;
+        min-height: 200px;
+        margin-top: 25px;
+        max-width: 280px;
+        max-height: 200px;
+        border: 1px solid rgba(0, 0, 0, 0.252);
+        border-radius: 5px;
+        translate: 0.3s;
+
+    }
+
+    .TaskDescription:focus {
+        outline: none;
+        outline: 1px solid #D99BFF;
+    }
+
+
+    .TaskDescription::placeholder {
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .datepicker {
+        width: 280px;
+        height: 40px;
+
+    }
+
+
+    .bottomBar {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .attachmentButton {
+        width: 280px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .assignButton {
+        width: 280px;
+        height: 40px;
+
+        font-size: 14px;
+
+    }
+
+    .fileObjectButton {
+        width: 280px;
+        height: 40px;
+
+        font-size: 14px;
+
+    }
+
+    .createButton {
+        width: 280px;
+        border: none;
+        
+        
+        height: 40px;
+        font-size: 16px;
+        
+    }
 }

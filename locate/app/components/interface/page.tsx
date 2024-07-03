@@ -490,6 +490,8 @@ export default function Interface() {
 
 
             <div className={styles.sidebarColumn}>
+
+                
                 <div className={styles.profileDescription}>
                     <img src={imageUrl} onClick={() => setUserProfile(true)} alt="Profile image" className={styles.sidebarProfileImage} />
                     {/* <p className={styles.projectName}>{projectName}</p> */}
