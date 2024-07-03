@@ -8,7 +8,7 @@ interface taskDetailsProps {
 interface assignedList {
     ImageUrl: string;
     Uid: string;
-    Status: string;
+    Status: boolean;
 }
 
 import { useRouter } from 'next/navigation';
@@ -31,14 +31,13 @@ export default function TaskDetails({ taskDocumentId, setOpenTask, setCurrentCom
     const [asssignies, setAssignies] = useState<string[]>([]);
     const { uid } = useGlobalUidContext();
     const {  projectName} = useGlobalProjectIdContext();
-    const router = useRouter();
-
+    
     const getImageUrl = async (userUid: string) => {
         const q = query(collection(firestore, 'Users'), where('Uid', "==", userUid))
         const documents = await getDocs(q);
         if (!documents.empty) {
             const userImage = documents.docs[0].data().ImageUrl || '';
-            console.log(userImage);
+           
             return userImage;
         }
     }
@@ -61,6 +60,7 @@ export default function TaskDetails({ taskDocumentId, setOpenTask, setCurrentCom
                 const documentAssigneMap = document.data().Assignies || {};
                 const documentDescription = document.data().Description || '';
               
+
                 const createdBy = document.data().CreatedBy;
                 const taskID = document.data().TaskID;
                 setTaskId(taskID);
@@ -71,6 +71,7 @@ export default function TaskDetails({ taskDocumentId, setOpenTask, setCurrentCom
                     setCreator(true);
                 }
                 //const newDocumentAssigneMap: { [key: string]: any } = {};
+                console.log(documentAssigneMap);
                 // Iterate over key-value pairs, apply a function, and update assigneMap
                 const assignieList: string[] = [];
                 const assignedList = await Promise.all(
@@ -78,15 +79,18 @@ export default function TaskDetails({ taskDocumentId, setOpenTask, setCurrentCom
                         // Apply your function to the key here
                         assignieList.push(key as string);
                         const transformedKey = await getImageUrl(key) as string;
+                        console.log(key, value);
                         return {
                             'ImageUrl': transformedKey,
                             'Uid': key,
-                            'Status': value as string
+                            'Status': value as boolean
                         }
                         
                     })
                     
                 );
+
+                console.log(assignieList);
                 setAssignies(assignieList);
 
                 // Update the assigneMap state with the updatedAssignMap
@@ -125,7 +129,7 @@ export default function TaskDetails({ taskDocumentId, setOpenTask, setCurrentCom
     return (
         <main className={styles.mainBody}>
             <div className={styles.creatorData}>
-                <img className={styles.creatorImgae} src={creatorIamge} alt="Creator profile Image" />
+                <img className={styles.creatorImage} src={creatorIamge} alt="Creator profile Image" />
                 <p className={styles.taskDescription}>{taskDescription}</p>
             </div>
             <div className={styles.assigneeMap}>
@@ -135,7 +139,7 @@ export default function TaskDetails({ taskDocumentId, setOpenTask, setCurrentCom
                     <div className={styles.assigneeMapRow} key={Uid}>
                         <img src={ImageUrl} alt="User image" className={styles.assigneeImage} />
                         <button className={styles.assigneeButton} disabled={Uid !== uid}>
-                            {Status}
+                            {Status ? 'Finished' : 'Assigned'}
                         </button>
                     </div>
                 ))}

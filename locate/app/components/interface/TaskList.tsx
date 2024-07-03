@@ -7,6 +7,8 @@ import styles from './tasklist.module.css';
 
 interface TaskListProps {
     setShowTaskList: React.Dispatch<React.SetStateAction<boolean>>;
+    setCurrentComponent: React.Dispatch<React.SetStateAction<string>>;
+    setTaskDocumentId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface AssignedTaskMap {
@@ -21,7 +23,7 @@ interface TaskDocument {
     }
 }
 
-export default function TaskList({ setShowTaskList }: TaskListProps) {
+export default function TaskList({ setShowTaskList, setTaskDocumentId, setCurrentComponent }: TaskListProps) {
     const { projectId } = useGlobalProjectIdContext();
     const { uid } = useGlobalUidContext();
     const [taskDocument, setTaskDocument] = useState<TaskDocument[]>([]);
@@ -61,7 +63,12 @@ export default function TaskList({ setShowTaskList }: TaskListProps) {
 
     const selectedTask = (taskId: string) => {
         // This function would change the outline of the task and hide the list of tasks
-        setShowTaskList(false); // Hide the current task list
+        // setShowTaskList(false); // Hide the current task list
+        console.log(taskId);
+
+        // // load and change the current component - 
+        setTaskDocumentId(taskId);
+        setCurrentComponent('TaskDetails');
     }
 
 

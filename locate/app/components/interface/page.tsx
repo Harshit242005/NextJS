@@ -633,7 +633,7 @@ export default function Interface() {
                                     {currentComponent === 'Task status' && <TaskStatus setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} setTaskHeading={setTaskHeading} setTaskDocumentId={setTaskDocumentId} setTaskAuthor={setTaskAuthor} />}
                                     {currentComponent === 'Members' && <Members setTaskId={setTaskId} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessage={false} setMessageUid={setMessageUid} />}
                                     {/* this should be load conditionally */}
-
+                                    {currentComponent === 'TaskDetails' && <TaskDetails setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} taskDocumentId={taskDocumentId}/>}
                                     {currentComponent === 'Requests' && <Requests />}
                                     {currentComponent === 'Task' && <Task taskId={taskId} />}
                                     {currentComponent === 'EditTask' && <EditTask taskDocumentId={taskDocumentId} />}
@@ -678,7 +678,7 @@ export default function Interface() {
 
 
             {/* show the Task list profile */}
-            {showTaskList && <TaskList setShowTaskList={setShowTaskList} />}
+            {showTaskList && <TaskList setShowTaskList={setShowTaskList}  setCurrentComponent={setCurrentComponenet} setTaskDocumentId={setTaskDocumentId}/>}
 
             {successfulInvite &&
                 <div className={`${successfulInvite} ? ${styles.successfullyInvited} : ' '`}>
