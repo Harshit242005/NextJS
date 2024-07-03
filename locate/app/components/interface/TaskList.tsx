@@ -1,106 +1,93 @@
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { firestore } from '@/app/firebase';
+import { useGlobalUidContext } from '@/app/context/uid';
+import { useGlobalProjectIdContext } from '@/app/context/projectId';
+import styles from './tasklist.module.css';
+
 interface TaskListProps {
     setShowTaskList: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface AssignedTaskMap {
-    [key: string]: string[];
+    [key: string]: boolean;
 }
 
-// interface for the task document structure 
 interface TaskDocument {
     DocId: string;
-    TaskName: string;
-    Deadline: string;
-    Status: string;
+    TaskData: {
+        TaskName: string;
+        Deadline: string;
+    }
 }
 
-import { useGlobalUidContext } from "@/app/context/uid";
-import { useGlobalProjectIdContext } from "@/app/context/projectId";
-
-import styles from './tasklist.module.css';
-import { useState, useEffect } from 'react';
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
-import { firestore } from "@/app/firebase";
 export default function TaskList({ setShowTaskList }: TaskListProps) {
-    const { projectName } = useGlobalProjectIdContext();
+    const { projectId } = useGlobalProjectIdContext();
     const { uid } = useGlobalUidContext();
-
-    const [assignedTasks, setAssignedTasks] = useState<string[]>([]);
     const [taskDocument, setTaskDocument] = useState<TaskDocument[]>([]);
 
     useEffect(() => {
         const fetchAssignedTasks = async () => {
             try {
-                const docRef = query(collection(firestore, 'Users'), where('Uid', "==", uid));
+                const docRef = query(collection(firestore, 'Tasks'), where('Project', "==", projectId));
                 const querySnapshot = await getDocs(docRef);
 
                 if (!querySnapshot.empty) {
-                    const userData = querySnapshot.docs[0].data();
-                    const assignedTaskMap = userData.AssignedTask as AssignedTaskMap;
-
-                    const tasksMap = new Map<string, string[]>();
-
-                    for (const [project, taskIds] of Object.entries(assignedTaskMap)) {
-
-                        if (project == projectName) {
-                            // loop over the taskIds to get the document view 
-                            // store the objects in the list
-                            setAssignedTasks(taskIds);
+                    const tasksMap: TaskDocument[] = [];
+                    querySnapshot.forEach((doc) => {
+                        const assignedTaskMap = doc.data().Assignies as AssignedTaskMap;
+                        const docData = doc.data();
+                        for (const [memberId, status] of Object.entries(assignedTaskMap)) {
+                            if (memberId === uid && status === false) {
+                                tasksMap.push({
+                                    DocId: doc.id,
+                                    TaskData: {
+                                        TaskName: docData.Heading,
+                                        Deadline: docData.Deadline
+                                    }
+                                });
+                            }
                         }
-                    }
+                    });
+                    setTaskDocument(tasksMap); // Set state once, after processing all documents
                 }
-                const documentData = [];
-                // make a for loop over the list and get the list of document created 
-                for (const id of assignedTasks) {
-                    const docRef = doc(firestore, 'Tasks', id);
-                    const docSnap = await getDoc(docRef);
-                    const docData = docSnap.data(); // gather the document data
-                    if (docData != null) {
-                        const docStructure = {
-                            DocId: id,
-                            TaskName: docData['Heading'],
-                            Deadline: docData['Deadline'],
-                            Status: docData['Status']
-                        }
-
-                        documentData.push(docStructure);
-                    }
-                }
-                setTaskDocument(documentData);
             } catch (error) {
                 console.error("Error fetching assigned tasks: ", error);
             }
         };
 
         fetchAssignedTasks();
-    }, [uid, assignedTasks]);
+    }, [uid, projectId]);
 
-
-    const selectedTask = () => {
-        // this function would change the outling of the task adn hide the list of task
-        setShowTaskList(false); // hide the current task list 
-        
+    const selectedTask = (taskId: string) => {
+        // This function would change the outline of the task and hide the list of tasks
+        setShowTaskList(false); // Hide the current task list
     }
 
 
-
-
+    for (const [taskData, data] of Object.entries(taskDocument)) {
+        for (const task in data) {
+            console.log(task);
+        }
+    }
 
     return (
         <div className={styles.TaskList}>
             <div className={styles.TaskListHeader}>
                 <p className={styles.taskListHeading}>Project Tasks</p>
-                <button className={styles.closeTaskListButton} onClick={() => setShowTaskList(false)}><img src="/Cross.png" alt='Close icon' /></button>
+                <button className={styles.closeTaskListButton} onClick={() => setShowTaskList(false)}>
+                    <img src="/Cross.png" alt='Close icon' />
+                </button>
             </div>
             <div className={styles.taskColumn}>
-               
-                {taskDocument.map(task => (
-                    // had to add a onclick for the each task assigned to the user so can some details about the task
-                    <div onClick={selectedTask} key={task.DocId} className={`${task.Status == 'Completed' ? styles.CompletedTasks : styles.tasks}`}>
-                        <p className={styles.taskHeading}>{task.TaskName}</p>
-                        <p className={styles.taskDeadline}>{task.Deadline}</p>
-                    </div>
-                ))}
+                {
+                    taskDocument.map(task => (
+                        <div key={task.DocId} className={styles.taskTile} onClick={() => selectedTask(task.DocId)}>
+                            <p className={styles.taskName}>{task.TaskData.TaskName}</p>
+                            <p className={styles.deadline}>{task.TaskData.Deadline}</p>
+                        </div>
+                    ))
+                }
             </div>
         </div>
     )

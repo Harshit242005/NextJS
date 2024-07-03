@@ -1,15 +1,15 @@
 .TaskList
 {
-    width: 800px;
-    height: 400px;
+    width: 600px;
+    height: 300px;
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: none;
     z-index: 999;
     border-radius: 10px;
-
+    box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.255);
     position: absolute;
-    top: 16%;
-    left: 22.5%;
+    top: 20%;
+    left: 30%;
 }
 
 .TaskListHeader
@@ -18,9 +18,9 @@
     flex-direction: row;
     justify-content: last baseline;
     align-items: last baseline;
-    gap: 575px;
+    gap: 420px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    
+    height: 20%;
 }
 
 .taskListHeading
@@ -28,7 +28,8 @@
     font-family: 'ReadexPro';
     font-size: 18px;
     padding-left: 10px;
-    font-weight: 400;
+    font-weight: 200;
+    width: 150px;
 }
 
 .closeTaskListButton
@@ -36,23 +37,22 @@
     background-color: black;
     border: none;
     border-top-right-radius: 10px;
-    height: fit-content;
-    width: 100px;
-    margin-left: 15px;
-    height: 55px;
+   
+    width: 75px;
+    
+    height: 100%;
 }
 
 .taskColumn
 {
     display: flex;
     flex-direction: column;
-    margin-top: 50px;
-    height: 200px;
-    max-height: 200px;
+    margin-top: 0px;
+    height: 240px;
+    max-height: 240px;
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: auto;
-    
 }
 
 .taskColumn::-webkit-scrollbar
@@ -60,48 +60,35 @@
     display: none;
 }
 
-.tasks
+.taskTile
 {
-    display: flex;
-    flex-direction: row;
+    background-color: rgba(238, 238, 238, 0.150);
+    width: 100%;
+    padding-left: 5px;
+    transition: 0.3s;
+    gap: 400px;
     border-top: 1px solid rgba(0, 0, 0, 0.25);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    padding-left: 10px;
-    justify-content: center;
-    align-items: last baseline;
-    padding-right: 10px;
-    gap: 600px;
-    overflow-x: auto;
-    scroll-behavior: auto;
-    background-color: #F7F7F7;
 }
 
-.CompletedTasks
+.taskTile:hover
 {
-    display: flex;
-    flex-direction: row;
-    border-top: 1px solid rgba(0, 0, 0, 0.50);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.50);
-    padding-left: 10px;
-    justify-content: center;
-    align-items: last baseline;
-    padding-right: 10px;
-    gap: 600px;
-    overflow-x: auto;
-    scroll-behavior: auto;
-    background-color: #5fff7f;
+    border: none;
+    background-color: rgba(238, 238, 238, 0.50);
 }
 
-.taskHeading
+.taskName
 {
     font-family: 'ReadexPro';
-    margin-top: 12.5px;
+    color: black;
+    font-size: 16px;
     font-weight: 400;
 }
 
-.taskDeadline {
+.deadline
+{
     font-family: 'ReadexPro';
-    margin-top: 12.5px;
+    color: rgba(0, 0, 0, 0.5);
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.468);
+    font-weight: 200;
+    margin-top: -10px;
 }

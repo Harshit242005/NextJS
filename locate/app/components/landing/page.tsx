@@ -334,7 +334,7 @@ export default function landing() {
                             {projects.map((element, index) => (
                                 <div className="col-md-4 mb-3" key={index}>
                                     <button className="btn btn-dark btn-lg btn-block"
-                                        style={{ fontSize: 16, width: 200, marginLeft: 25 }}
+                                        style={{ fontSize: 16, width: 200, marginLeft: -15 }}
                                         onClick={() => navigateProject(element)}
                                     >{element}</button>
                                 </div>
