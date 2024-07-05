@@ -14,7 +14,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useGlobalProjectIdContext } from '@/app/context/projectId';
 import { useGlobalUidContext } from '@/app/context/uid';
 import Assignies from './assignies';
-import useBeforeUnload from '@/app/inactive';
+
 import Image from 'next/image';
 import axios from 'axios';
 
