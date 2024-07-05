@@ -27,7 +27,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default function Interface() {
 
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 425);
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
     const [openMobileMenu, setOpenMobileMenu] = useState(false);
 
     useEffect(() => {
