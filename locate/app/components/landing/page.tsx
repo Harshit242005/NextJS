@@ -323,14 +323,14 @@ export default function landing() {
             </div>
 
             {projects && projects.length > 0 ?
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'left', alignItems: 'flex-start' }}>
+                <div className={styles.projectsData}>
                     {/* projects exist then allow user to select one and navigate using dynamic routing  */}
-                    <h3 className={styles.projectsStatus}>Select project</h3>
+                    <h3 className={styles.projectsStatus}>Select Project</h3>
                     {/* building map button for the project */}
 
 
                     <div className="container">
-                        <div className="row">
+                        <div className={`${styles.projectsButton}`}>
                             {projects.map((element, index) => (
                                 <div className="col-md-4 mb-3" key={index}>
                                     <button className="btn btn-dark btn-lg btn-block"
@@ -350,7 +350,7 @@ export default function landing() {
                         <div>
                             <h3 className={styles.projectsStatus}>Oops! No project exist yet!</h3></div> : ''
                     }
-                    <div className="d-flex flex-row justify-center align-center" style={{ gap: 10 }}>
+                    <div className={styles.userPreferenceButtons} style={{ gap: 10 }}>
                         <button className={`${styles.userPreferenceButton} ${userPreference === 'Create' ? styles.preferred : ''}`} onClick={() => SetUserPreference('Create')}>Create one</button>
                         <button className={`${styles.userPreferenceButton} ${userPreference === 'Join' ? styles.preferred : ''}`} onClick={() => SetUserPreference('Join')}>Join one</button>
                     </div>
@@ -360,7 +360,7 @@ export default function landing() {
                         userPreference === 'Create' ?
                             <div style={{ marginTop: 25 }}>
                                 <div className={styles.createProject}>
-                                    <p>Project name</p>
+                                    <p className={styles.createProjectHeading}>Project name</p>
                                     <input type="text" className={styles.projectName} placeholder="Type name of project..." onChange={(e) => setProjectNameCreate(e.target.value)} />
                                 </div>
                                 <button onClick={createProject} className={styles.createButton}>Create</button>
@@ -372,10 +372,10 @@ export default function landing() {
 
                                 <div>
                                     <div className={styles.createProject}>
-                                        <p>Project name</p>
+                                        <p className={styles.createProjectHeading}>Project name</p>
                                         <input type="text" className={styles.projectName} placeholder="Type name of project..." onChange={(e) => setJoinProject(e.target.value)} />
                                     </div>
-                                    <div className="d-flex flex-row" style={{ gap: 10 }}>
+                                    <div className={styles.joinProjectButtons} style={{ gap: 10 }}>
                                         <button onClick={joinProject} className={styles.createButton}>Join</button>
                                         <button onClick={showOldRequests} className={styles.requestButton}>Old Requests</button>
                                     </div>

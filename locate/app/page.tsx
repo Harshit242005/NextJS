@@ -65,7 +65,7 @@ export default function Home() {
 
   return (
     <main className={styles.body}>
-      <h1 className={styles.heading}>Locate</h1>
+      <h1 className={styles.heading}>ProjeKt</h1>
       <button className={styles.signupButton} onClick={googleSignIn}>
         <img src="google.png" className={styles.googleImageIcon} />
         Sign up with google

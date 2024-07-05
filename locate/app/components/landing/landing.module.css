@@ -7,7 +7,7 @@
     gap: 10px;
     position: relative;
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.512);
-    top: 80px;
+    top: 20vh;
     border: none;
     border-radius: 10px;
     margin-left: auto;
@@ -16,6 +16,8 @@
     color: white;
     padding: 20px;
     background-color: black;
+
+
 
 }
 
@@ -37,11 +39,15 @@
     border-radius: 5px;
     padding-left: 10px;
     font-family: 'ReadexPro';
-
 }
 
 .createProject input:focus {
     outline: none;
+}
+
+.createProjectHeading {
+    font-size: 1.5rem;
+    font-weight: 400;
 }
 
 .projectsStatus {
@@ -49,6 +55,19 @@
     font-size: 24px;
     font-weight: bold;
 }
+
+.projectsButton {
+    display: flex;
+    flex-direction: row;
+}
+
+.projectsData {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
 
 .projectMember {
     background-color: white;
@@ -88,7 +107,21 @@
     box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.1);
 }
 
-.createButton,
+.createButton {
+    background-color: black;
+    color: white;
+    font-family: 'ReadexPro';
+    width: 150px;
+    height: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.253);
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 600;
+
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+
 .projectButton {
     background-color: black;
     color: white;
@@ -238,6 +271,13 @@
     font-weight: 600;
 }
 
+.userPreferenceButtons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .userPreferenceButton {
     width: 150px;
     height: 50px;
@@ -259,6 +299,12 @@
 }
 
 
+.joinProjectButtons {
+    display: flex;
+    flex-direction: row;
+}
+
+
 
 .showRequestsDialog {
     height: 300px;
@@ -271,7 +317,7 @@
 
     z-index: 999;
     background-color: white;
-    top: 20%;
+    top: 20vh;
     position: absolute;
 }
 
@@ -326,18 +372,7 @@
 
 }
 
-.Accepted
-{
-    background-color: #84ffcc6a;
-}
-
-.Waiting
-{
-    background-color: #F8F8F8;
-}
-
-.requestDataRowName
-{
+.requestDataRowName {
     font-family: 'ReadexPro';
     font-weight: 200;
     width: 200px;
@@ -345,6 +380,16 @@
     color: black;
     max-width: 200px;
 }
+
+.Accepted {
+    background-color: #84ffcc6a;
+}
+
+.Waiting {
+    background-color: #F8F8F8;
+}
+
+
 
 
 .successfullyInvited {
@@ -382,4 +427,187 @@
         left: 90%;
         display: flex;
     }
+}
+
+@media (max-width: 425px) {
+
+    .body {
+
+        top: 20vh;
+        position: relative;
+        width: 87.5vw;
+
+
+    }
+
+
+    .createProject {
+        font-size: 1.5rem;
+        font-weight: 400;
+    }
+
+    .createProject input {
+        width: 100%;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    .projectsData {
+
+        justify-content: center;
+        align-items: center;
+    }
+
+    .projectsStatus {
+        font-family: 'ReadexPro';
+        font-size: 1rem;
+        font-weight: 200;
+        text-align: center;
+    }
+
+    .projectsButton {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .userPreferenceButton {
+        width: 100px;
+        height: 50px;
+        background-color: transparent;
+        color: black;
+        font-family: 'ReadexPro';
+        border: 0.5px solid white;
+        border-radius: 5px;
+        color: rgba(255, 255, 255, 0.577);
+    }
+
+    .createProjectHeading {
+        font-weight: 200;
+        font-size: 1.5rem;
+    }
+
+    .createButton {
+        width: 100%;
+        font-weight: 400;
+        border: 0.5px solid white;
+    }
+
+    .createProject::placeholder {
+        padding-left: 5px;
+    }
+
+    .preferred {
+        color: white;
+        border: 1px solid white;
+    }
+
+    .joinProjectButtons {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .requestButton {
+
+        width: 100%;
+        height: 50px;
+        text-align: center;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 1);
+
+    }
+
+    .projectName::placeholder {
+        font-size: 1.2rem;
+    }
+
+
+
+    .showRequestsDialog {
+        height: 300px;
+        width: 87.5vw;
+        border: none;
+        box-shadow: none;
+    }
+
+    .showRequestHeader {
+
+        gap: 0px;
+
+    }
+
+    .showRequestHeaderHeading {
+        font-weight: 200;
+        font-size: 1.2rem;
+        width: 71vw;
+        margin-top: 5px;
+    }
+
+
+    .requestsData {
+
+        gap: 0px;
+
+    }
+
+
+    .requestDataRow {
+        gap: 0px;
+    }
+
+    .requestDataRowName {
+        font-size: 1.5rem;
+        font-weight: 100;
+    }
+
+    .deleteButton {
+        margin-top: 5px;
+    }
+
+
+    .NewProjectPopup {
+        display: flex;
+        flex-direction: column;
+
+        width: 87.5vw;
+        height: fit-content;
+
+        background-color: white;
+
+        border-radius: 5px;
+        font-family: 'ReadexPro';
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+        position: absolute;
+        top: 20vh;
+
+    }
+
+    .popupHeaderHeading {
+      
+        font-weight: 200;
+        font-size: 20px;
+        
+        width: 71vw;
+    }
+
+    .NewProjectPopupHeader {
+        
+        gap: 0px;
+    }
+
+    .NewProjectInput {
+        width: 100%;
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+    .NewProjectCreateButton {
+        
+        font-size: 1.5rem;
+        margin-top: 0px;
+    }
+
+   
+
+
 }
