@@ -532,7 +532,7 @@
 
     .showRequestHeader {
 
-        gap: 0px;
+        gap: 10px;
 
     }
 
@@ -592,7 +592,7 @@
 
     .NewProjectPopupHeader {
 
-        gap: 0px;
+        gap: 10px;
     }
 
     .NewProjectInput {

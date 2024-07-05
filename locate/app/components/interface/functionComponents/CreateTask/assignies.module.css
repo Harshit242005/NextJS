@@ -129,3 +129,23 @@
     border-top-right-radius: 5px;
     width: 60px;
 }
+
+@media (max-width: 425px) {
+    .membersOptions
+    {
+        left: 0%;
+        justify-content: center;
+        width: 87.5vw;
+        margin-left: 6%;
+    }
+
+    .assigneeDialogHeading
+    {
+        width: 71vw;
+    }
+
+    .membersOptionsHeader
+    {
+        gap: 0px;
+    }
+}

@@ -94,3 +94,26 @@
     font-family: 'ReadexPro';
     font-weight: 200;
 }
+
+@media (max-width: 425px) {
+    .requestMemberData{
+        gap: 10px;
+    }
+
+    .requestData
+    {
+        padding-left: 10px;
+    }
+
+    .requests
+    {
+        height: 100vh;
+        max-height: 100vh;
+        padding: 10px;
+    }
+
+    .button
+    {
+        width: 60px;
+    }
+}

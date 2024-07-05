@@ -105,7 +105,7 @@ export default function Assignies({  setShowAssignOption, selectedId, setSelecte
             <div className={styles.membersOptions}>
 
                 <div className={styles.membersOptionsHeader}>
-                    <p style={{paddingLeft: 10, marginTop: 10}}>Members for assginees</p>
+                    <p className={styles.assigneeDialogHeading} style={{paddingLeft: 10, marginTop: 10}}>Members for assginees</p>
                     <button onClick={closeMemberOptions} className={styles.memberOptionCloseButton}><img src="/Cross.png" alt="close icon" /></button>
                 </div>
 
