@@ -752,7 +752,12 @@
 
 
 /* defining the media queries for the application */
-@media (max-width: 320px) {
+@media (max-width: 425px) {
+
+    .profileDescription
+    {
+        display: none;
+    }
     .MainContainer {
         display: flex;
         flex-direction: column;
@@ -770,7 +775,12 @@
     }
 
     .sidebarColumn {
-        display: none;
+        width: 100%;
+        z-index: 999;
+        position: absolute;
+        height: 75%;
+        top: 8vh;
+        height: 100vh;
     }
 
     .headerBar {
@@ -789,5 +799,57 @@
         
     }
 
+    .mobileViewHeader
+    {
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+        
+    }
+
+    .mobileHeaderUserImage
+    {
+        height: 40px;
+        width: 40px;
+        border: none;
+        border-radius: 50%;
+    }
+
+    .mobileHeaderData
+    {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        width: 85vw;
+    }
+
+    .mobileComponentName
+    {
+        color: rgba(255, 255, 255, .75);
+        font-size: 1.2rem;
+        font-weight: 200;
+        font-family: 'ReadexPro';
+        margin-top: 15px;
+    }
+
+    .mobileMenuButton
+    {
+        background-color: transparent;
+        border: none;
+    }
+
+    .SettingButton
+    {
+        position: relative;
+        top: 51.4vh;
+    }
+
+    .SettingButtonExtra
+    {
+        position: relative;
+        top: 58.8vh;
+    }
     
 }

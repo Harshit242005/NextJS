@@ -583,15 +583,15 @@
     }
 
     .popupHeaderHeading {
-      
+
         font-weight: 200;
         font-size: 20px;
-        
+
         width: 71vw;
     }
 
     .NewProjectPopupHeader {
-        
+
         gap: 0px;
     }
 
@@ -602,12 +602,15 @@
     }
 
     .NewProjectCreateButton {
-        
+
         font-size: 1.5rem;
         margin-top: 0px;
     }
 
-   
+    .projectButton {
+        border: 0.5px solid white;
+        margin-left: -5px;
+    }
 
 
 }
