@@ -535,7 +535,7 @@
         width: 100%;
         max-width: 100%;
         padding: 0px;
-        z-index: 999;
+        
     }
 
     .sendChatButton {
@@ -562,7 +562,7 @@
 
     .referenceDiv {
         background-color: #FFF3F3;
-        z-index: 999;
+       
         height: 50%;
     
         display: flex;

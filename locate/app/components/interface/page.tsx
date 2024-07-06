@@ -207,6 +207,9 @@ export default function Interface() {
 
     const OpenProfile = () => {
         setOpenProfile(true);
+        if (isMobile) {
+            setOpenMobileMenu(!openMobileMenu);
+        }
     }
 
     // remove the memberId 
