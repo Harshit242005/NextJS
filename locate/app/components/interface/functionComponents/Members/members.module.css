@@ -1,14 +1,11 @@
-
-
-.members
-{
+.members {
     display: flex;
     flex-direction: column;
     margin-top: 5%;
     gap: 0px;
     height: 100%;
     max-height: 100%;
-   
+
 }
 
 .ChatInterface {
@@ -21,68 +18,84 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .LeftContainer {
     width: 20%;
     height: 100vh;
     border-right: 1px solid rgba(0, 0, 0, 0.25);
-    max-height: 100%; /* Ensure this is set for proper scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 100%;
+    /* Ensure this is set for proper scrolling */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
 .LeftContainer::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
 }
 
 .RightContainer {
-    width: 80%; /* Adjust width to ensure it takes the remaining space */
+    width: 80%;
+    /* Adjust width to ensure it takes the remaining space */
     display: flex;
     height: 100vh;
     max-height: 100vh;
     flex-direction: column;
-    overflow-y: auto; /* Enable vertical scrolling */
-    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    scroll-behavior: smooth;
+    /* Optional: smooth scrolling behavior */
 }
 
 .RightContainer::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
 }
 
 .chatBox {
     height: 73vh;
     max-height: 73vh;
     width: 100%;
-    overflow-y: auto; /* Enable vertical scrolling */
-    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    scroll-behavior: smooth;
+    /* Optional: smooth scrolling behavior */
 }
 
 .chatBox::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
 }
 
 .chatReferenceCreated {
     height: 62%;
     max-height: 62%;
-    overflow-y: auto; /* Enable vertical scrolling */
-    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    scroll-behavior: smooth;
+    /* Optional: smooth scrolling behavior */
 }
 
 .chatReferenceCreated::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
 }
 
 
-.chatInput
-{
+.chatInput {
     height: 10%;
     display: flex;
     flex-direction: row;
@@ -90,8 +103,7 @@
     max-width: 100%;
 }
 
-.chatInputReference
-{
+.chatInputReference {
     height: 20%;
     display: flex;
     flex-direction: row;
@@ -102,13 +114,12 @@
 }
 
 
-.activeChat
-{
+.activeChat {
     background-color: #F2F2F2;
     border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
-.active{
+.active {
     width: 15px;
     height: 15px;
     border: none;
@@ -122,12 +133,12 @@
     height: 15px;
     border: none;
     border-radius: 50%;
-    background-color: rgb(223, 222, 222);;
+    background-color: rgb(223, 222, 222);
+    ;
     margin-left: -10px;
 }
 
-.userImage
-{
+.userImage {
     width: 40px;
     height: 40px;
     border: none;
@@ -136,38 +147,34 @@
 }
 
 
-.MemberRow
-{
+.MemberRow {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items:  center;
+    align-items: center;
     gap: 25px;
     border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
-.memberData
-{
+.memberData {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items:  center;
+    align-items: center;
     gap: 25px;
-    
-  
+
+
 }
 
-.userStatusRow
-{
+.userStatusRow {
     display: flex;
     flex-direction: row;
     justify-content: left;
     align-items: last baseline;
-    
+
 }
 
-.userName
-{
+.userName {
     font-family: 'ReadexPro';
     font-size: 14px;
     font-weight: 400;
@@ -176,8 +183,7 @@
 }
 
 
-.chatButton
-{
+.chatButton {
     border: none;
     width: 100%;
     height: 50px;
@@ -186,8 +192,7 @@
     font-weight: 600;
 }
 
-.chatMessageInputBox
-{
+.chatMessageInputBox {
     width: 800px;
     height: 50px;
     border: 1px solid rgba(0, 0, 0, 0.25);
@@ -198,19 +203,16 @@
     font-weight: 400;
 }
 
-.chatMessageInputBox::placeholder
-{
+.chatMessageInputBox::placeholder {
     font-family: 'ReadexPro';
     color: rgba(0, 0, 0, 0.5);
 }
 
-.chatMessageInputBox:focus
-{
+.chatMessageInputBox:focus {
     outline: none;
 }
 
-.sendChatButton
-{
+.sendChatButton {
     width: 100px;
     border: 1px solid rgba(0, 0, 0, 0.25);
     background-color: transparent;
@@ -219,21 +221,18 @@
     font-family: 'ReadexPro';
 }
 
-.sendChatButton:focus
-{
+.sendChatButton:focus {
     outline: none;
 }
 
 
 /* reference manager */
-.chatMessageReference
-{
+.chatMessageReference {
     display: flex;
     flex-direction: column;
 }
 
-.referenceData
-{
+.referenceData {
     display: flex;
     flex-direction: column;
     justify-content: left;
@@ -242,8 +241,7 @@
     padding-bottom: 5px;
 }
 
-.referenceDiv
-{
+.referenceDiv {
     background-color: #FFF3F3;
     z-index: 999;
     height: 50%;
@@ -254,36 +252,31 @@
 }
 
 
-.referenceTaskName
-{
+.referenceTaskName {
     font-family: 'ReadexPro';
     font-size: 14px;
     font-weight: 400;
 }
 
-.referenceTaskId
-{
+.referenceTaskId {
     font-family: 'ReadexPro';
     font-size: 10px;
     margin-top: -20px;
     color: rgba(0, 0, 0, 0.5);
 }
 
-.cancelReferenceButton
-{
+.cancelReferenceButton {
     background-color: black;
     border: none;
     width: 50px;
 }
 
-.cancelReferenceButton:focus
-{
+.cancelReferenceButton:focus {
     outline: none;
 }
 
 /* Designing the styles for the group chat messages */
-.dateHeader
-{
+.dateHeader {
     text-align: center;
     font-family: 'ReadexPro';
     font-size: 18px;
@@ -292,13 +285,12 @@
 
 
 
-.myMessage
-{
+.myMessage {
     background-color: black;
     color: white;
     width: 250px;
     height: fit-content;
-    
+
     border: none;
     border-radius: 5px;
     border-top-right-radius: 0px;
@@ -312,13 +304,12 @@
 
 
 
-.otherMessage
-{
+.otherMessage {
     background-color: #dbdbdb74;
     color: black;
     text-align: left;
     width: 250px;
-    
+
     height: fit-content;
     /* padding: 10px; */
     border: none;
@@ -329,8 +320,7 @@
     margin-left: 15px;
 }
 
-.normalMessageHeader
-{
+.normalMessageHeader {
     display: flex;
     flex-direction: row;
     align-items: last baseline;
@@ -338,16 +328,14 @@
     justify-content: last baseline;
 }
 
-.noramlMessageHeaderImage
-{
+.noramlMessageHeaderImage {
     width: 40px;
     height: 40px;
     border: none;
     border-radius: 50%;
 }
 
-.viewedByImage
-{
+.viewedByImage {
     width: 20px;
     height: 20px;
     border: none;
@@ -355,57 +343,49 @@
     margin-left: -10px;
 }
 
-.normalMessageBottom
-{
+.normalMessageBottom {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    gap: 10px;   
+    gap: 10px;
 }
 
-.normalMyMessageBottom
-{
+.normalMyMessageBottom {
     display: flex;
     flex-direction: row;
     justify-content: right;
-    gap: 10px;      
+    gap: 10px;
 }
 
-.senderName
-{
+.senderName {
     font-weight: 400;
 }
 
-.messageTimestamp
-{
+.messageTimestamp {
     font-weight: bold;
     font-family: 'ReadexPro';
     margin-top: -2px;
 }
 
-.messageTimestampMyReference
-{
+.messageTimestampMyReference {
     font-weight: bold;
     font-family: 'ReadexPro';
     margin-top: -2px;
     color: black;
 }
 
-.viewedByImages
-{
+.viewedByImages {
     display: flex;
     flex-direction: row;
-   
+
 }
 
-.viewedByImagesCollection
-{
+.viewedByImagesCollection {
     margin-left: 10px;
-    
+
 }
 
-.viewedByItem
-{
+.viewedByItem {
     display: flex;
     flex-direction: row;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
@@ -415,8 +395,7 @@
     gap: 50px;
 }
 
-.viewedByColumn
-{
+.viewedByColumn {
     display: flex;
     flex-direction: column;
     margin-top: 25px;
@@ -426,20 +405,17 @@
     scroll-behavior: auto;
 }
 
-.viewedByColumn::-webkit-scrollbar
-{
+.viewedByColumn::-webkit-scrollbar {
     display: none;
 }
 
-.viewedByItemName
-{
+.viewedByItemName {
     font-weight: 100;
     font-family: 'ReadexPro';
     margin-top: 15px;
 }
 
-.viewedByDiv
-{
+.viewedByDiv {
     width: 400px;
     height: 250px;
     border: 0px;
@@ -453,8 +429,7 @@
     top: 25%;
 }
 
-.viewedByDivHeader
-{
+.viewedByDivHeader {
     height: 20%;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     display: flex;
@@ -465,16 +440,14 @@
     gap: 253px;
 }
 
-.viewedByItemImage
-{
+.viewedByItemImage {
     border: none;
     border-radius: 50%;
     height: 40px;
     width: 40px;
 }
 
-.viewedByCloseButton
-{
+.viewedByCloseButton {
     height: 100%;
     width: 55px;
     background-color: black;
@@ -482,89 +455,118 @@
     border-top-right-radius: 10px;
 }
 
-.viewedByCloseButton:focus
-{
+.viewedByCloseButton:focus {
     outline: none;
 }
 
 
 
-.referenceMessageHeader
-{
+.referenceMessageHeader {
     background-color: #FFF3F3;
     width: 100%;
     padding: 5px;
 }
 
-.referenceMessageBottom
-{
+.referenceMessageBottom {
     background-color: white;
     margin-top: 10px;
     padding: 5px;
 }
 
-.referenceMessage
-{
+.referenceMessage {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.referenceMessageHeader
-{
+.referenceMessageHeader {
     width: 100%;
 }
 
-.myReferenceMessage
-{
+.myReferenceMessage {
     font-weight: 100;
     font-family: 'ReadexPro';
     color: black;
     padding-right: 20px;
     text-align: right;
     width: 250px;
-    
+
 }
 
 
 
 /* now adding up the member data */
 @media (max-width: 425px) {
-    .LeftContainer
-    {
+    .LeftContainer {
         width: 100%;
         z-index: 999;
     }
 
-    .closeUp
-    {
+    .closeUp {
         display: none;
     }
 
-    .ChatInterface
-    {
+    .ChatInterface {
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    .selectMemberOption
-    {
+    .selectMemberOption {
         width: 100%;
     }
 
-    .RightContainer
-    {
+    .RightContainer {
         width: 100%;
     }
 
-    .myMessage
-    {
+    .myMessage {
         margin-left: 15%;
-       
+
     }
 
-    .otherMessage
-    {
+    .otherMessage {
         margin-left: 0px;
+    }
+
+    .chatInput {
+        height: 25vh;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        padding: 0px;
+        z-index: 999;
+    }
+
+    .sendChatButton {
+        width: 100%;
+       
+        height: 50px;
+      
+    }
+
+    .chatMessageInputBox {
+        width: 100%;
+        font-weight: 200;
+    }
+
+    .chatBox
+    {
+        height: 68vh;
+    }
+
+    .chatReferenceCreated
+    {
+        height: 60vh;
+    }
+
+    .referenceDiv {
+        background-color: #FFF3F3;
+        z-index: 999;
+        height: 50%;
+    
+        display: flex;
+        flex-direction: row;
+        gap: 0px;
     }
 }

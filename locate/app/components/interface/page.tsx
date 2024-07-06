@@ -568,7 +568,7 @@ export default function Interface() {
                 {/* conditional rendering of the headerbox  */}
 
                 {
-                    !isMobile && openMessage ? (
+                    openMessage ? (
                         <div className={styles.messageHeader}>
                             { /* show the profile header for the user */}
                             <div className={styles.messageHeaderStatus}>
