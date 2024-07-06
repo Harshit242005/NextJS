@@ -54,6 +54,17 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
         return `${day}/${month}/${year}`;
 
     }
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 425);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const replaceHyphensWithSlashes = (dateStr: string) => {
 
@@ -174,17 +185,29 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                         <div className={styles.taskTopbar}>
                             <img className={styles.creatorImage} src={document.data.CreatorImage} />
                             <div className={styles.taskTextDescription}>
-                                <h3>{document.data.Heading}</h3>
-                                <p>{document.data.Description}</p>
+                                <p className={styles.taskHeading}>{document.data.Heading}</p>
+                                {
+                                    !isMobile ?
+                                        <p>{document.data.Description}</p>
+                                        : ""
+                                }
                             </div>
-                            <button
-                                onClick={() => setTaskValues(document.data.Heading, document.id, document.data.CreatedBy)}
-                                className={styles.taskStatus}>{document.data.Status}</button>
+                            <div className={`${isMobile ? styles.mobileTaskCardButtons : ''}`}>
+                                {isMobile ? <div><button className={styles.attachmentButton} onClick={() => openFilesDialogs(document.data.Files)}>
+                                    Files
+                                </button></div> : ""}
+                                <button
+                                    onClick={() => setTaskValues(document.data.Heading, document.id, document.data.CreatedBy)}
+                                    className={styles.taskStatus}>{document.data.Status}</button>
+                            </div>
                         </div>
                         <div className={styles.bottomBar}>
 
                             <div className={styles.AssigneeDescription}>
-                                <p>Assignees</p>
+                                
+                                  
+                                        <p>Assignees</p>
+                                
                                 {/* image would be shown here in this  */}
                                 <div className={styles.taskAssigneesImages}>
                                     {document.data.AssignieesImages.slice(0, 2).map((image, index) => (
@@ -194,15 +217,21 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                             </div>
                             <div className={styles.sideDescriptionTask}>
                                 <div>
-                                    <button className={styles.attachmentButton} onClick={() => openFilesDialogs(document.data.Files)}>
-                                        Files
-                                    </button>
+                                    {
+                                        !isMobile ?
+                                            <button className={styles.attachmentButton} onClick={() => openFilesDialogs(document.data.Files)}>
+                                                Files
+                                            </button>
+                                            : ""
+                                    }
                                 </div>
-                                <div className={styles.deadline}>
-                                    <h4>Deadline</h4>
-                                    <p className={getCurrentDateResult(document.data.Deadline) ? styles.invalidDate : styles.validDate}
-                                    >{document.data.Deadline}</p>
-                                </div>
+                                {!isMobile ?
+                                    <div className={styles.deadline}>
+                                        <h4>Deadline</h4>
+                                        <p className={getCurrentDateResult(document.data.Deadline) ? styles.invalidDate : styles.validDate}
+                                        >{document.data.Deadline}</p>
+                                    </div>
+                                    : ""}
                             </div>
                         </div>
 

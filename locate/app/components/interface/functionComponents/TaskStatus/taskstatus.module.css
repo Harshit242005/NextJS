@@ -14,11 +14,11 @@
     align-items: center;
     justify-content: start;
     gap: 25px;
-    height: 400px;
-    max-height: 400px;
+    height: 100vh;
+    max-height: 100vh;
     overflow-y: auto;
     scroll-behavior: auto;
-
+    padding-bottom: 100px;
 }
 
 .TaskCollection::-webkit-scrollbar {
@@ -140,8 +140,7 @@
     box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.25);
 }
 
-.filesDialogHeader
-{
+.filesDialogHeader {
     height: 20%;
     width: 100%;
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
@@ -153,8 +152,7 @@
     padding-left: 0px;
 }
 
-.fileDialogHeaderHeading
-{
+.fileDialogHeaderHeading {
     font-family: 'ReadexPro';
     font-size: 20px;
     margin-left: 20px;
@@ -162,13 +160,11 @@
     width: 100px;
 }
 
-.fileDialogBottom
-{
+.fileDialogBottom {
     margin-top: 50px;
 }
 
-.cancelFileDialogButton
-{
+.cancelFileDialogButton {
     height: 100%;
     width: 75px;
     border-top-right-radius: 10px;
@@ -232,11 +228,152 @@
     box-shadow: 0px 2px 10px 0px white;
 }
 
-.noFileExist
-{
+.noFileExist {
     font-family: 'ReadexPro';
     text-align: center;
     font-weight: 100;
     font-size: 20px;
-    
+
+}
+
+
+/* adding media queries */
+@media (max-width: 425px) {
+    .TaskCollection {
+        overflow-x: hidden;
+        justify-content: flex-start;
+
+        width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        text-align: center;
+    }
+
+    .Task {
+        width: 87.5vw;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        padding: 0px;
+        padding-bottom: 40px;
+    }
+
+    .creatorImage {
+        width: 75px;
+        height: 75px;
+
+    }
+
+    .taskTopbar {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 0px;
+        padding-top: 10px;
+    }
+
+    .taskStatus {
+
+
+        font-weight: 200;
+        font-size: 1.2rem;
+
+
+        border: none;
+        width: 87.5vw;
+
+    }
+
+    .taskHeading {
+        font-size: 1.4rem;
+        font-weight: 200;
+        text-align: center;
+        width: 87.5vw;
+    }
+
+    .bottomBar {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        top: -25%;
+        text-align: center;
+
+    }
+
+
+    .AssigneeDescription {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column-reverse;
+        top: 75%;
+        position: relative;
+        z-index: 1;
+    }
+
+    .attachmentButton {
+        width: 87.5vw;
+        font-weight: 200;
+        font-size: 1.2rem;
+
+    }
+
+    .mobileTaskCardButtons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .taskTextDescription {
+        width: 87.5vw;
+        max-width: 87.5vw;
+        height: fit-content;
+        max-height: fit-content;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .taskAssigneesImages {
+
+        z-index: 1;
+    }
+
+
+    .filesDialog {
+        width: 87.5vw;
+        height: 300px;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        margin-left: auto;
+        margin-right: auto;
+        border: none;
+        margin-left: 4%;
+    }
+
+    .filesDialogHeader {
+        gap: 10px;
+    }
+
+    .fileDialogHeaderHeading {
+        
+        font-size: 1.5rem;
+        padding-left: 10px;
+        font-weight: 200;
+        width: 71vw;
+    }
+
+    .fileDialogBottom {
+        margin-top: 0px;
+    }
 }
