@@ -525,3 +525,46 @@
     
 }
 
+
+
+/* now adding up the member data */
+@media (max-width: 425px) {
+    .LeftContainer
+    {
+        width: 100%;
+        z-index: 999;
+    }
+
+    .closeUp
+    {
+        display: none;
+    }
+
+    .ChatInterface
+    {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .selectMemberOption
+    {
+        width: 100%;
+    }
+
+    .RightContainer
+    {
+        width: 100%;
+    }
+
+    .myMessage
+    {
+        margin-left: 15%;
+       
+    }
+
+    .otherMessage
+    {
+        margin-left: 0px;
+    }
+}

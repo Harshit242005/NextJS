@@ -66,9 +66,11 @@ export default function Interface() {
     const [messageName, setMessageUserName] = useState<string>('');
     const [messageUserStatus, setMessageUserStatus] = useState<boolean>(false);
     const [showDeleteButton, setShowDeleteButton] = useState<boolean>(false); // to hide and show the delete button for the message header
+    
     const changeDeleteButtonShow = () => {
         setShowDeleteButton(!showDeleteButton)
     }
+    
     // to hold the function that i am going to call for the deletion of the chat
     const [deleteFunction, setDeleteFunction] = useState<(() => void) | undefined>(undefined);
     const [openMessageMenu, setOpenMessageMenu] = useState<boolean>(false);
@@ -566,7 +568,7 @@ export default function Interface() {
                 {/* conditional rendering of the headerbox  */}
 
                 {
-                    openMessage ? (
+                    !isMobile && openMessage ? (
                         <div className={styles.messageHeader}>
                             { /* show the profile header for the user */}
                             <div className={styles.messageHeaderStatus}>
@@ -596,7 +598,7 @@ export default function Interface() {
 
                         </div>) :
                         // header according to the openTask if this is open or not
-                        openTask ?
+                        isMobile && openTask ?
                             (
                                 <div className={styles.messageHeaderStatus}>
                                     <button className={styles.backButton} onClick={RemoveTask}><img src="/Back.png" alt="Back image" /></button>
@@ -613,6 +615,8 @@ export default function Interface() {
                                 </div>
                             )
                             :
+
+                            // Normal message 
                             // styling the headbar for the task related components  
                             <div className={styles.headerBar}>
                                 {/* new type of header for the application */}
@@ -668,7 +672,7 @@ export default function Interface() {
                                     {/* here the component should be rendered  */}
                                     {currentComponent === 'Create task' && <CreateTask />}
                                     {currentComponent === 'Task status' && <TaskStatus setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} setTaskHeading={setTaskHeading} setTaskDocumentId={setTaskDocumentId} setTaskAuthor={setTaskAuthor} />}
-                                    {currentComponent === 'Members' && <Members setTaskId={setTaskId} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessage={false} setMessageUid={setMessageUid} />}
+                                    {currentComponent === 'Members' && <Members setTaskId={setTaskId} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} setOpenMessageMenu={setOpenMessageMenu} openMessage={false} messageUid={messageUid} setMessageUid={setMessageUid} />}
                                     {/* this should be load conditionally */}
                                     {currentComponent === 'TaskDetails' && <TaskDetails setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} taskDocumentId={taskDocumentId} />}
                                     {currentComponent === 'Requests' && <Requests />}

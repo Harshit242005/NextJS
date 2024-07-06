@@ -45,10 +45,13 @@ interface MemberFunctionProps {
     setCurrentComponenet: React.Dispatch<React.SetStateAction<string>>;
     setTaskId: React.Dispatch<React.SetStateAction<string>>;
     setMessageUid: React.Dispatch<React.SetStateAction<string>>;
+    messageUid: string;
     openMessage: boolean;
+    openMessageMenu: boolean;
+    setOpenMessageMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Members({ setOpenMessage, setTaskId, setCurrentComponenet, setMessageUid }: MemberFunctionProps) {
+export default function Members({ setOpenMessage, setTaskId, messageUid, setCurrentComponenet, openMessageMenu, setOpenMessageMenu, setMessageUid }: MemberFunctionProps) {
     const { projectId, projectName } = useGlobalProjectIdContext();
     const { uid } = useGlobalUidContext();
     const [users, setUsers] = useState<userData[]>([]);
@@ -70,11 +73,7 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
 
 
     useEffect(() => {
-        // getting users chat messages 
-        // const q = query(
-        //     collection(firestore, 'GroupChat'),
-        //     orderBy('Date', 'asc')
-        // );
+
         console.log('project id is', projectId);
         const q = query(
             collection(firestore, 'GroupChat'),
@@ -330,26 +329,13 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
         }
     };
 
-    
+
 
     const [storeMessageForReference, setStoreMessageForReference] = useState<{ [key: string]: string[] }>({});
     // a useState hook based dict to store the boolean value with the message doc id and the nature of being a reference either true or false 
     const [isReferenceMessage, setIsReferenceMessage] = useState<{ [key: string]: boolean }>({}); // docId: boolean result 
 
-    // to check if the message is a reference message 
-    // const checkMessageText = (messageDocId: string, chatMessage: string) => {
-    //     const regex = /@\w+-\w+-\w+-\w+-\w+/g;
-    //     const matches = chatMessage.match(regex);
-    //     if (matches) {
 
-    //         console.log('True');
-    //         // store the data message in the dict and dict structure would be this 
-
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
 
     const fetchTaskDetails = async (taskId: string) => {
         const docRef = query(collection(firestore, 'Tasks'), where('TaskID', "==", taskId));
@@ -496,14 +482,106 @@ export default function Members({ setOpenMessage, setTaskId, setCurrentComponene
 
     }
 
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 425);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const [openMobileChatMenu, setOpenMobileChatMenu] = useState<boolean>(false);
+
+    const [messageImageUrl, setMessagUserImageUrl] = useState<string>('');
+    const [messageName, setMessageUserName] = useState<string>('');
+    const [messageUserStatus, setMessageUserStatus] = useState<boolean>(false);
+    const [showDeleteButton, setShowDeleteButton] = useState<boolean>(false);
+
+    // let's check how can i set up the value
+    useEffect(() => {
+        const fetchUserDataAndListenStatus = async () => {
+            if (messageUid !== '') {
+                // Query to get user data
+                const userDataQuery = query(collection(firestore, 'Users'), where('Uid', '==', messageUid));
+
+                // Subscribe to real-time updates for user status
+                const statusUnsubscribe = onSnapshot(userDataQuery, (snapshot) => {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === 'modified') {
+                            const userData = change.doc.data();
+                            setMessageUserStatus(userData.Status);
+                        }
+                        // if not modified then get the back value of the status which already exist
+                        else {
+                            const userData = change.doc.data();
+                            setMessageUserStatus(userData.Status);
+                        }
+                    });
+                });
+
+                // Get user data
+                const userDataDocs = await getDocs(userDataQuery);
+                if (!userDataDocs.empty) {
+                    const userDocData = userDataDocs.docs[0].data();
+                    setMessageUserName(userDocData.Name);
+                    setMessagUserImageUrl(userDocData.ImageUrl);
+                }
+
+                // Return an object with unsubscribe functions for cleanup
+                return {
+                    statusUnsubscribe
+                };
+            }
+        };
+
+        fetchUserDataAndListenStatus();
+
+    }, [messageUid]);
+
 
 
 
     return (
         <main className={styles.ChatInterface}>
+            {/* need to develop a header in this */}
+            {
+                isMobile ?
+                    <div onClick={() => setOpenMobileChatMenu(!openMobileChatMenu)} className={styles.selectMemberOption}>
+                        {/* selected member should be shown here in this  */}
+                        {messageUid != "" ?
+                            <div className={styles.messageHeaderMenuRow}>
+                                <div className={styles.messageHeaderData}>
 
+                                    <div className={styles.messageUserStatus}>
+
+                                        <img className={styles.messageImage} src={messageImageUrl} alt="message user image" />
+
+                                        <div className={`${messageUserStatus ? styles.activeMessageUser : styles.inactiveMessageUser}`}></div>
+
+                                    </div>
+
+                                    <p className={styles.messageUserName}>{messageName}</p>
+                                </div>
+
+
+                                {/* menu button for the member */}
+                                <button onClick={() => setOpenMessageMenu(!openMessageMenu)} className={styles.menuButtonMessage}><img src="/MenuVertical.png" alt="Menu button" /></button>
+                            </div>
+                            :
+                            <p>{projectName}</p>
+                        }
+                    </div>
+                    :
+                    <div>
+
+                    </div>
+            }
             {/* dividing the two section from this part */}
-            <div className={styles.LeftContainer}>
+            <div className={`${styles.LeftContainer} ${isMobile && openMobileChatMenu ? styles.openUp : styles.closeUp}`}>
                 <button className={`${styles.chatButton} ${selectedButton == projectName ? styles.activeChat : styles.inactiveChats}`}>{projectName}</button>
 
                 {/* member data would be here to show in the chat */}
