@@ -535,14 +535,14 @@
         width: 100%;
         max-width: 100%;
         padding: 0px;
-        
+
     }
 
     .sendChatButton {
         width: 100%;
-       
+
         height: 50px;
-      
+
     }
 
     .chatMessageInputBox {
@@ -550,24 +550,99 @@
         font-weight: 200;
     }
 
-    .chatBox
-    {
+    .chatBox {
         height: 68vh;
     }
 
-    .chatReferenceCreated
-    {
+    .chatReferenceCreated {
         height: 60vh;
     }
 
     .referenceDiv {
         background-color: #FFF3F3;
-       
+
         height: 50%;
-    
+
         display: flex;
         flex-direction: row;
         gap: 0px;
+    }
+
+    .messageHeaderMenuRow {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .menuButtonMessage {
+        border: none;
+        background-color: transparent;
+        
+    }
+
+    .messageImage {
+        height: 30px;
+        width: 30px;
+        border: none;
+        border-radius: 50%;
+        z-index: 2;
+    }
+
+    .messageHeaderData {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: last baseline;
+        gap: 10px;
+    }
+
+    .messageUserName {
+        font-family: 'ReadexPro';
+        margin-top: 5px;
+        font-size: 0.9rem;
+        font-weight: 200;
+        width: 71vw;
+    }
+
+    .activeMessageUser {
+        width: 15px;
+        height: 15px;
+        border: none;
+        border-radius: 50%;
+        margin-left: -10px;
+        background-color: rgb(118, 255, 118);
+
+    }
+
+    .inactiveMessageUser {
+        width: 15px;
+        height: 15px;
+        border: none;
+        margin-left: -10px;
+        border-radius: 50%;
+        background-color: rgb(178, 178, 178);
+    }
+
+
+    .messageUserStatus {
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: last baseline;
+    }
+
+    .dateHeader
+    {
+        font-weight: 200;
+        font-size: 14px;
+    }
+
+    .projectNameButtonSwitch
+    {
+        
+        font-family: 'ReadexPro';
     }
 }
 

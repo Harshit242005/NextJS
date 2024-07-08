@@ -302,6 +302,21 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
         setOpenMessage(true);
         // setting up the new call up
         setMessageUid(Uid);
+        // close the chat options
+        if (isMobile) {
+            setOpenMobileChatMenu(false);
+        }
+    }
+
+
+    // switch to the group chat
+    const addProjectChat = () => {
+        setOpenMessage(true);
+        // setting up the new call up
+        setMessageUid('');
+        if (isMobile) {
+            setOpenMobileChatMenu(false);
+        }
     }
 
 
@@ -572,7 +587,7 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
                                 <button onClick={() => setOpenMessageMenu(!openMessageMenu)} className={styles.menuButtonMessage}><img src="/MenuVertical.png" alt="Menu button" /></button>
                             </div>
                             :
-                            <p>{projectName}</p>
+                            <p className={styles.projectNameButtonSwitch}>{projectName}</p>
                         }
                     </div>
                     :
@@ -582,7 +597,7 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
             }
             {/* dividing the two section from this part */}
             <div className={`${styles.LeftContainer} ${isMobile && openMobileChatMenu ? styles.openUp : styles.closeUp}`}>
-                <button className={`${styles.chatButton} ${selectedButton == projectName ? styles.activeChat : styles.inactiveChats}`}>{projectName}</button>
+                <button onClick={addProjectChat} className={`${styles.chatButton} ${selectedButton == projectName ? styles.activeChat : styles.inactiveChats}`}>{projectName}</button>
 
                 {/* member data would be here to show in the chat */}
                 {

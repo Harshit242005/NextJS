@@ -521,36 +521,36 @@ export default function Interface() {
 
 
                     <div className={styles.functionButtons}>
-                       
-                            <button
-                                className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
-                                onClick={() => handleMenuButtonClick('Create task')}>
-                                Create task
-                            </button>
 
-                            <button
-                                className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
-                                onClick={() => handleMenuButtonClick('Task status')}
-                            >
-                                Task status
-                            </button>
-                            <button
-                                className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
-                                onClick={() => handleMenuButtonClick('Members')}
-                            >
-                                Members
-                            </button>
+                        <button
+                            className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
+                            onClick={() => handleMenuButtonClick('Create task')}>
+                            Create task
+                        </button>
 
-                            {
-                                isProjectMember ? '' :
-                                    <button
-                                        className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
-                                        onClick={() => handleMenuButtonClick('Requests')}
-                                    >
-                                        Requests
-                                    </button>
-                            }
-                       
+                        <button
+                            className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
+                            onClick={() => handleMenuButtonClick('Task status')}
+                        >
+                            Task status
+                        </button>
+                        <button
+                            className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
+                            onClick={() => handleMenuButtonClick('Members')}
+                        >
+                            Members
+                        </button>
+
+                        {
+                            isProjectMember ? '' :
+                                <button
+                                    className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
+                                    onClick={() => handleMenuButtonClick('Requests')}
+                                >
+                                    Requests
+                                </button>
+                        }
+
 
                         <button
                             className={`${isProjectMember ? styles.SettingButtonExtra : styles.SettingButton}`}
@@ -572,13 +572,15 @@ export default function Interface() {
                 {/* conditional rendering of the headerbox  */}
 
                 {
-                    openMessage ? (
+                    !isMobile && openMessage ? (
                         <div className={styles.messageHeader}>
                             { /* show the profile header for the user */}
                             <div className={styles.messageHeaderStatus}>
 
                                 <button className={styles.backButton} onClick={RemoveMessage}><img src="/Back.png" alt="Back image" /></button>
+                                
                                 <div className={styles.messageHeaderMenuRow}>
+
                                     <div className={styles.messageHeaderData}>
 
                                         <div className={styles.messageUserStatus}>
@@ -600,7 +602,9 @@ export default function Interface() {
 
 
 
-                        </div>) :
+                        </div>
+
+                    ) :
                         // header according to the openTask if this is open or not
                         isMobile && openTask ?
                             (
@@ -657,7 +661,7 @@ export default function Interface() {
 
                 <div style={{ padding: 10 }} className={styles.loadComponent}>
                     {
-                        openMessage ? (
+                        !isMobile && openMessage ? (
                             <div>
                                 {/* showing the chat message box  */}
                                 <Chat setOpenMessage={setOpenMessage} openMessage={false} messageUid={messageUid} openMessageMenu={openMessageMenu} RemoveMessage={RemoveMessage} />
