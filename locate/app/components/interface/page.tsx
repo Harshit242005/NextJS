@@ -66,11 +66,11 @@ export default function Interface() {
     const [messageName, setMessageUserName] = useState<string>('');
     const [messageUserStatus, setMessageUserStatus] = useState<boolean>(false);
     const [showDeleteButton, setShowDeleteButton] = useState<boolean>(false); // to hide and show the delete button for the message header
-    
+
     const changeDeleteButtonShow = () => {
         setShowDeleteButton(!showDeleteButton)
     }
-    
+
     // to hold the function that i am going to call for the deletion of the chat
     const [deleteFunction, setDeleteFunction] = useState<(() => void) | undefined>(undefined);
     const [openMessageMenu, setOpenMessageMenu] = useState<boolean>(false);
@@ -514,7 +514,6 @@ export default function Interface() {
             {isMobile && openMobileMenu ?
                 <div className={styles.sidebarColumn}>
 
-
                     <div className={styles.profileDescription}>
                         <img src={imageUrl} onClick={() => setUserProfile(true)} alt="Profile image" className={styles.sidebarProfileImage} />
                         {/* <p className={styles.projectName}>{projectName}</p> */}
@@ -522,36 +521,36 @@ export default function Interface() {
 
 
                     <div className={styles.functionButtons}>
+                       
+                            <button
+                                className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
+                                onClick={() => handleMenuButtonClick('Create task')}>
+                                Create task
+                            </button>
 
-                        <button
-                            className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
-                            onClick={() => handleMenuButtonClick('Create task')}>
-                            Create task
-                        </button>
+                            <button
+                                className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
+                                onClick={() => handleMenuButtonClick('Task status')}
+                            >
+                                Task status
+                            </button>
+                            <button
+                                className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
+                                onClick={() => handleMenuButtonClick('Members')}
+                            >
+                                Members
+                            </button>
 
-                        <button
-                            className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
-                            onClick={() => handleMenuButtonClick('Task status')}
-                        >
-                            Task status
-                        </button>
-                        <button
-                            className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
-                            onClick={() => handleMenuButtonClick('Members')}
-                        >
-                            Members
-                        </button>
-
-                        {
-                            isProjectMember ? '' :
-                                <button
-                                    className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
-                                    onClick={() => handleMenuButtonClick('Requests')}
-                                >
-                                    Requests
-                                </button>
-                        }
-
+                            {
+                                isProjectMember ? '' :
+                                    <button
+                                        className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
+                                        onClick={() => handleMenuButtonClick('Requests')}
+                                    >
+                                        Requests
+                                    </button>
+                            }
+                       
 
                         <button
                             className={`${isProjectMember ? styles.SettingButtonExtra : styles.SettingButton}`}
@@ -561,6 +560,8 @@ export default function Interface() {
                             Settings
 
                         </button>
+
+
                     </div>
                 </div>
                 : <div></div>
