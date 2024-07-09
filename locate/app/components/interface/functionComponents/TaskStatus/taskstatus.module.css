@@ -359,6 +359,7 @@
         margin-right: auto;
         border: none;
         margin-left: 4%;
+        z-index: 999;
     }
 
     .filesDialogHeader {

@@ -671,7 +671,7 @@ export default function Interface() {
                                 (
                                     // component to show the task details 
                                     <div>
-                                        <EditTask taskDocumentId={taskDocumentId} />
+                                        <EditTask taskDocumentId={taskDocumentId} isMobile={isMobile} />
                                         {/* <TaskDetails taskDocumentId={taskDocumentId} setOpenTask={setOpenTask} setCurrentComponenet={setCurrentComponenet} /> */}
                                     </div>
                                 )
@@ -685,7 +685,7 @@ export default function Interface() {
                                     {currentComponent === 'TaskDetails' && <TaskDetails setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} taskDocumentId={taskDocumentId} />}
                                     {currentComponent === 'Requests' && <Requests />}
                                     {currentComponent === 'Task' && <Task taskId={taskId} />}
-                                    {currentComponent === 'EditTask' && <EditTask taskDocumentId={taskDocumentId} />}
+                                    {currentComponent === 'EditTask' && <EditTask taskDocumentId={taskDocumentId} isMobile={isMobile}/>}
                                 </div>
                     }
                 </div>

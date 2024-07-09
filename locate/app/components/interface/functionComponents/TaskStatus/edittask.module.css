@@ -1,5 +1,4 @@
-.assignieImage
-{
+.assignieImage {
     width: 50px;
     height: 50px;
     border: none;
@@ -7,16 +6,14 @@
     margin-left: -25px;
 }
 
-.assignieImageRow
-{
+.assignieImageRow {
     display: flex;
     flex-direction: row;
     justify-content: left;
     align-items: center;
 }
 
-.assignieImageRowData
-{
+.assignieImageRowData {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -28,13 +25,11 @@
     border-radius: 5px;
 }
 
-.assignieImageRowData:hover .assignieText
-{
+.assignieImageRowData:hover .assignieText {
     font-weight: 400;
 }
 
-.filesRowData
-{
+.filesRowData {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -46,30 +41,26 @@
     border-radius: 5px;
 }
 
-.filesRowData:hover .fileRowHeading
-{
+.filesRowData:hover .fileRowHeading {
     font-weight: 400;
 }
 
-.fileRowHeading
-{
+.fileRowHeading {
     font-family: 'ReadexPro';
     font-weight: 200;
-    
+
     margin-top: 10px;
     transition: 0.3s;
 }
 
-.assignieText
-{
+.assignieText {
     font-family: 'ReadexPro';
     font-weight: 200;
     margin-top: 10px;
     transition: 0.3s;
 }
 
-.headData
-{
+.headData {
     font-family: 'ReadexPro';
     display: flex;
     flex-direction: column;
@@ -77,8 +68,7 @@
     align-items: flex-start;
 }
 
-.headRowData
-{
+.headRowData {
     display: flex;
     flex-direction: row;
     justify-content: left;
@@ -86,8 +76,7 @@
     gap: 200px;
 }
 
-.deadlineData
-{
+.deadlineData {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -95,8 +84,7 @@
     gap: 10px;
 }
 
-.nodeadlineData
-{
+.nodeadlineData {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -105,27 +93,24 @@
     background-color: rgba(238, 238, 238, 0.5);
 }
 
-.deadline
-{
+.deadline {
     font-family: 'ReadexPro';
     font-weight: 200;
     font-size: 14px;
     margin-top: 10px;
 
-    
+
 }
 
-.deadlineBox
-{
+.deadlineBox {
     border: 1px solid rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     width: 400px;
     height: 50px;
-    
+
 }
 
-.textHeading
-{
+.textHeading {
     border: 1px solid rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     width: 400px;
@@ -134,15 +119,13 @@
     font-weight: 200;
 }
 
-.heading
-{
+.heading {
     font-size: 20px;
     font-weight: 400;
     font-family: 'ReadexPro';
 }
 
-.taskDescription
-{
+.taskDescription {
     width: 1000px;
     height: 200px;
     max-width: 1000px;
@@ -154,19 +137,17 @@
     padding: 5px;
     font-family: 'ReadexPro';
     font-weight: 200;
-    
+
 }
 
-.BottomButtonCollection
-{
+.BottomButtonCollection {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 10px;
 }
 
-.updateTaskButton
-{
+.updateTaskButton {
     width: 1000px;
     height: 50px;
     border: none;
@@ -179,13 +160,11 @@
     transition: 0.3s;
 }
 
-.updateTaskButton:hover
-{
+.updateTaskButton:hover {
     font-weight: 400;
 }
 
-.fileDialog
-{
+.fileDialog {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.25);
     border-radius: 5px;
@@ -198,8 +177,7 @@
     box-shadow: 1px 0px 10px 0px rgba(0, 0, 0, 0.25);
 }
 
-.fileDialogHeader
-{
+.fileDialogHeader {
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     display: flex;
     height: 20%;
@@ -210,8 +188,7 @@
     align-items: center;
 }
 
-.fileDialogHeaderHeading
-{
+.fileDialogHeaderHeading {
     font-family: 'ReadexPro';
     font-weight: 200;
     margin-top: 10px;
@@ -220,16 +197,14 @@
 }
 
 
-.fileDialogCloseButton
-{
+.fileDialogCloseButton {
     height: 100%;
     background-color: black;
     border: none;
     width: 100px;
 }
 
-.fileRow
-{
+.fileRow {
     display: flex;
     flex-direction: row;
     justify-content: left;
@@ -243,45 +218,43 @@
     height: 200px;
     max-height: 200px;
     overflow-y: auto;
-    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+    scroll-behavior: smooth;
+    /* Optional: smooth scrolling behavior */
     display: flex;
     flex-direction: column;
 }
 
 .fileColumn::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
 }
 
 
-.fileName
-{
+.fileName {
     font-family: 'ReadexPro';
     font-weight: 200;
     width: 250px;
 }
 
-.assignieName
-{
+.assignieName {
     font-family: 'ReadexPro';
     font-weight: 200;
     width: 250px;
     margin-top: 10px;
 }
 
-.fileDeleteButton
-{
+.fileDeleteButton {
     background-color: transparent;
     border: none;
 }
 
-.fileDeleteButton:focus
-{
+.fileDeleteButton:focus {
     outline: none;
 }
 
-.assignieData
-{
+.assignieData {
     display: flex;
     flex-direction: row;
     padding-left: 25px;
@@ -290,16 +263,14 @@
     align-items: center;
 }
 
-.assignieImage
-{
+.assignieImage {
     width: 40px;
     height: 40px;
     border: none;
     border-radius: 50%;
 }
 
-.addFileButton
-{
+.addFileButton {
     background-color: black;
     border: none;
     text-align: center;
@@ -308,29 +279,24 @@
     transition: 0.3s;
 }
 
-.addFileButton:focus
-{
+.addFileButton:focus {
     border: none;
     outline: none;
 }
 
-.addFileButton:hover
-{
+.addFileButton:hover {
     color: white;
 }
 
-.noUpdateTaskButton
-{
+.noUpdateTaskButton {
     display: none;
 }
 
-.noAddFileButton
-{
+.noAddFileButton {
     display: none;
 }
 
-.noFileToShow
-{
+.noFileToShow {
     text-align: center;
     font-family: 'ReadexPro';
     font-weight: 100;
@@ -338,7 +304,88 @@
     margin-top: 50px;
 }
 
-.noDeleteAssigneeButton
-{
+.noDeleteAssigneeButton {
     display: none;
+}
+
+
+@media (max-width: 425px) {
+    .headRowData {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .heading {
+        font-size: 16px;
+        font-weight: 200;
+        font-family: 'ReadexPro';
+    }
+
+    .textHeading {
+
+        width: 87.5vw;
+
+    }
+
+
+    .textHeading:focus {
+        outline: 0.5px solid black;
+    }
+
+    .deadlineBox {
+        
+        width: 87.5vw;
+        
+    
+    }
+
+    .deadline {
+        margin-top: 15px;
+    }
+
+    .taskDescription {
+        width: 87.5vw;
+        height: 200px;
+        max-width: 87.5vw;
+        max-height: 200px;
+        min-height: 200px;
+        min-width: 87.5vw;
+        
+    
+    }
+
+    .filesRowData {
+        
+        width: 87.5vw;
+        
+    }
+
+    .assignieImageRowData {
+        
+        width: 87.5vw;
+        
+    }
+
+    .mobileColData
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: flex-start;
+        margin-left: 15px;
+        margin-top: 10px;
+    }
+
+    .updateTaskButton {
+        width: 87.5vw;
+       
+    }
+
+    .mobileTaskShowData
+    {
+        
+        scroll-behavior: auto;
+        overflow-y: auto;
+    }
+    
 }

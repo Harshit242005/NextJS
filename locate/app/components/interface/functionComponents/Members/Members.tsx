@@ -71,15 +71,34 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
         chatTyping(message);
     };
 
-
+    // for holding the query
+    let q
     useEffect(() => {
 
         console.log('project id is', projectId);
-        const q = query(
-            collection(firestore, 'GroupChat'),
-            where('ProjectId', '==', projectId),
-            orderBy('Date', 'asc')
-        );
+
+        // i have to make this conditional so it can switch between the group chat / peer to peer chats 
+        // const q = query(
+        //     collection(firestore, 'GroupChat'),
+        //     where('ProjectId', '==', projectId),
+        //     orderBy('Date', 'asc')
+        // );
+
+
+        if (messageUid != "") {
+            q = query(
+                collection(firestore, 'Chats'),
+                where('From', '==', uid),
+                orderBy('Date', 'asc')
+            );
+        }
+        else{
+            q = query(
+                    collection(firestore, 'GroupChat'),
+                    where('ProjectId', '==', projectId),
+                    orderBy('Date', 'asc')
+                );
+        }
 
 
         const unsubscribe = onSnapshot(q, async (snapshot) => {
@@ -193,7 +212,7 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
         }
 
 
-    }, [projectId, projectName]); // Listen for changes in projectId
+    }, [projectId, projectName, messageUid]); // Listen for changes in projectId
 
     const messageBoxRef = useRef<HTMLDivElement>(null);
     const isAtBottomRef = useRef<boolean>(true);

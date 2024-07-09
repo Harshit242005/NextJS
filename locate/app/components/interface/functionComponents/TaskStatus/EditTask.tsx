@@ -7,9 +7,10 @@ import { useGlobalProjectIdContext } from '@/app/context/projectId';
 import { useGlobalUidContext } from '@/app/context/uid';
 interface EditTask {
     taskDocumentId: string;
+    isMobile: boolean;
 }
 
-export default function EditTask({ taskDocumentId }: EditTask) {
+export default function EditTask({ taskDocumentId, isMobile }: EditTask) {
     const [taskHeading, setTaskHeading] = useState<string>('');
     const [taskDescription, setTaskDescription] = useState<string>('');
     const [taskDeadline, setTaskDeadline] = useState('');
@@ -172,37 +173,37 @@ export default function EditTask({ taskDocumentId }: EditTask) {
             delete updatedState[assigneeId];
             return updatedState;
         });
-    
+
         // Use getUserData to get the assignee's image URL
         const key_value_data = await getUserData(assigneeId);
         if (!key_value_data) {
             console.error('User data not found');
             return;
         }
-    
+
         const assigneeUrl = key_value_data[1];
-    
+
         try {
             const docRef = doc(firestore, 'Tasks', taskDocumentId);
             const docSnapshot = await getDoc(docRef);
-    
+
             if (docSnapshot.exists()) {
                 const docData = docSnapshot.data();
                 const assigneeImages = docData.AssignieesImages || [];
                 const assignees = docData.Assignies || {};
-    
+
                 // Create a new array without the removed URL
                 const updatedAssigneeImages = assigneeImages.filter((url: string) => url !== assigneeUrl);
-    
+
                 // Remove the assignee ID from the map
                 const { [assigneeId]: removed, ...updatedAssignees } = assignees;
-    
+
                 // Update the Firestore document
                 await updateDoc(docRef, {
                     AssignieesImages: updatedAssigneeImages,
                     Assignies: updatedAssignees
                 });
-    
+
                 console.log('Assignee deleted successfully');
             } else {
                 console.error('No such document!');
@@ -283,12 +284,12 @@ export default function EditTask({ taskDocumentId }: EditTask) {
 
 
     return (
-        <main>
+        <main className={`${isMobile ? styles.mobileTaskShowData : ''}`}>
             <div className={styles.headRowData}>
                 {/* column for the doc heading */}
                 <div className={styles.headData}>
                     <p className={styles.heading}>Task</p>
-                    <input className={styles.textHeading} disabled={!(uid == createdBy)}  type="text" value={taskHeading} onChange={(e) => setTaskHeading(e.target.value)} />
+                    <input className={styles.textHeading} disabled={!(uid == createdBy)} type="text" value={taskHeading} onChange={(e) => setTaskHeading(e.target.value)} />
                 </div>
                 {/* column for the doc Deadline */}
                 <div className={styles.headData}>
@@ -301,29 +302,31 @@ export default function EditTask({ taskDocumentId }: EditTask) {
                     </div>
                 </div>
             </div>
-            {/* showing the task description  */}
-            <div className={styles.headData}>
-                <p className={styles.heading}>Description</p>
-                <textarea className={styles.taskDescription}  disabled={!(uid == createdBy)} value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
-            </div>
-
-
-            <div className={styles.BottomButtonCollection}>
-                {/* Attach files */}
-                <div className={styles.filesRowData} onClick={() => setOpenFile(true)}>
-                    <img src='/Files.png' /><p className={styles.fileRowHeading}>Files</p>
+            <div className={`${isMobile ? styles.mobileColData : ''}`}>
+                {/* showing the task description  */}
+                <div className={styles.headData}>
+                    <p className={styles.heading}>Description</p>
+                    <textarea className={styles.taskDescription} disabled={!(uid == createdBy)} value={taskDescription} onChange={(e) => setTaskDescription(e.target.value)}></textarea>
                 </div>
 
-                {/* handle assignies  */}
-                <div onClick={() => setOpenAssignie(true)} className={styles.assignieImageRowData}>
-                    <div className={styles.assignieImageRow}>
-                        {assignieImages.map((imageUrl, index) => (
-                            <img className={styles.assignieImage} src={imageUrl} alt="Image Url" />
-                        ))}
+
+                <div className={styles.BottomButtonCollection}>
+                    {/* Attach files */}
+                    <div className={styles.filesRowData} onClick={() => setOpenFile(true)}>
+                        <img src='/Files.png' /><p className={styles.fileRowHeading}>Files</p>
                     </div>
-                    <p className={styles.assignieText}>Assignees</p>
+
+                    {/* handle assignies  */}
+                    <div onClick={() => setOpenAssignie(true)} className={styles.assignieImageRowData}>
+                        <div className={styles.assignieImageRow}>
+                            {assignieImages.map((imageUrl, index) => (
+                                <img className={styles.assignieImage} src={imageUrl} alt="Image Url" />
+                            ))}
+                        </div>
+                        <p className={styles.assignieText}>Assignees</p>
+                    </div>
+                    <button className={`${uid == createdBy ? styles.updateTaskButton : styles.noUpdateTaskButton}`}>Update Task</button>
                 </div>
-                <button className={`${uid == createdBy ? styles.updateTaskButton : styles.noUpdateTaskButton }`}>Update Task</button>
             </div>
 
             {/* opening the file to show the description */}
@@ -337,13 +340,13 @@ export default function EditTask({ taskDocumentId }: EditTask) {
                     <div className={styles.fileColumn}>
                         {
                             taskFileData ?
-                        Object.entries(taskFileData).map(([key, value]) => (
-                            <div className={styles.fileRow}>
-                                <p className={styles.fileName}>{key}</p>
-                                <button onClick={() => handleDeleteFile(key)} className={styles.fileDeleteButton}><img src='/deleteIcon.png' /></button>
-                            </div>
-                        )) :
-                        <p className={styles.noFileToShow}>No file to show!</p>
+                                Object.entries(taskFileData).map(([key, value]) => (
+                                    <div className={styles.fileRow}>
+                                        <p className={styles.fileName}>{key}</p>
+                                        <button onClick={() => handleDeleteFile(key)} className={styles.fileDeleteButton}><img src='/deleteIcon.png' /></button>
+                                    </div>
+                                )) :
+                                <p className={styles.noFileToShow}>No file to show!</p>
                         }
                         <input type="file"
                             style={{ display: 'none' }}
