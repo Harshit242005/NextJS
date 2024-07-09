@@ -22,7 +22,7 @@ export default function Home() {
   // function to handle google signup
   const googleSignIn = async () => {
     // check if the data exist the localstorage and if yes then just navigate efficently
-    if (localStorage.getItem('UserUid')) {
+    if (typeof window !== 'undefined' && localStorage.getItem('UserUid')) {
       setUid(localStorage.getItem('UserUid'));
       setEmail(localStorage.getItem('UserEmail'));
       setImageUrl(localStorage.getItem('UserImageUrl') || '');

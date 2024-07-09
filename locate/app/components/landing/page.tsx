@@ -21,7 +21,7 @@ export default function landing() {
     const router = useRouter();
     const [joinProjectName, setJoinProject] = useState('');
     const [showNewProject, setShowCreateNewProject] = useState<boolean>(false);
-    const { uid, imageUrl, userName } = useGlobalUidContext();
+    const { uid, imageUrl, userName, setUid, setEmail, setImageUrl, setUserName } = useGlobalUidContext();
     const { projectId, projectName, setProjectId, setProjectName, setProjectCreator } = useGlobalProjectIdContext();
     console.log('uid value is', uid);
     console.log('image url is', imageUrl);
@@ -33,6 +33,24 @@ export default function landing() {
     const [showRequest, setShowRequest] = useState<boolean>(false);
 
     const [successfulJoinRequest, setSuccessfulJoinRequest] = useState<boolean>(false);
+
+    // load the local storage and look for the data in it if exist
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+            const storedEmail = localStorage.getItem('UserEmail');
+            const storedImageUrl = localStorage.getItem('UserImageUrl');
+            const storedUserName = localStorage.getItem('UserName');
+
+            if (storedUid) {
+                setUid(storedUid);
+                setEmail(storedEmail || '');
+                setImageUrl(storedImageUrl || '');
+                setUserName(storedUserName || '');
+            }
+        }
+    }, []);
 
 
 
