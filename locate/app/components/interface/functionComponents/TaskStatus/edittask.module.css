@@ -388,4 +388,39 @@
         overflow-y: auto;
     }
     
+
+    .fileDialog {
+        
+        width: 87.5vw;
+        height: fit-content;
+        
+        
+        left: 6%;
+        top: 25%;
+        
+        
+    }
+    
+    .fileDialogHeader {
+        
+        gap: 0px;
+        
+    }
+    
+    .fileDialogHeaderHeading {
+        
+        width: 71vw;
+        font-size: 20px;
+    }
+    
+    .fileDialogCloseButton {
+        height: 60px;
+        border-top-right-radius: 5px;
+    }
+
+    .addFileButton {
+       width: 100%;
+    }
+    
+    
 }

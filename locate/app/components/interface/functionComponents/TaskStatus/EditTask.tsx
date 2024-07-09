@@ -348,13 +348,14 @@ export default function EditTask({ taskDocumentId, isMobile }: EditTask) {
                                 )) :
                                 <p className={styles.noFileToShow}>No file to show!</p>
                         }
-                        <input type="file"
+                       
+                    </div>
+                    <input type="file"
                             style={{ display: 'none' }}
                             ref={fileInputRef}
                             onChange={handleFileChange}
                             multiple />
                         <button onClick={handleButtonClick} className={`${uid == createdBy ? styles.addFileButton : styles.noAddFileButton}`}>Add files</button>
-                    </div>
                 </div>
             }
 

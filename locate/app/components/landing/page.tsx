@@ -37,7 +37,7 @@ export default function landing() {
 
 
     useEffect(() => {
-        const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid));
+        const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid || localStorage.getItem('UserUid')));
 
         // Set up a real-time listener
         const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
@@ -60,14 +60,14 @@ export default function landing() {
 
         return() => unsubscribe();
 
-    }, [uid]);
+    }, [uid || localStorage.getItem('UserUid')]);
 
     // show the requests 
     const showOldRequests = async () => {
         setShowRequest(true);
         // get the requests map with the project name and boolean value 
         // addingg the project name with false value in the map of the user document
-        const q = query(collection(firestore, 'Users'), where('Uid', '==', uid));
+        const q = query(collection(firestore, 'Users'), where('Uid', '==', uid || localStorage.getItem('UserUid')));
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
@@ -88,7 +88,7 @@ export default function landing() {
     const addProjectNameInMap = async () => {
         try {
             // addingg the project name with false value in the map of the user document
-            const q = query(collection(firestore, 'Users'), where('Uid', '==', uid));
+            const q = query(collection(firestore, 'Users'), where('Uid', '==', uid || localStorage.getItem('UserUid')));
             const querySnapshot = await getDocs(q);
 
             if (!querySnapshot.empty) {
@@ -138,9 +138,9 @@ export default function landing() {
                 let requests = documentData.requests || [];
 
                 // Check if the UID already exists in the requests array
-                if (!requests.includes(uid)) {
+                if (!requests.includes(uid || localStorage.getItem('UserUid'))) {
                     // Push the new UID into the requests array
-                    requests.push(uid);
+                    requests.push(uid || localStorage.getItem('UserUid'));
                     console.log('UID added to requests successfully.');
 
                     // set the sucessful request sent for the joining of the group
@@ -193,18 +193,18 @@ export default function landing() {
                 const data = documents.docs[0].data();
                 const docRef = doc(firestore, 'Projects', documentId)
                 const requestsList = data.requests;
-                if (requestsList.includes(uid)) {
+                if (requestsList.includes(uid || localStorage.getItem('UserUid'))) {
                     // Remove MemberId from requests list
                     // const updatedRequestsList = arrayRemove(requestsList, MemberId);
-                    const updatedRequestsList = removeFromArray(requestsList, uid);
+                    const updatedRequestsList = removeFromArray(requestsList, uid || localStorage.getItem('UserUid'));
                     console.log('Updated list after removing the id', updatedRequestsList);
 
                     // Update the document with the modified requests list
                     await updateDoc(docRef, { requests: updatedRequestsList });
 
-                    console.log(`Member ID ${uid} removed from requests list.`);
+                    console.log(`Member ID ${uid || localStorage.getItem('UserUid')} removed from requests list.`);
                 } else {
-                    console.log(`Member ID ${uid} not found in requests list.`);
+                    console.log(`Member ID ${uid || localStorage.getItem('UserUid')} not found in requests list.`);
                 }
             }
         }
@@ -215,7 +215,7 @@ export default function landing() {
         // second step 
         // remove from the map as well 
         try {
-            const q = query(collection(firestore, 'Users'), where('Uid', "==", uid))
+            const q = query(collection(firestore, 'Users'), where('Uid', "==", uid || localStorage.getItem('UserUid')))
             const documents = await getDocs(q)
             if (!documents.empty) {
                 const documentId = documents.docs[0].id;
@@ -248,7 +248,7 @@ export default function landing() {
         if (projectNameCreate.length != 0) {
             const documentData = {
                 'projectName': projectNameCreate,
-                'createdBy': uid
+                'createdBy': uid || localStorage.getItem('UserUid')
             }
 
 
@@ -268,7 +268,7 @@ export default function landing() {
 
             // update the user profile to to add the project name in the user document
             const userRef = collection(firestore, 'Users');
-            const querySnapshot = query(userRef, where('Uid', '==', uid));
+            const querySnapshot = query(userRef, where('Uid', '==', uid || localStorage.getItem('UserUid')));
             const userDocs = await getDocs(querySnapshot);
             if (!userDocs.empty) {
                 const userDocument = userDocs.docs[0];
@@ -318,7 +318,7 @@ export default function landing() {
         <main className={styles.body}>
 
             <div className={styles.profileImageDescription}>
-                <img src={imageUrl} alt="Profile image" className={styles.profileImage} />
+                <img src={imageUrl || localStorage.getItem('UserImageUrl') || ''} alt="Profile image" className={styles.profileImage} />
                 {/* <p>{userName}</p> */}
             </div>
 

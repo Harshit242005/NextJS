@@ -21,45 +21,73 @@ export default function Home() {
   const { setUid, setEmail, setImageUrl, setUserName } = useGlobalUidContext();
   // function to handle google signup
   const googleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    // Set prompt option to select_account
-    provider.setCustomParameters({ prompt: 'select_account' });
-    const result = await signInWithPopup(auth, provider);
+    // check if the data exist the localstorage and if yes then just navigate efficently
+    if (localStorage.getItem('UserUid')) {
+      setUid(localStorage.getItem('UserUid'));
+      setEmail(localStorage.getItem('UserEmail'));
+      setImageUrl(localStorage.getItem('UserImageUrl') || '');
+      setUserName(localStorage.getItem('UserName'));
 
 
-
-    // here we would set up the application side of our websocket 
-    setUserId(result.user.uid);
-
-    // Once the user is signed in, update the UID state with the user's UID
-    setUid(result.user.uid);
-    if (result.user.photoURL != null) {
-      setImageUrl(result.user.photoURL);
-    }
-    setEmail(result.user.email);
-    // setUserName(result.user.displayName);
-
-    // Fetch the document corresponding to the user's UID
-    const userDocRef = collection(firestore, 'Users');
-    const q = query(userDocRef, where('Uid', '==', result.user.uid));
-    const userDocSnapshot = await getDocs(q);
-
-    if (!userDocSnapshot.empty) {
-      // Set the status to true while signing up 
+      // update the doc itself for the true status 
+      const userDocRef = collection(firestore, 'Users');
+      const q = query(userDocRef, where('Uid', '==', localStorage.getItem('UserUid')));
+      const userDocSnapshot = await getDocs(q);
       const userDocId = userDocSnapshot.docs[0].id;
-      const user_name =  userDocSnapshot.docs[0].data()['Name'] || '';
-      const user_image =  userDocSnapshot.docs[0].data()['ImageUrl'] || '';
-      setUserName(user_name);
-      setImageUrl(user_image);
       const docRef = doc(firestore, 'Users', userDocId);
       await updateDoc(docRef, { 'Status': true });
 
-
       // Document exists, navigate to the landing page
       router.push('/components/landing');
-    } else {
-      // Document doesn't exist, navigate to the workspace page
-      router.push('/components/workspace');
+    }
+    else {
+
+
+
+      const provider = new GoogleAuthProvider();
+      // Set prompt option to select_account
+      provider.setCustomParameters({ prompt: 'select_account' });
+      const result = await signInWithPopup(auth, provider);
+
+
+
+      // here we would set up the application side of our websocket 
+      setUserId(result.user.uid);
+      localStorage.setItem('UserUid', result.user.uid);
+
+
+      if (result.user.photoURL != null) {
+        setImageUrl(result.user.photoURL);
+        localStorage.setItem('UserImageUrl', result.user.photoURL);
+      }
+      setEmail(result.user.email);
+      localStorage.setItem('UserEmail', result.user.email || '');
+      // setUserName(result.user.displayName);
+
+      // Fetch the document corresponding to the user's UID
+      const userDocRef = collection(firestore, 'Users');
+      const q = query(userDocRef, where('Uid', '==', result.user.uid));
+      const userDocSnapshot = await getDocs(q);
+
+      if (!userDocSnapshot.empty) {
+        // Set the status to true while signing up 
+        const userDocId = userDocSnapshot.docs[0].id;
+        const user_name = userDocSnapshot.docs[0].data()['Name'] || '';
+        const user_image = userDocSnapshot.docs[0].data()['ImageUrl'] || '';
+        setUserName(user_name);
+        setImageUrl(user_image);
+        localStorage.setItem('UserName', user_name);
+        localStorage.setItem('UserImageUrl', user_image);
+        const docRef = doc(firestore, 'Users', userDocId);
+        await updateDoc(docRef, { 'Status': true });
+
+
+        // Document exists, navigate to the landing page
+        router.push('/components/landing');
+      } else {
+        // Document doesn't exist, navigate to the workspace page
+        router.push('/components/workspace');
+      }
     }
   }
 
