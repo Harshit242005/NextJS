@@ -160,113 +160,59 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
 
-
-
-
-        // // user data for the members showing
-        // const getUsersData = () => {
-        //     // getting the members ids first
-        //     const docRef = doc(firestore, 'Projects', projectId);
-        //     getDoc(docRef).then((document) => {
-        //         if (document.exists()) {
-        //             const memberIds = document.data().members || [];
-
-        //             const filteredMemberIds = memberIds.filter((memberId: any) => memberId !== uid);
-        //             console.log('filtered members of the projects are', filteredMemberIds);
-
-
-        //             filteredMemberIds.forEach((ids: string) => {
-        //                 const memberQuery = query(collection(firestore, 'Users'), where('Uid', "==", ids));
-        //                 onSnapshot(memberQuery, (querySnapshot) => {
-        //                     querySnapshot.forEach((doc) => {
-        //                         const userDoc = doc.data();
-        //                         const userData: userData = {
-        //                             'Name': userDoc.Name,
-        //                             'ImageUrl': userDoc.ImageUrl,
-        //                             'Uid': userDoc.Uid,
-        //                             'Status': userDoc.Status
-        //                         };
-
-        //                         // Update user data list
-        //                         setUsers((prevUsers) => {
-        //                             const index = prevUsers.findIndex((user) => user.Uid === userData.Uid);
-        //                             if (index !== -1) {
-        //                                 const updatedUsers = [...prevUsers];
-        //                                 updatedUsers[index] = userData;
-        //                                 console.log(updatedUsers);
-        //                                 return updatedUsers;
-        //                             } else {
-        //                                 console.log([...prevUsers, userData]);
-        //                                 return [...prevUsers, userData];
-        //                             }
-        //                         });
-        //                     });
-        //                 });
-        //             });
-        //             console.log(users);
-        //         } else {
-        //             console.log('Project does not exist');
-        //         }
-        //     });
-        // };
-
-        // user data for the members showing
         const getUsersData = () => {
             // getting the members ids first
             const docRef = doc(firestore, 'Projects', projectId);
             getDoc(docRef).then((document) => {
                 if (document.exists()) {
                     const memberIds = document.data().members || [];
+    
                     const filteredMemberIds = memberIds.filter((memberId: any) => memberId !== uid);
-                    console.log('filtered members of the projects are', filteredMemberIds);
-
-                    const userPromises = filteredMemberIds.map((ids: string) => {
-                        const memberQuery = query(collection(firestore, 'Users'), where('Uid', '==', ids));
-                        return new Promise((resolve, reject) => {
-                            onSnapshot(memberQuery, (querySnapshot) => {
-                                const userDocs: userData[] = [];
-                                querySnapshot.forEach((doc) => {
-                                    const userDoc = doc.data();
-                                    const userData: userData = {
-                                        'Name': userDoc.Name,
-                                        'ImageUrl': userDoc.ImageUrl,
-                                        'Uid': userDoc.Uid,
-                                        'Status': userDoc.Status
-                                    };
-                                    userDocs.push(userData);
-                                });
-                                resolve(userDocs);
-                            }, reject);
+                    console.log('Filtered members of the projects are', filteredMemberIds);
+    
+                    const users_data: userData[] = [];
+                    let completedRequests = 0;
+    
+                    filteredMemberIds.forEach((id: string) => {
+                        const memberQuery = query(collection(firestore, 'Users'), where('Uid', '==', id));
+    
+                        onSnapshot(memberQuery, (querySnapshot) => {
+                            querySnapshot.forEach((doc) => {
+                                const userDoc = doc.data();
+                                const userData: userData = {
+                                    Name: userDoc.Name,
+                                    ImageUrl: userDoc.ImageUrl,
+                                    Uid: userDoc.Uid,
+                                    Status: userDoc.Status,
+                                };
+    
+                                // Add user data to users_data array if not already present
+                                if (!users_data.some((user) => user.Uid === userData.Uid)) {
+                                    users_data.push(userData);
+                                }
+                            });
+    
+                            // Increment the completedRequests counter and check if all requests are done
+                            completedRequests += 1;
+                            if (completedRequests === filteredMemberIds.length) {
+                                console.log(users_data);
+                                setUsers(users_data);
+                                console.log('All users:', users_data);
+                            }
                         });
                     });
-
-                    Promise.all(userPromises)
-                        .then((results) => {
-                            const allUsers = results.flat();
-                            setUsers((prevUsers) => {
-                                const updatedUsers = [...prevUsers];
-                                allUsers.forEach((userData) => {
-                                    const index = updatedUsers.findIndex((user) => user.Uid === userData.Uid);
-                                    if (index !== -1) {
-                                        updatedUsers[index] = userData;
-                                    } else {
-                                        updatedUsers.push(userData);
-                                    }
-                                });
-                                console.log(updatedUsers);
-                                return updatedUsers;
-                            });
-                        })
-                        .catch((error) => {
-                            console.error('Error fetching user data:', error);
-                        });
+                  
                 } else {
                     console.log('Project does not exist');
                 }
             });
         };
 
-        console.log(users);
+
+
+        
+
+        
 
         // clean up the listner after unmounting the component
         return () => {
@@ -283,6 +229,8 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
     const messageBoxRef = useRef<HTMLDivElement>(null);
     const isAtBottomRef = useRef<boolean>(true);
+
+    
 
     useEffect(() => {
         const messageBox = messageBoxRef.current;
