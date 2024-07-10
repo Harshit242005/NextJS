@@ -30,7 +30,8 @@ export const GlobalSocketContext = ({children}: GlobalSocketProviderProps) => {
 
     useEffect(() => {
         if (userId) {
-          const newSocket = new WebSocket(`ws://localhost:8080?uid=${userId}`);
+          // https://ember-courageous-range.glitch.me/sendTaskCreate
+          const newSocket = new WebSocket(`https://ember-courageous-range.glitch.me?uid=${userId}`);
           setSocket(newSocket);
     
           newSocket.onopen = () => {

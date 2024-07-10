@@ -30,7 +30,9 @@ export default function Home() {
       setEmail(localStorage.getItem('UserEmail'));
       setImageUrl(localStorage.getItem('UserImageUrl') || '');
       setUserName(localStorage.getItem('UserName'));
-
+  
+      setUserId(localStorage.getItem('UserUid') || '');
+      
 
       // update the doc itself for the true status 
       const userDocRef = collection(firestore, 'Users');
