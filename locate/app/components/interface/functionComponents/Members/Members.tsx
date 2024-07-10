@@ -117,7 +117,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                 }
 
 
-                console.log(message.messageDoc, viewed_by);
+
                 // update the message in the Firestore core itself
                 const docRef = doc(firestore, 'GroupChat', message.messageDoc);
                 updateDoc(docRef, { ViewedBy: viewed_by })
@@ -163,6 +163,53 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
 
+        // // user data for the members showing
+        // const getUsersData = () => {
+        //     // getting the members ids first
+        //     const docRef = doc(firestore, 'Projects', projectId);
+        //     getDoc(docRef).then((document) => {
+        //         if (document.exists()) {
+        //             const memberIds = document.data().members || [];
+
+        //             const filteredMemberIds = memberIds.filter((memberId: any) => memberId !== uid);
+        //             console.log('filtered members of the projects are', filteredMemberIds);
+
+
+        //             filteredMemberIds.forEach((ids: string) => {
+        //                 const memberQuery = query(collection(firestore, 'Users'), where('Uid', "==", ids));
+        //                 onSnapshot(memberQuery, (querySnapshot) => {
+        //                     querySnapshot.forEach((doc) => {
+        //                         const userDoc = doc.data();
+        //                         const userData: userData = {
+        //                             'Name': userDoc.Name,
+        //                             'ImageUrl': userDoc.ImageUrl,
+        //                             'Uid': userDoc.Uid,
+        //                             'Status': userDoc.Status
+        //                         };
+
+        //                         // Update user data list
+        //                         setUsers((prevUsers) => {
+        //                             const index = prevUsers.findIndex((user) => user.Uid === userData.Uid);
+        //                             if (index !== -1) {
+        //                                 const updatedUsers = [...prevUsers];
+        //                                 updatedUsers[index] = userData;
+        //                                 console.log(updatedUsers);
+        //                                 return updatedUsers;
+        //                             } else {
+        //                                 console.log([...prevUsers, userData]);
+        //                                 return [...prevUsers, userData];
+        //                             }
+        //                         });
+        //                     });
+        //                 });
+        //             });
+        //             console.log(users);
+        //         } else {
+        //             console.log('Project does not exist');
+        //         }
+        //     });
+        // };
+
         // user data for the members showing
         const getUsersData = () => {
             // getting the members ids first
@@ -170,46 +217,56 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             getDoc(docRef).then((document) => {
                 if (document.exists()) {
                     const memberIds = document.data().members || [];
-                    console.log('members of the project', memberIds);
                     const filteredMemberIds = memberIds.filter((memberId: any) => memberId !== uid);
                     console.log('filtered members of the projects are', filteredMemberIds);
 
-
-                    filteredMemberIds.forEach((ids: string) => {
-                        const memberQuery = query(collection(firestore, 'Users'), where('Uid', "==", ids));
-                        onSnapshot(memberQuery, (querySnapshot) => {
-                            querySnapshot.forEach((doc) => {
-                                const userDoc = doc.data();
-                                const userData: userData = {
-                                    'Name': userDoc.Name,
-                                    'ImageUrl': userDoc.ImageUrl,
-                                    'Uid': userDoc.Uid,
-                                    'Status': userDoc.Status
-                                };
-                                console.log(userData);
-                                // Update user data list
-                                setUsers((prevUsers) => {
-                                    const index = prevUsers.findIndex((user) => user.Uid === userData.Uid);
-                                    if (index !== -1) {
-                                        const updatedUsers = [...prevUsers];
-                                        updatedUsers[index] = userData;
-                                        console.log(updatedUsers);
-                                        return updatedUsers;
-                                    } else {
-                                        console.log([...prevUsers, userData]);
-                                        return [...prevUsers, userData];
-                                    }
+                    const userPromises = filteredMemberIds.map((ids: string) => {
+                        const memberQuery = query(collection(firestore, 'Users'), where('Uid', '==', ids));
+                        return new Promise((resolve, reject) => {
+                            onSnapshot(memberQuery, (querySnapshot) => {
+                                const userDocs: userData[] = [];
+                                querySnapshot.forEach((doc) => {
+                                    const userDoc = doc.data();
+                                    const userData: userData = {
+                                        'Name': userDoc.Name,
+                                        'ImageUrl': userDoc.ImageUrl,
+                                        'Uid': userDoc.Uid,
+                                        'Status': userDoc.Status
+                                    };
+                                    userDocs.push(userData);
                                 });
-                            });
+                                resolve(userDocs);
+                            }, reject);
                         });
                     });
-                    console.log(users);
+
+                    Promise.all(userPromises)
+                        .then((results) => {
+                            const allUsers = results.flat();
+                            setUsers((prevUsers) => {
+                                const updatedUsers = [...prevUsers];
+                                allUsers.forEach((userData) => {
+                                    const index = updatedUsers.findIndex((user) => user.Uid === userData.Uid);
+                                    if (index !== -1) {
+                                        updatedUsers[index] = userData;
+                                    } else {
+                                        updatedUsers.push(userData);
+                                    }
+                                });
+                                console.log(updatedUsers);
+                                return updatedUsers;
+                            });
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching user data:', error);
+                        });
                 } else {
                     console.log('Project does not exist');
                 }
             });
         };
 
+        console.log(users);
 
         // clean up the listner after unmounting the component
         return () => {
@@ -218,6 +275,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             }
 
             getUsersData();
+
         }
 
 
@@ -354,7 +412,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         console.log(matches);
         if (matches) {
             const id = matches[0].slice(1); // Extract the first matched ID without the @
-            console.log(id);
+
             const docRef = query(collection(firestore, 'Tasks'), where('TaskID', "==", id));
             const querySnapshot = await getDocs(docRef);
 
@@ -405,7 +463,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         const regex = /\b\w{8}-\w{4}-\w{4}-\w{4}-\w{12}\b/g; // Updated regex to match UUIDs
         const matches = chatMessage.match(regex);
         if (matches) {
-            console.log('True');
+
 
             // Extract the task ID from the matches array
             const taskId = matches[0]; // No need to remove '@' character
@@ -482,7 +540,6 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                 await getSenderName(senderId);
             }
 
-            // get the chat message and get the doc id and get the viewedby and add them in the supposed list of the dict 
 
 
         };
