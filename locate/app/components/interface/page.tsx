@@ -578,7 +578,7 @@ export default function Interface() {
                             <div className={styles.messageHeaderStatus}>
 
                                 <button className={styles.backButton} onClick={RemoveMessage}><img src="/Back.png" alt="Back image" /></button>
-                                
+
                                 <div className={styles.messageHeaderMenuRow}>
 
                                     <div className={styles.messageHeaderData}>
@@ -630,7 +630,7 @@ export default function Interface() {
                                 {/* new type of header for the application */}
                                 {isMobile ?
                                     <div className={styles.mobileViewHeader}>
-                                        <div className={styles.mobileHeaderData}>
+                                        <div onClick={() => setUserProfile(true)} className={styles.mobileHeaderData}>
                                             <img src={imageUrl} className={styles.mobileHeaderUserImage} alt="User profile photo" />
                                             <p className={styles.mobileComponentName}>{currentComponent}</p>
                                         </div>
@@ -685,7 +685,7 @@ export default function Interface() {
                                     {currentComponent === 'TaskDetails' && <TaskDetails setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} taskDocumentId={taskDocumentId} />}
                                     {currentComponent === 'Requests' && <Requests />}
                                     {currentComponent === 'Task' && <Task taskId={taskId} />}
-                                    {currentComponent === 'EditTask' && <EditTask taskDocumentId={taskDocumentId} isMobile={isMobile}/>}
+                                    {currentComponent === 'EditTask' && <EditTask taskDocumentId={taskDocumentId} isMobile={isMobile} />}
                                 </div>
                     }
                 </div>
@@ -765,10 +765,16 @@ export default function Interface() {
                             <input onChange={(e) => changePersonalName(e.target.value)} type="text" placeholder="Type name" value={newUserName || ''} className={styles.personalUserNameInput} />
                         </div>
 
-                        <div className={styles.personalProfileButtons}>
-                            <button onClick={() => setShowProjects(true)} className={styles.personalProfileButton}>Projects</button>
-                            <button onClick={() => setShowCompletedTask(true)} className={styles.personalProfileButton}>Tasks</button>
-                            {dataChange && <button onClick={changePersonalData} className={styles.personalProfileButton}>Update</button>}
+                        <div className={`${isMobile ? '' : styles.personalProfileButtons}`}>
+                            <div className={`${isMobile ? styles.mobileProfileButtons : ''}`}>
+                            <div className={styles.personalProfileButtons}>
+                                <button onClick={() => setShowProjects(true)} className={styles.personalProfileButton}>Projects</button>
+                                <button onClick={() => setShowCompletedTask(true)} className={styles.personalProfileButton}>Tasks</button>
+                            </div>
+                            <div>
+                                {dataChange && <button onClick={changePersonalData} className={styles.personalProfileButtonDataChange}>Update</button>}
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -792,6 +798,9 @@ export default function Interface() {
                 </div>
             }
 
+
+
+            
             {showProjects &&
                 <div className={styles.completedTask}>
                     <div className={styles.completedTaskHeader}>
