@@ -30,7 +30,7 @@
     height: 300px;
     position: absolute;
     left: 30%;
-    margin-top: 7%;
+    margin-top: 0%;
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -43,6 +43,8 @@
     box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
+
+
 .leaveProject {
     width: 100%;
     border: none;
@@ -54,7 +56,7 @@
     font-weight: 200;
     font-size: 17px;
 
-    margin-top: 115px;
+    margin-top: 60px;
 }
 
 .profileDescriptionHeader {
@@ -362,6 +364,8 @@
     font-family: 'ReadexPro';
 }
 
+
+
 .InviteEmailSection {
     display: flex;
     flex-direction: column;
@@ -527,6 +531,19 @@
     font-size: 16px;
 }
 
+.logOutButton
+{
+    width: 200px;
+    height: 50px;
+    background-color: #F2F2F2;
+    border: none;
+    border-radius: 5px;
+    font-family: 'ReadexPro';
+    color: rgb(255, 0, 0);
+    font-weight: 200;
+    font-size: 16px;
+}
+
 
 
 .deleteButton {
@@ -586,6 +603,8 @@
 
     gap: 10px;
 }
+
+
 
 .personalProfileImage {
     width: 40px;
@@ -858,20 +877,20 @@
     .SettingButton {
         position: relative;
         /* top: 51.4vh; */
-        top: 0%;
+        top: 5%;
     }
 
     .SettingButtonExtra {
         position: relative;
         /* top: 58.8vh; */
-        top: 0%;
+        top: 5%;
     }
 
     .showProfile {
         width: 87.5vw;
         left: 0%;
         margin-left: 6%;
-        top: 15%;
+        top: 25%;
 
     }
 
@@ -1026,6 +1045,11 @@
         background-color: #e8e8e86d;
         padding-left: 10px;
     
+    }
+
+    .userFunctions
+    {
+        flex-direction: column;
     }
 
 

@@ -505,6 +505,11 @@ export default function Interface() {
         setOpenMobileMenu(!openMobileMenu)
     }
 
+    const logout = () => {
+        localStorage.clear();
+        router.push('/');
+    }
+
 
 
     return (
@@ -718,7 +723,9 @@ export default function Interface() {
                     {/* content for the profile component */}
                     <div className={styles.userFunctions}>
                         <button className={styles.showList} onClick={() => setShowTaskList(true)}>Show  Tasks</button> {/* to show the task list as a component */}
+                        <button onClick={logout} className={styles.logOutButton}>Log out</button>
                     </div>
+
 
                     <button onClick={() => leaveProject()} className={styles.leaveProject}>Leave Project</button>
                 </div>
