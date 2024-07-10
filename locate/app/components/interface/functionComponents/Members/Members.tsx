@@ -649,7 +649,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
                             </div> :
                             <div>
-
+                                <p>No Member exist yet</p>
                             </div>
                     }
 
