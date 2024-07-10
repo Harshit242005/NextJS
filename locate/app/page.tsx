@@ -9,12 +9,15 @@ import { firestore } from "./firebase";
 import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 
 
 
 export default function Home() {
   const { setUserId } = useGlobalSocketContext();
+ 
+
 
 
   const router = useRouter();
@@ -45,9 +48,15 @@ export default function Home() {
 
 
       const provider = new GoogleAuthProvider();
+      
+
+
       // Set prompt option to select_account
       provider.setCustomParameters({ prompt: 'select_account' });
       const result = await signInWithPopup(auth, provider);
+      
+     
+
 
 
 
@@ -91,6 +100,7 @@ export default function Home() {
     }
   }
 
+ 
   return (
     <main className={styles.body}>
       <h1 className={styles.heading}>ProjeKt</h1>

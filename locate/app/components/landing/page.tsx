@@ -217,7 +217,7 @@ export default function landing() {
                     // Update the document with the modified requests list
                     await updateDoc(docRef, { requests: updatedRequestsList });
 
-                    console.log(`Member ID ${uid} removed from requests list.`);
+                    
                 } else {
                     console.log(`Member ID ${uid} not found in requests list.`);
                 }
@@ -243,7 +243,7 @@ export default function landing() {
                     // Update the document with the modified Requests map
                     await updateDoc(doc(collection(firestore, 'Users'), documentId), { Requests: requestsMap });
 
-                    console.log(`Project ${projectName} removed from user's requests.`);
+                   
                 } else {
                     console.log(`Project ${projectName} not found in user's requests.`);
                 }
@@ -273,7 +273,7 @@ export default function landing() {
             // Add the document to the collection
             const docRef = await addDoc(collectionRef, documentData);
             const document_id = docRef.id;
-            console.log('created document id', document_id);
+         
 
 
             // setting up the global context id 

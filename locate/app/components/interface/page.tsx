@@ -669,7 +669,7 @@ export default function Interface() {
                         !isMobile && openMessage ? (
                             <div>
                                 {/* showing the chat message box  */}
-                                <Chat setOpenMessage={setOpenMessage} openMessage={false} messageUid={messageUid} openMessageMenu={openMessageMenu} RemoveMessage={RemoveMessage} />
+                                <Chat setOpenMessage={setOpenMessage} openMessage={openMessage} messageUid={messageUid} openMessageMenu={openMessageMenu} RemoveMessage={RemoveMessage} />
                             </div>
                         ) :
                             openTask ?
@@ -685,7 +685,7 @@ export default function Interface() {
                                     {/* here the component should be rendered  */}
                                     {currentComponent === 'Create task' && <CreateTask />}
                                     {currentComponent === 'Task status' && <TaskStatus setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} setTaskHeading={setTaskHeading} setTaskDocumentId={setTaskDocumentId} setTaskAuthor={setTaskAuthor} />}
-                                    {currentComponent === 'Members' && <Members setTaskId={setTaskId} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} setOpenMessageMenu={setOpenMessageMenu} openMessage={false} messageUid={messageUid} setMessageUid={setMessageUid} />}
+                                    {currentComponent === 'Members' && <Members RemoveMessage={RemoveMessage} setTaskId={setTaskId} openMessage={openMessage} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} setOpenMessageMenu={setOpenMessageMenu}  messageUid={messageUid} setMessageUid={setMessageUid} />}
                                     {/* this should be load conditionally */}
                                     {currentComponent === 'TaskDetails' && <TaskDetails setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} taskDocumentId={taskDocumentId} />}
                                     {currentComponent === 'Requests' && <Requests />}

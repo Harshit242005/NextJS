@@ -30,7 +30,7 @@ import Image from "next/image";
 import axios from "axios";
 
 
-export default function Chat({ setOpenMessage, messageUid, openMessageMenu, RemoveMessage }: MemberFunctionProps) {
+export default function Chat({ messageUid, openMessageMenu, RemoveMessage }: MemberFunctionProps) {
     const { projectCreator, projectId, projectName } = useGlobalProjectIdContext();
     const { uid, email } = useGlobalUidContext();
     const [messageText, setMessaeText] = useState<string>('');
@@ -44,14 +44,47 @@ export default function Chat({ setOpenMessage, messageUid, openMessageMenu, Remo
     useEffect(() => {
 
         // Set up listener for real-time updates to chat messages 
-        const q = query(
+        // const q = query(
+        //     collection(firestore, 'Chats'),
+        //     orderBy('Date', 'asc')
+        // );
+
+
+        // const unsubscribe = onSnapshot(q, (snapshot) => {
+        //     const messages: messageDoc[] = [];
+        //     snapshot.forEach((doc: any) => {
+        //         // here apply the function to change the status value of the text
+        //         if (doc.data().Status !== true && doc.data().To === uid) {
+        //             const docRef = doc.ref;
+        //             updateDoc(docRef, { Status: true });
+        //         }
+        //         messages.push({
+        //             messageDocId: doc.id,
+        //             docData: doc.data() as messageDoc['docData']
+        //         });
+        //     });
+        //     setChatMessages(messages);
+        // });
+
+        const q1 = query(
             collection(firestore, 'Chats'),
+            where('From', '==', messageUid),
+            where('To', '==', uid),
             orderBy('Date', 'asc')
         );
-        const unsubscribe = onSnapshot(q, (snapshot) => {
+
+        // Define query q2
+        const q2 = query(
+            collection(firestore, 'Chats'),
+            where('From', '==', uid),
+            where('To', '==', messageUid),
+            orderBy('Date', 'asc')
+        );
+
+        // Listen to q1
+        const unsubscribeQ1 = onSnapshot(q1, (snapshot) => {
             const messages: messageDoc[] = [];
-            snapshot.forEach((doc: any) => {
-                // here apply the function to change the status value of the text
+            snapshot.forEach((doc) => {
                 if (doc.data().Status !== true && doc.data().To === uid) {
                     const docRef = doc.ref;
                     updateDoc(docRef, { Status: true });
@@ -61,9 +94,28 @@ export default function Chat({ setOpenMessage, messageUid, openMessageMenu, Remo
                     docData: doc.data() as messageDoc['docData']
                 });
             });
-            setChatMessages(messages);
+            console.log(chatMessages);
+            // Merge the messages from q1 with existing chatMessages
+            setChatMessages((prevMessages) => [...prevMessages, ...messages]);
         });
 
+        // Listen to q2
+        const unsubscribeQ2 = onSnapshot(q2, (snapshot) => {
+            const messages: messageDoc[] = [];
+            snapshot.forEach((doc) => {
+                if (doc.data().Status !== true && doc.data().To === uid) {
+                    const docRef = doc.ref;
+                    updateDoc(docRef, { Status: true });
+                }
+                messages.push({
+                    messageDocId: doc.id,
+                    docData: doc.data() as messageDoc['docData']
+                });
+            });
+            console.log(chatMessages);
+            // Merge the messages from q2 with existing chatMessages
+            setChatMessages((prevMessages) => [...prevMessages, ...messages]);
+        });
 
 
         const getOtherPersonImageUrl = async () => {
@@ -81,7 +133,8 @@ export default function Chat({ setOpenMessage, messageUid, openMessageMenu, Remo
 
         // Clean up the listener when component unmounts
         return () => {
-            unsubscribe();
+            unsubscribeQ1();
+            unsubscribeQ2();
             getOtherPersonImageUrl();
         };
     }, [chatMessages, otherPersonImageUrl]); // Empty dependency array to run only once when component mounts
@@ -122,7 +175,7 @@ export default function Chat({ setOpenMessage, messageUid, openMessageMenu, Remo
         }
 
         setEnableClickSelection(false);
-        
+
     }
 
     // function to add the chat message doc id in the list of ids
@@ -240,20 +293,24 @@ export default function Chat({ setOpenMessage, messageUid, openMessageMenu, Remo
 
 
 
-                {Object.keys(groupedMessages).map(date => (
-                    <div key={date}>
-                        <div className={styles.dateHeader}>{date}</div>
-                        {groupedMessages[date].map((message) => (
-                            <div style={{ marginTop: 10 }} key={message.messageDocId} onDoubleClick={() => addInSelectedChats(message.docData.From, message.messageDocId)} className={`${message.docData.From === uid ? styles.myMessage : styles.otherMessage} ${selectedChatsAfterDoubleClicks.includes(message.messageDocId) ? styles.highlightMessage : ''}`} id={message.messageDocId}>
-                                <p>{message.docData.MessageText}</p>
-                                <div className={`${message.docData.From === uid ? styles.myChatMessageData : styles.chatMessageData}`}>
-                                    <p>{message.docData.Timestamp}</p>
-                                    {message.docData.Status && message.docData.From === uid ? <img className={styles.otherPersonImage} src={otherPersonImageUrl} alt="Other person image" /> : ''}
+                {  chatMessages.length != 0 ? 
+                    Object.keys(groupedMessages).map(date => (
+                        <div key={date}>
+                            <div className={styles.dateHeader}>{date}</div>
+                            {groupedMessages[date].map((message) => (
+                                <div style={{ marginTop: 10 }} key={message.messageDocId} onDoubleClick={() => addInSelectedChats(message.docData.From, message.messageDocId)} className={`${message.docData.From === uid ? styles.myMessage : styles.otherMessage} ${selectedChatsAfterDoubleClicks.includes(message.messageDocId) ? styles.highlightMessage : ''}`} id={message.messageDocId}>
+                                    <p>{message.docData.MessageText}</p>
+                                    <div className={`${message.docData.From === uid ? styles.myChatMessageData : styles.chatMessageData}`}>
+                                        <p>{message.docData.Timestamp}</p>
+                                        {message.docData.Status && message.docData.From === uid ? <img className={styles.otherPersonImage} src={otherPersonImageUrl} alt="Other person image" /> : ''}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                ))}
+                            ))}
+                        </div>
+                    )
+                    
+                ) : <p className={styles.noMessageDesciption}>No messsages</p>
+                }
 
 
             </div>
@@ -272,8 +329,8 @@ export default function Chat({ setOpenMessage, messageUid, openMessageMenu, Remo
                             <button onClick={deleteUser} className={styles.messageMenuButton}>Remove User</button> : ''
                     }
                     {
-                            enableClickSelection ? <button onClick={deleteChatMessageDocId} className={styles.messageMenuButton}>Delete Messages</button>
-                            : 
+                        enableClickSelection ? <button onClick={deleteChatMessageDocId} className={styles.messageMenuButton}>Delete Messages</button>
+                            :
                             <button disabled className={styles.messageMenuButton}>Delete Messages</button>
                     }
                 </div>

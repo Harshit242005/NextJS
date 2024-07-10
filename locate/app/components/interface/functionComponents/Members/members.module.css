@@ -150,8 +150,9 @@
 .MemberRow {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    justify-content: left;
+    align-items: flex-start;
+    padding-left: 10px;
     gap: 25px;
     border: 1px solid rgba(0, 0, 0, 0.25);
 }
@@ -161,7 +162,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 25px;
+    gap: 10px;
 
 
 }
@@ -496,19 +497,57 @@
 
 /* now adding up the member data */
 @media (max-width: 425px) {
-    .LeftContainer {
-        width: 100%;
-        z-index: 999;
+    /* .LeftContainer {
+        display: none;
+        z-index: 2;
+    }
+
+    .openUp
+    {
+        display: block;
+        width: 75%;
+        
     }
 
     .closeUp {
+        width: 0%;
         display: none;
+        transition: 0.3s;
+    } */
+
+    .LeftContainer {
+        width: 0;
+        
+        opacity: 0;
+        overflow: hidden; /* Prevent content overflow during transition */
+        transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        z-index: 2;
     }
+    
+    .openUp {
+        width: 150%;
+        opacity: 1;
+        
+    }
+    
+    .closeUp {
+        width: 0;
+        opacity: 0;
+        
+    }
+
+    .rowStructure
+    {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+    
 
     .ChatInterface {
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: left;
+        align-items: flex-start;
     }
 
     .selectMemberOption {
@@ -517,6 +556,7 @@
 
     .RightContainer {
         width: 100%;
+        z-index: 1;
     }
 
     .myMessage {

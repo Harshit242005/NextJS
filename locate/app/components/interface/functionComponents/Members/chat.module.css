@@ -1,5 +1,4 @@
-.messageinputBox
-{
+.messageinputBox {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -9,8 +8,7 @@
     backdrop-filter: blur(10px);
 }
 
-.sendChatButton
-{
+.sendChatButton {
     width: fit-content;
     height: fit-content;
     padding: 7px;
@@ -19,13 +17,11 @@
     border-radius: 50%;
 }
 
-.sendChatButton:focus
-{
+.sendChatButton:focus {
     outline: none;
 }
 
-.chatMessageInput
-{
+.chatMessageInput {
     height: 60px;
     width: 1000px;
     font-family: 'ReadexPro';
@@ -37,21 +33,18 @@
     border: 1px solid #D99BFF;
 }
 
-.chatMessageInput::placeholder
-{
+.chatMessageInput::placeholder {
     color: rgba(0, 0, 0, 0.50);
     font-size: 18px;
     font-weight: 100;
     padding-left: 10px;
 }
 
-.chatMessageInput:focus
-{
+.chatMessageInput:focus {
     outline: none;
 }
 
-.body
-{
+.body {
     height: 100%;
     max-height: 100%;
     overflow-y: hidden;
@@ -78,21 +71,24 @@
 .messageBox {
     height: 375px;
     max-height: 375px;
-    overflow-y: auto; /* Enable vertical scrolling */
-    scroll-behavior: smooth; /* Optional: smooth scrolling behavior */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    scroll-behavior: smooth;
+    /* Optional: smooth scrolling behavior */
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
 .messageBox::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
 }
 
 
-.myMessage
-{
+.myMessage {
     background-color: black;
     color: white;
     width: 250px;
@@ -105,18 +101,16 @@
     font-weight: 100;
     position: relative;
     text-align: right;
-    margin-left: 850px;
-   
+    margin-left: -100px;
+
 }
 
-.highlightMessage
-{
+.highlightMessage {
     background-color: #dbdbdb74;
     color: black;
 }
 
-.otherMessage
-{
+.otherMessage {
     background-color: #dbdbdb74;
     color: black;
     text-align: left;
@@ -129,15 +123,13 @@
     font-weight: 100;
 }
 
-.chatMessageData
-{
+.chatMessageData {
     display: flex;
     flex-direction: row;
     gap: 10px;
 }
 
-.myChatMessageData
-{
+.myChatMessageData {
     display: flex;
     flex-direction: row;
     justify-content: right;
@@ -146,8 +138,7 @@
     margin-top: -10px;
 }
 
-.otherPersonImage
-{
+.otherPersonImage {
     width: 20px;
     height: 20px;
     border: none;
@@ -156,16 +147,14 @@
 }
 
 
-.dateHeader
-{
+.dateHeader {
     font-family: 'ReadexPro';
     font-weight: bold;
     font-size: 15px;
     text-align: center;
 }
 
-.MessageMenuButtons
-{
+.MessageMenuButtons {
     display: flex;
     flex-direction: column;
     width: 200px;
@@ -179,8 +168,7 @@
     z-index: 999;
 }
 
-.messageMenuButton
-{
+.messageMenuButton {
     background-color: transparent;
     border: 1px solid rgba(255, 255, 255, 0.25);
     font-family: 'ReadexPro';
@@ -192,7 +180,15 @@
     transition: 0.3s;
 }
 
-.messageMenuButton:hover
-{
+.messageMenuButton:hover {
     color: white;
+}
+
+@media (max-width: 425px) {
+    .noMessageDesciption {
+        text-align: center;
+        font-family: 'ReadexPro';
+        font-size: 1.5rem;
+        font-weight: 200;
+    }
 }

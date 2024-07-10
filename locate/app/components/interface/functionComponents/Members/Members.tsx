@@ -10,6 +10,9 @@ import styles from './members.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faL, faMessage } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from "next/navigation"
+import Chat from "./Chat"
+
+
 // group chat message 
 interface messageDoc {
     messageDoc: string;
@@ -21,6 +24,7 @@ interface messageDoc {
         Date: string;
     }
 }
+
 
 
 
@@ -49,9 +53,10 @@ interface MemberFunctionProps {
     openMessage: boolean;
     openMessageMenu: boolean;
     setOpenMessageMenu: React.Dispatch<React.SetStateAction<boolean>>;
+    RemoveMessage: () => void;
 }
 
-export default function Members({ setOpenMessage, setTaskId, messageUid, setCurrentComponenet, openMessageMenu, setOpenMessageMenu, setMessageUid }: MemberFunctionProps) {
+export default function Members({ RemoveMessage, setOpenMessage, setTaskId, messageUid, setCurrentComponenet, openMessageMenu, setOpenMessageMenu, setMessageUid, openMessage }: MemberFunctionProps) {
     const { projectId, projectName } = useGlobalProjectIdContext();
     const { uid } = useGlobalUidContext();
     const [users, setUsers] = useState<userData[]>([]);
@@ -60,7 +65,6 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
     const [messageText, setMessageText] = useState<string>('');
 
     const [chatMessages, setChatMessages] = useState<messageDoc[]>([]);
-
     const router = useRouter();
 
 
@@ -85,20 +89,13 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
         // );
 
 
-        if (messageUid != "") {
-            q = query(
-                collection(firestore, 'Chats'),
-                where('From', '==', uid),
-                orderBy('Date', 'asc')
-            );
-        }
-        else{
-            q = query(
-                    collection(firestore, 'GroupChat'),
-                    where('ProjectId', '==', projectId),
-                    orderBy('Date', 'asc')
-                );
-        }
+
+        q = query(
+            collection(firestore, 'GroupChat'),
+            where('ProjectId', '==', projectId),
+            orderBy('Date', 'asc')
+        );
+
 
 
         const unsubscribe = onSnapshot(q, async (snapshot) => {
@@ -163,6 +160,9 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
 
 
 
+
+
+
         // user data for the members showing
         const getUsersData = () => {
             // getting the members ids first
@@ -207,7 +207,10 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
 
         // clean up the listner after unmounting the component
         return () => {
-            unsubscribe();
+            if (messageUid == "") {
+                unsubscribe();
+            }
+
             getUsersData();
         }
 
@@ -614,232 +617,246 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
 
                     </div>
             }
-            {/* dividing the two section from this part */}
-            <div className={`${styles.LeftContainer} ${isMobile && openMobileChatMenu ? styles.openUp : styles.closeUp}`}>
-                <button onClick={addProjectChat} className={`${styles.chatButton} ${selectedButton == projectName ? styles.activeChat : styles.inactiveChats}`}>{projectName}</button>
 
-                {/* member data would be here to show in the chat */}
-                {
-                    users.length > 0 ?
-                        <div className={styles.members}>
+            <div className={styles.rowStructure}>
+                {/* dividing the two section from this part */}
+                <div className={`${styles.LeftContainer} ${isMobile && openMobileChatMenu ? styles.openUp : styles.closeUp}`}>
+                    <button onClick={addProjectChat} className={`${styles.chatButton} ${selectedButton == projectName ? styles.activeChat : styles.inactiveChats}`}>{projectName}</button>
 
-                            {users.map((user) => (
+                    {/* member data would be here to show in the chat */}
+                    {
+                        users.length > 0 ?
+                            <div className={styles.members}>
 
-                                <div key={user.Uid} className={styles.MemberRow}>
+                                {users.map((user) => (
 
-                                    <div className={styles.memberData} onClick={() => AddMessageTab(user.Uid)}>
+                                    <div key={user.Uid} className={styles.MemberRow}>
 
-                                        <div className={styles.userStatusRow}>
-                                            <img className={styles.userImage} src={user.ImageUrl} alt={user.Name} />
-                                            <div className={`${user.Status ? styles.active : styles.inactive}`}></div>
+                                        <div className={styles.memberData} onClick={() => AddMessageTab(user.Uid)}>
+
+                                            <div className={styles.userStatusRow}>
+                                                <img className={styles.userImage} src={user.ImageUrl} alt={user.Name} />
+                                                <div className={`${user.Status ? styles.active : styles.inactive}`}></div>
+                                            </div>
+
+                                            <p className={styles.userName}>{user.Name}</p>
+
                                         </div>
-
-                                        <p className={styles.userName}>{user.Name}</p>
 
                                     </div>
 
+                                ))}
+
+                            </div> :
+                            <div>
+
+                            </div>
+                    }
+
+                </div>
+
+                {
+                    messageUid == "" ?
+                        <div className={styles.RightContainer}>
+
+
+                            {/* task document to include styles for the reference task based input box */}
+
+                            {/* adding here the conditional statment for the appication to load group message feature or the new peer to 
+                        peer normal messages  */}
+
+                            <div id="messageBox" ref={messageBoxRef} onScroll={handleScroll} className={` ${taskDocument ? styles.chatReferenceCreated : styles.chatBox}`}>
+
+                                {Object.keys(groupedMessages).map(date => (
+
+                                    <div key={date}>
+
+                                        <div className={styles.dateHeader}>{date}</div>
+
+                                        {groupedMessages[date].map((message) => (
+
+                                            <div style={{ marginTop: 10 }} key={message.messageDoc} className={`${message.docData.From === uid ? styles.myMessage : styles.otherMessage} ${isReferenceMessage[message.messageDoc] ? styles.referenceMessage : styles.normalMessage}`} id={message.messageDoc}>
+                                                {isReferenceMessage[message.messageDoc] ?
+                                                    /* styling and data for the reference message */
+                                                    <div>
+
+                                                        {message.docData.From != uid ?
+                                                            // styles for the text which are not sent by me 
+                                                            <div className={styles.referenceMessageOther} onClick={() => navigateToTask(storeMessageForReference[message.messageDoc])}>
+                                                                {/* data to hold for the reference */}
+                                                                <div className={styles.referenceMessageHeader}>
+                                                                    {storeMessageForReference[message.messageDoc] && (
+                                                                        <div className={styles.taskDetails}>
+                                                                            {storeMessageForReference[message.messageDoc].map((detail, index) => (
+                                                                                <p style={{ fontWeight: '400' }} key={index}>{detail}</p>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                {/* message data */}
+                                                                {/* here would hold the message and viewed by and the sent time */}
+                                                                <div className={styles.referenceMessageBottom}>
+                                                                    <div className={styles.normalMessageHeader}>
+                                                                        {senderImages[message.docData.From] && <img className={styles.noramlMessageHeaderImage} src={senderImages[message.docData.From]} alt="Sender profile picture" />}
+                                                                        <p className={styles.senderName}>{senderNames[message.docData.From]}</p>
+                                                                    </div>
+                                                                    <p>{message.docData.Message}</p>
+                                                                    <div className={styles.normalMessageBottom}>
+                                                                        <div className={styles.viewedByImagesCollection}>
+                                                                            {/* list to show the message is viewed by the person as image */}
+                                                                            {viewedByImages[message.messageDoc] && (
+                                                                                <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
+                                                                                    {viewedByImages[message.messageDoc].map((imageUrl, index) => (
+                                                                                        <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
+                                                                                    ))}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                        <p className={styles.messageTimestamp}>{message.docData.TimeStamp}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            // styles for the text which is sent by me
+                                                            <div className={styles.referenceMessageMy}>
+                                                                <div className={styles.referenceMessageHeader} >
+                                                                    {storeMessageForReference[message.messageDoc] && (
+                                                                        <div className={styles.taskDetails}>
+                                                                            {storeMessageForReference[message.messageDoc].map((detail, index) => (
+                                                                                <p style={{ fontWeight: '400', color: 'black' }} key={index}>{detail}</p>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                <div className={styles.referenceMessageBottom}>
+                                                                    <p className={styles.myReferenceMessage}>{message.docData.Message}</p>
+                                                                    <div className={styles.normalMyMessageBottom}>
+                                                                        <p className={styles.messageTimestampMyReference}>{message.docData.TimeStamp}</p>
+                                                                        <div className={styles.viewedByImagesCollection}>
+                                                                            {/* list to show the message is viewed by the person as image */}
+                                                                            {viewedByImages[message.messageDoc] && (
+                                                                                <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
+                                                                                    {viewedByImages[message.messageDoc].map((imageUrl, index) => (
+                                                                                        <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
+                                                                                    ))}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+
+                                                    </div>
+                                                    :
+                                                    /* styling and data for the normal message  */
+                                                    <div>
+                                                        {message.docData.From != uid ?
+                                                            // message send by someone else in thre group
+                                                            <div style={{ padding: 10 }}>
+                                                                <div className={styles.normalMessageHeader}>
+                                                                    {senderImages[message.docData.From] && <img className={styles.noramlMessageHeaderImage} src={senderImages[message.docData.From]} alt="Sender profile picture" />}
+                                                                    <p className={styles.senderName}>{senderNames[message.docData.From]}</p>
+                                                                </div>
+                                                                <p>{message.docData.Message}</p>
+                                                                <div className={styles.normalMessageBottom}>
+                                                                    <div className={styles.viewedByImagesCollection}>
+                                                                        {/* list to show the message is viewed by the person as image */}
+                                                                        {
+                                                                            viewedByImages[message.messageDoc] && (
+                                                                                <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
+                                                                                    {viewedByImages[message.messageDoc].map((imageUrl, index) => (
+                                                                                        <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
+                                                                                    ))}
+                                                                                </div>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                    <p className={styles.messageTimestamp}>{message.docData.TimeStamp}</p>
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            // message sent by me should be 
+                                                            <div style={{ marginRight: 25, padding: 10 }}>
+                                                                <p>{message.docData.Message}</p>
+                                                                <div className={styles.normalMyMessageBottom}>
+                                                                    <p className={styles.messageTimestamp}>{message.docData.TimeStamp}</p>
+                                                                    <div className={styles.viewedByImagesCollection}>
+                                                                        {/* list to show the message is viewed by the person as image */}
+                                                                        {viewedByImages[message.messageDoc] && (
+                                                                            <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
+                                                                                {viewedByImages[message.messageDoc].map((imageUrl, index) => (
+                                                                                    <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
+                                                                                ))}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+
+                                        ))}
+
+                                    </div>
+
+                                ))}
+
+
+                            </div>
+
+                            {/* chat input */}
+                            <div className={`${taskDocument ? styles.chatInputReference : styles.chatInput}`}>
+
+                                {/* create a function on the inout to make the chat up and look for the reference id */}
+                                <div className={styles.chatMessageReference}>
+
+                                    {
+                                        taskDocument ?
+                                            <div className={styles.referenceDiv}>
+
+
+
+                                                <div className={styles.referenceData}>
+
+                                                    <p className={styles.referenceTaskName}>{taskDocument.TaskName}</p>
+                                                    <p className={styles.referenceTaskId}>{taskDocument.DocId}</p>
+
+                                                </div>
+
+                                                <button className={styles.cancelReferenceButton} onClick={closeTaskReference}><img src="/Cross.png" alt="Close icon" /></button>
+
+
+                                            </div>
+                                            :
+                                            <div>
+
+                                            </div>
+                                    }
+
+                                    <input className={styles.chatMessageInputBox} value={messageText} onChange={handleInputChange} type="text" placeholder="Type message..." />
+
                                 </div>
 
-                            ))}
+                                <button onClick={sendMessage} className={styles.sendChatButton}>Send</button>
+                            </div>
+
+
 
                         </div> :
                         <div>
-
+                            <Chat messageUid={messageUid} RemoveMessage={RemoveMessage} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} openMessage={openMessage} />
                         </div>
                 }
-
             </div>
 
 
-            {/* message box container  */}
-            <div className={styles.RightContainer}>
-                {/* task document to include styles for the reference task based input box */}
-                <div id="messageBox" ref={messageBoxRef} onScroll={handleScroll} className={` ${taskDocument ? styles.chatReferenceCreated : styles.chatBox}`}>
-
-                    {Object.keys(groupedMessages).map(date => (
-
-                        <div key={date}>
-
-                            <div className={styles.dateHeader}>{date}</div>
-
-                            {groupedMessages[date].map((message) => (
-
-                                <div style={{ marginTop: 10 }} key={message.messageDoc} className={`${message.docData.From === uid ? styles.myMessage : styles.otherMessage} ${isReferenceMessage[message.messageDoc] ? styles.referenceMessage : styles.normalMessage}`} id={message.messageDoc}>
-                                    {isReferenceMessage[message.messageDoc] ?
-                                        /* styling and data for the reference message */
-                                        <div>
-
-                                            {message.docData.From != uid ?
-                                                // styles for the text which are not sent by me 
-                                                <div className={styles.referenceMessageOther} onClick={() => navigateToTask(storeMessageForReference[message.messageDoc])}>
-                                                    {/* data to hold for the reference */}
-                                                    <div className={styles.referenceMessageHeader}>
-                                                        {storeMessageForReference[message.messageDoc] && (
-                                                            <div className={styles.taskDetails}>
-                                                                {storeMessageForReference[message.messageDoc].map((detail, index) => (
-                                                                    <p style={{ fontWeight: '400' }} key={index}>{detail}</p>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    {/* message data */}
-                                                    {/* here would hold the message and viewed by and the sent time */}
-                                                    <div className={styles.referenceMessageBottom}>
-                                                        <div className={styles.normalMessageHeader}>
-                                                            {senderImages[message.docData.From] && <img className={styles.noramlMessageHeaderImage} src={senderImages[message.docData.From]} alt="Sender profile picture" />}
-                                                            <p className={styles.senderName}>{senderNames[message.docData.From]}</p>
-                                                        </div>
-                                                        <p>{message.docData.Message}</p>
-                                                        <div className={styles.normalMessageBottom}>
-                                                            <div className={styles.viewedByImagesCollection}>
-                                                                {/* list to show the message is viewed by the person as image */}
-                                                                {viewedByImages[message.messageDoc] && (
-                                                                    <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
-                                                                        {viewedByImages[message.messageDoc].map((imageUrl, index) => (
-                                                                            <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
-                                                                        ))}
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                            <p className={styles.messageTimestamp}>{message.docData.TimeStamp}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                :
-                                                // styles for the text which is sent by me
-                                                <div className={styles.referenceMessageMy}>
-                                                    <div className={styles.referenceMessageHeader} >
-                                                        {storeMessageForReference[message.messageDoc] && (
-                                                            <div className={styles.taskDetails}>
-                                                                {storeMessageForReference[message.messageDoc].map((detail, index) => (
-                                                                    <p style={{ fontWeight: '400', color: 'black' }} key={index}>{detail}</p>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <div className={styles.referenceMessageBottom}>
-                                                        <p className={styles.myReferenceMessage}>{message.docData.Message}</p>
-                                                        <div className={styles.normalMyMessageBottom}>
-                                                            <p className={styles.messageTimestampMyReference}>{message.docData.TimeStamp}</p>
-                                                            <div className={styles.viewedByImagesCollection}>
-                                                                {/* list to show the message is viewed by the person as image */}
-                                                                {viewedByImages[message.messageDoc] && (
-                                                                    <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
-                                                                        {viewedByImages[message.messageDoc].map((imageUrl, index) => (
-                                                                            <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
-                                                                        ))}
-                                                                    </div>
-                                                                )}
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-
-                                        </div>
-                                        :
-                                        /* styling and data for the normal message  */
-                                        <div>
-                                            {message.docData.From != uid ?
-                                                // message send by someone else in thre group
-                                                <div style={{ padding: 10 }}>
-                                                    <div className={styles.normalMessageHeader}>
-                                                        {senderImages[message.docData.From] && <img className={styles.noramlMessageHeaderImage} src={senderImages[message.docData.From]} alt="Sender profile picture" />}
-                                                        <p className={styles.senderName}>{senderNames[message.docData.From]}</p>
-                                                    </div>
-                                                    <p>{message.docData.Message}</p>
-                                                    <div className={styles.normalMessageBottom}>
-                                                        <div className={styles.viewedByImagesCollection}>
-                                                            {/* list to show the message is viewed by the person as image */}
-                                                            {
-                                                                viewedByImages[message.messageDoc] && (
-                                                                    <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
-                                                                        {viewedByImages[message.messageDoc].map((imageUrl, index) => (
-                                                                            <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
-                                                                        ))}
-                                                                    </div>
-                                                                )
-                                                            }
-                                                        </div>
-                                                        <p className={styles.messageTimestamp}>{message.docData.TimeStamp}</p>
-                                                    </div>
-                                                </div>
-                                                :
-                                                // message sent by me should be 
-                                                <div style={{ marginRight: 25, padding: 10 }}>
-                                                    <p>{message.docData.Message}</p>
-                                                    <div className={styles.normalMyMessageBottom}>
-                                                        <p className={styles.messageTimestamp}>{message.docData.TimeStamp}</p>
-                                                        <div className={styles.viewedByImagesCollection}>
-                                                            {/* list to show the message is viewed by the person as image */}
-                                                            {viewedByImages[message.messageDoc] && (
-                                                                <div className={styles.viewedByImages} onClick={() => openViewedBy(viewedByImages[message.messageDoc])}>
-                                                                    {viewedByImages[message.messageDoc].map((imageUrl, index) => (
-                                                                        <img className={styles.viewedByImage} key={index} src={imageUrl} alt="Viewed by user profile picture" />
-                                                                    ))}
-                                                                </div>
-                                                            )}
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            }
-                                        </div>
-                                    }
-                                </div>
-
-                            ))}
-
-                        </div>
-
-                    ))}
-
-
-                </div>
-
-
-                {/* chat input */}
-                <div className={`${taskDocument ? styles.chatInputReference : styles.chatInput}`}>
-
-                    {/* create a function on the inout to make the chat up and look for the reference id */}
-                    <div className={styles.chatMessageReference}>
-
-                        {
-                            taskDocument ?
-                                <div className={styles.referenceDiv}>
-
-
-
-                                    <div className={styles.referenceData}>
-
-                                        <p className={styles.referenceTaskName}>{taskDocument.TaskName}</p>
-                                        <p className={styles.referenceTaskId}>{taskDocument.DocId}</p>
-
-                                    </div>
-
-                                    <button className={styles.cancelReferenceButton} onClick={closeTaskReference}><img src="/Cross.png" alt="Close icon" /></button>
-
-
-                                </div>
-                                :
-                                <div>
-
-                                </div>
-                        }
-
-                        <input className={styles.chatMessageInputBox} value={messageText} onChange={handleInputChange} type="text" placeholder="Type message..." />
-
-                    </div>
-
-                    <button onClick={sendMessage} className={styles.sendChatButton}>Send</button>
-                </div>
-
-
-            </div>
-
-
-            {OpenViewedBy &&
+            {
+                OpenViewedBy &&
                 <div className={styles.viewedByDiv}>
                     {/* show up the viewed by dict for the users  */}
                     <div className={styles.viewedByDivHeader}><p>Viewed By</p><button className={styles.viewedByCloseButton} onClick={closeViewedBy}><img src="/Cross.png" alt="close button icon" /></button></div>
@@ -855,6 +872,6 @@ export default function Members({ setOpenMessage, setTaskId, messageUid, setCurr
             }
 
 
-        </main>
+        </main >
     );
 }
