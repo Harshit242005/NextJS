@@ -170,10 +170,13 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             getDoc(docRef).then((document) => {
                 if (document.exists()) {
                     const memberIds = document.data().members || [];
+                    console.log('members of the project', memberIds);
                     const filteredMemberIds = memberIds.filter((memberId: any) => memberId !== uid);
-                    const userDataList: userData[] = [];
+                    console.log('filtered members of the projects are', filteredMemberIds);
+
+
                     filteredMemberIds.forEach((ids: string) => {
-                        const memberQuery = query(collection(firestore, 'Users'), where('Uid', "==", ids))
+                        const memberQuery = query(collection(firestore, 'Users'), where('Uid', "==", ids));
                         onSnapshot(memberQuery, (querySnapshot) => {
                             querySnapshot.forEach((doc) => {
                                 const userDoc = doc.data();
@@ -183,14 +186,17 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                                     'Uid': userDoc.Uid,
                                     'Status': userDoc.Status
                                 };
+                                console.log(userData);
                                 // Update user data list
                                 setUsers((prevUsers) => {
                                     const index = prevUsers.findIndex((user) => user.Uid === userData.Uid);
                                     if (index !== -1) {
                                         const updatedUsers = [...prevUsers];
                                         updatedUsers[index] = userData;
+                                        console.log(updatedUsers);
                                         return updatedUsers;
                                     } else {
+                                        console.log([...prevUsers, userData]);
                                         return [...prevUsers, userData];
                                     }
                                 });
