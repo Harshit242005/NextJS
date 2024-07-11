@@ -208,12 +208,6 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             });
         };
 
-
-
-        
-
-        
-
         // clean up the listner after unmounting the component
         return () => {
             if (messageUid == "") {

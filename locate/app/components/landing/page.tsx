@@ -340,7 +340,7 @@ export default function landing() {
             {projects && projects.length > 0 ?
                 <div className={styles.projectsData}>
                     {/* projects exist then allow user to select one and navigate using dynamic routing  */}
-                    <h3 className={styles.projectsStatus}>Select Project</h3>
+                    <p className={styles.projectsStatus}>Select Project</p>
                     {/* building map button for the project */}
 
 

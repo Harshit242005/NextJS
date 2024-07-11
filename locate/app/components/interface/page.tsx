@@ -28,7 +28,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 export default function Interface() {
 
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
-    const [openMobileMenu, setOpenMobileMenu] = useState(false);
+    const [openMobileMenu, setOpenMobileMenu] = useState(true);
 
     useEffect(() => {
         const handleResize = () => {
@@ -326,6 +326,12 @@ export default function Interface() {
         }
         else {
             setCurrentComponenet('Task status');
+
+        }
+
+        if (openTask) {
+            setOpenTask(false);
+            setTaskHeading('');
         }
     }
 
@@ -516,60 +522,119 @@ export default function Interface() {
 
         <main className={`${styles.MainContainer}`} >
 
-            {isMobile && openMobileMenu ?
-                <div className={styles.sidebarColumn}>
+            {
+                isMobile ?
+                    openMobileMenu ?
+                        <div className={styles.sidebarColumn}>
 
-                    <div className={styles.profileDescription}>
-                        <img src={imageUrl} onClick={() => setUserProfile(true)} alt="Profile image" className={styles.sidebarProfileImage} />
-                        {/* <p className={styles.projectName}>{projectName}</p> */}
-                    </div>
+                            <div className={styles.profileDescription}>
+                                <img src={imageUrl} onClick={() => setUserProfile(true)} alt="Profile image" className={styles.sidebarProfileImage} />
+                                {/* <p className={styles.projectName}>{projectName}</p> */}
+                            </div>
 
 
-                    <div className={styles.functionButtons}>
+                            <div className={styles.functionButtons}>
 
-                        <button
-                            className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
-                            onClick={() => handleMenuButtonClick('Create task')}>
-                            Create task
-                        </button>
-
-                        <button
-                            className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
-                            onClick={() => handleMenuButtonClick('Task status')}
-                        >
-                            Task status
-                        </button>
-                        <button
-                            className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
-                            onClick={() => handleMenuButtonClick('Members')}
-                        >
-                            Members
-                        </button>
-
-                        {
-                            isProjectMember ? '' :
                                 <button
-                                    className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
-                                    onClick={() => handleMenuButtonClick('Requests')}
-                                >
-                                    Requests
+                                    className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
+                                    onClick={() => handleMenuButtonClick('Create task')}>
+                                    Create task
                                 </button>
-                        }
+
+                                <button
+                                    className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
+                                    onClick={() => handleMenuButtonClick('Task status')}
+                                >
+                                    Task status
+                                </button>
+                                <button
+                                    className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
+                                    onClick={() => handleMenuButtonClick('Members')}
+                                >
+                                    Members
+                                </button>
+
+                                {
+                                    isProjectMember ? '' :
+                                        <button
+                                            className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
+                                            onClick={() => handleMenuButtonClick('Requests')}
+                                        >
+                                            Requests
+                                        </button>
+                                }
 
 
-                        <button
-                            className={`${isProjectMember ? styles.SettingButtonExtra : styles.SettingButton}`}
-                            onClick={OpenProfile}
-                        >
-                            <img src="/Settings.png" alt="Setting icon" />
-                            Settings
+                                <button
+                                    className={`${isProjectMember ? styles.SettingButtonExtra : styles.SettingButton}`}
+                                    onClick={OpenProfile}
+                                >
+                                    <img src="/Settings.png" alt="Setting icon" />
+                                    Settings
 
-                        </button>
+                                </button>
 
 
+                            </div>
+                        </div>
+                        :
+                        <div>
+
+                        </div>
+                    :
+
+                    <div className={styles.sidebarColumn}>
+
+                        <div className={styles.profileDescription}>
+                            <img src={imageUrl} onClick={() => setUserProfile(true)} alt="Profile image" className={styles.sidebarProfileImage} />
+                            {/* <p className={styles.projectName}>{projectName}</p> */}
+                        </div>
+
+
+                        <div className={styles.functionButtons}>
+
+                            <button
+                                className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
+                                onClick={() => handleMenuButtonClick('Create task')}>
+                                Create task
+                            </button>
+
+                            <button
+                                className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
+                                onClick={() => handleMenuButtonClick('Task status')}
+                            >
+                                Task status
+                            </button>
+                            <button
+                                className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
+                                onClick={() => handleMenuButtonClick('Members')}
+                            >
+                                Members
+                            </button>
+
+                            {
+                                isProjectMember ? '' :
+                                    <button
+                                        className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
+                                        onClick={() => handleMenuButtonClick('Requests')}
+                                    >
+                                        Requests
+                                    </button>
+                            }
+
+
+                            <button
+                                className={`${isProjectMember ? styles.SettingButtonExtra : styles.SettingButton}`}
+                                onClick={OpenProfile}
+                            >
+                                <img src="/Settings.png" alt="Setting icon" />
+                                Settings
+
+                            </button>
+
+
+                        </div>
                     </div>
-                </div>
-                : <div></div>
             }
 
             <div className={styles.mainBody}>
@@ -641,18 +706,22 @@ export default function Interface() {
                                         </div>
                                         <button onClick={openMobileMenuSection} className={styles.mobileMenuButton}><img src="/Menu.png" alt="Menu icon" /></button>
                                     </div>
-                                    :
-                                    <div>
 
-                                        {currentComponent == 'Task' || currentComponent == 'EditTask' && <img onClick={backMemberPage} src="/Back.png" />}
+
+                                    :
+                                    <div className={styles.headbarData}>
+
+                                        {currentComponent == 'Task' || currentComponent == 'EditTask' && <button className={styles.headbarBackButton} onClick={backMemberPage}><img src="/Back.png" /></button>}
+
+                                        {taskHeading && <p className={styles.editTaskHeading}>{taskHeading} </p>}
                                         {/* showing the task heading to reflect about which task we are talking about */}
-                                        {currentComponent == 'EditTask' &&
+                                        {/* {currentComponent == 'EditTask' &&
                                             <div style={{ marginLeft: -900, fontSize: 18, fontFamily: 'ReadexPro', fontWeight: 200 }}>
-                                                <p className={styles.editTaskHeading}>{taskHeading} </p>
+                                                
 
                                             </div>
-                                        }
-                                        <button className={` ${currentComponent != 'Task' ? styles.distanceButton : styles.ShareButton}`}
+                                        } */}
+                                        <button className={` ${currentComponent == 'EditTask' ? styles.distanceButton : styles.ShareButton}`}
                                             onClick={changeShare}
                                         >Share
                                             <img src="/Share.png" alt="share icon" />
@@ -664,7 +733,7 @@ export default function Interface() {
                 }
 
 
-                <div style={{ padding: 10 }} className={styles.loadComponent}>
+                <div className={styles.loadComponent}>
                     {
                         !isMobile && openMessage ? (
                             <div>
@@ -685,7 +754,7 @@ export default function Interface() {
                                     {/* here the component should be rendered  */}
                                     {currentComponent === 'Create task' && <CreateTask />}
                                     {currentComponent === 'Task status' && <TaskStatus setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} setTaskHeading={setTaskHeading} setTaskDocumentId={setTaskDocumentId} setTaskAuthor={setTaskAuthor} />}
-                                    {currentComponent === 'Members' && <Members RemoveMessage={RemoveMessage} setTaskId={setTaskId} openMessage={openMessage} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} setOpenMessageMenu={setOpenMessageMenu}  messageUid={messageUid} setMessageUid={setMessageUid} />}
+                                    {currentComponent === 'Members' && <Members RemoveMessage={RemoveMessage} setTaskId={setTaskId} openMessage={openMessage} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} setOpenMessageMenu={setOpenMessageMenu} messageUid={messageUid} setMessageUid={setMessageUid} />}
                                     {/* this should be load conditionally */}
                                     {currentComponent === 'TaskDetails' && <TaskDetails setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} taskDocumentId={taskDocumentId} />}
                                     {currentComponent === 'Requests' && <Requests />}
@@ -774,13 +843,13 @@ export default function Interface() {
 
                         <div className={`${isMobile ? '' : styles.personalProfileButtons}`}>
                             <div className={`${isMobile ? styles.mobileProfileButtons : ''}`}>
-                            <div className={styles.personalProfileButtons}>
-                                <button onClick={() => setShowProjects(true)} className={styles.personalProfileButton}>Projects</button>
-                                <button onClick={() => setShowCompletedTask(true)} className={styles.personalProfileButton}>Tasks</button>
-                            </div>
-                            <div>
-                                {dataChange && <button onClick={changePersonalData} className={styles.personalProfileButtonDataChange}>Update</button>}
-                            </div>
+                                <div className={styles.personalProfileButtons}>
+                                    <button onClick={() => setShowProjects(true)} className={styles.personalProfileButton}>Projects</button>
+                                    <button onClick={() => setShowCompletedTask(true)} className={styles.personalProfileButton}>Tasks</button>
+                                </div>
+                                <div>
+                                    {dataChange && <button onClick={changePersonalData} className={styles.personalProfileButtonDataChange}>Update</button>}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -807,7 +876,7 @@ export default function Interface() {
 
 
 
-            
+
             {showProjects &&
                 <div className={styles.completedTask}>
                     <div className={styles.completedTaskHeader}>
