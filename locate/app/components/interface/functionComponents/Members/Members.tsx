@@ -25,7 +25,18 @@ interface messageDoc {
     }
 }
 
-
+// normal message 
+interface normalMessageDoc {
+    messageDocId: string;
+    docData: {
+        From: string;
+        To: string;
+        MessageText: string;
+        Timestamp: string;
+        Status: boolean;
+        Date: string;
+    }
+}
 
 
 // reference document
@@ -63,10 +74,12 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     const [selectedButton, setSelectedButton] = useState(projectName);
     const [taskDocument, setTaskDocument] = useState<TaskDocument | null>(null);
     const [messageText, setMessageText] = useState<string>('');
-
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [chatMessages, setChatMessages] = useState<messageDoc[]>([]);
-    const router = useRouter();
-
+    const [normalChatMessages, setNormalChatMessages] = useState<normalMessageDoc[]>([]);
+    const [otherPersonImageUrl, setOtherPersonImageUrl] = useState('');
+    const [openMobileChatMenu, setOpenMobileChatMenu] = useState<boolean>(false);
+    const normalMessageIdsSet = new Set<string>();
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,16 +93,6 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     useEffect(() => {
 
         console.log('project id is', projectId);
-
-        // i have to make this conditional so it can switch between the group chat / peer to peer chats 
-        // const q = query(
-        //     collection(firestore, 'GroupChat'),
-        //     where('ProjectId', '==', projectId),
-        //     orderBy('Date', 'asc')
-        // );
-
-
-
         q = query(
             collection(firestore, 'GroupChat'),
             where('ProjectId', '==', projectId),
@@ -166,16 +169,16 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             getDoc(docRef).then((document) => {
                 if (document.exists()) {
                     const memberIds = document.data().members || [];
-    
+
                     const filteredMemberIds = memberIds.filter((memberId: any) => memberId !== uid);
                     console.log('Filtered members of the projects are', filteredMemberIds);
-    
+
                     const users_data: userData[] = [];
                     let completedRequests = 0;
-    
+
                     filteredMemberIds.forEach((id: string) => {
                         const memberQuery = query(collection(firestore, 'Users'), where('Uid', '==', id));
-    
+
                         onSnapshot(memberQuery, (querySnapshot) => {
                             querySnapshot.forEach((doc) => {
                                 const userDoc = doc.data();
@@ -185,13 +188,13 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                                     Uid: userDoc.Uid,
                                     Status: userDoc.Status,
                                 };
-    
+
                                 // Add user data to users_data array if not already present
                                 if (!users_data.some((user) => user.Uid === userData.Uid)) {
                                     users_data.push(userData);
                                 }
                             });
-    
+
                             // Increment the completedRequests counter and check if all requests are done
                             completedRequests += 1;
                             if (completedRequests === filteredMemberIds.length) {
@@ -201,7 +204,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                             }
                         });
                     });
-                  
+
                 } else {
                     console.log('Project does not exist');
                 }
@@ -224,7 +227,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     const messageBoxRef = useRef<HTMLDivElement>(null);
     const isAtBottomRef = useRef<boolean>(true);
 
-    
+
 
     useEffect(() => {
         const messageBox = messageBoxRef.current;
@@ -326,24 +329,31 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     };
 
 
-    const AddMessageTab = (Uid: string) => {
-        setOpenMessage(true);
+    const AddMessageTab = (Uid: string, index_number: number) => {
+        if (index_number == selectedIndex) {
+            setSelectedIndex(null);
+        }
+        else {
+            setSelectedIndex(index_number);
+        }
+        // setOpenMessage(true);
         // setting up the new call up
         setMessageUid(Uid);
         // close the chat options
         if (isMobile) {
-            setOpenMobileChatMenu(false);
+            setOpenMobileChatMenu(!openMobileChatMenu);
         }
     }
 
 
     // switch to the group chat
     const addProjectChat = () => {
-        setOpenMessage(true);
+        setSelectedIndex(null);
+        // setOpenMessage(true);
         // setting up the new call up
         setMessageUid('');
         if (isMobile) {
-            setOpenMobileChatMenu(false);
+            setOpenMobileChatMenu(!openMobileChatMenu);
         }
     }
 
@@ -536,7 +546,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         };
     }, []);
 
-    const [openMobileChatMenu, setOpenMobileChatMenu] = useState<boolean>(false);
+
 
     const [messageImageUrl, setMessagUserImageUrl] = useState<string>('');
     const [messageName, setMessageUserName] = useState<string>('');
@@ -585,6 +595,155 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     }, [messageUid]);
 
 
+    const shiftMobileChatSidebar = () => {
+        console.log(openMobileChatMenu);
+        
+        if (openMobileChatMenu == true) {
+            setOpenMobileChatMenu(false);
+        }
+        else {
+            setOpenMobileChatMenu(true);
+        }
+        console.log(openMobileChatMenu);
+    }
+
+
+    // Getting the normal messaages 
+
+    useEffect(() => {
+
+
+
+        const q1 = query(
+            collection(firestore, 'Chats'),
+            where('From', '==', messageUid),
+            where('To', '==', uid),
+            orderBy('Date', 'asc')
+        );
+
+        // Define query q2
+        const q2 = query(
+            collection(firestore, 'Chats'),
+            where('From', '==', uid),
+            where('To', '==', messageUid),
+            orderBy('Date', 'asc')
+        );
+
+        // Listen to q1
+        const unsubscribeQ1 = onSnapshot(q1, (snapshot) => {
+            const messages: normalMessageDoc[] = [];
+            snapshot.forEach((doc) => {
+                const docId = doc.id as normalMessageDoc['messageDocId'];
+                if (!normalMessageIdsSet.has(docId)) {
+                    if (doc.data().Status !== true && doc.data().To === uid) {
+                        const docRef = doc.ref;
+                        updateDoc(docRef, { Status: true });
+                    }
+                    messages.push({
+                        messageDocId: doc.id,
+                        docData: doc.data() as normalMessageDoc['docData']
+                    });
+                    normalMessageIdsSet.add(docId);
+                }
+            });
+            console.log(normalChatMessages);
+            // Merge the messages from q1 with existing chatMessages
+            setNormalChatMessages((prevMessages) => [...prevMessages, ...messages]);
+        });
+
+        // Listen to q2
+        const unsubscribeQ2 = onSnapshot(q2, (snapshot) => {
+            const messages: normalMessageDoc[] = [];
+            snapshot.forEach((doc) => {
+                const docId = doc.id as normalMessageDoc['messageDocId'];
+                if (!normalMessageIdsSet.has(docId)) {
+                    if (doc.data().Status !== true && doc.data().To === uid) {
+                        const docRef = doc.ref;
+                        updateDoc(docRef, { Status: true });
+                    }
+                    messages.push({
+                        messageDocId: doc.id,
+                        docData: doc.data() as normalMessageDoc['docData']
+                    });
+
+                    normalMessageIdsSet.add(docId);
+                }
+            });
+            console.log(normalChatMessages);
+            // Merge the messages from q2 with existing chatMessages
+            setNormalChatMessages((prevMessages) => [...prevMessages, ...messages]);
+        });
+
+        const getOtherPersonImageUrl = async () => {
+
+            const q = query(collection(firestore, 'Users'), where('Uid', "==", messageUid));
+
+            const usersDocs = await getDocs(q);
+
+            if (!usersDocs.empty) {
+                const userImage = usersDocs.docs[0].data().ImageUrl;
+                setOtherPersonImageUrl(userImage);
+            }
+
+        }
+
+
+
+
+        // Clean up the listener when component unmounts
+        return () => {
+            unsubscribeQ1();
+            unsubscribeQ2();
+            getOtherPersonImageUrl();
+        };
+    }, [messageUid]); // Empty dependency array to run only once when component mounts
+
+
+
+    // grouping the messages with the date 
+    const groupNormalMessagesByDate = (messages: normalMessageDoc[]) => {
+        const groupedMessages: { [key: string]: normalMessageDoc[] } = {};
+
+        messages.forEach(message => {
+            const date = formatDate(message.docData.Date);
+            if (!groupedMessages[date]) {
+                groupedMessages[date] = [];
+            }
+            groupedMessages[date].push(message);
+        });
+
+        return groupedMessages;
+    };
+
+    const normalMessages = groupNormalMessagesByDate(normalChatMessages);
+
+
+    const sendNormalMessage = async () => {
+        if (messageText.trim() !== "") {
+            const currentTime = new Date();
+            const hours = String(currentTime.getHours()).padStart(2, '0');
+            const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+            const formattedTime = `${hours}:${minutes}`;
+
+            const currentDate = getCurrentDate() // function to get current date
+
+            // Add the message
+            const messageData = {
+                'From': uid,
+                'To': messageUid,
+                'MessageText': messageText.trim(),
+                'Timestamp': formattedTime,
+                'Status': false,
+                'Date': currentDate
+            };
+
+            const collectionRef = collection(firestore, 'Chats');
+            await addDoc(collectionRef, messageData);
+            setMessageText('');
+
+        }
+    };
+
 
 
     return (
@@ -592,7 +751,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             {/* need to develop a header in this */}
             {
                 isMobile ?
-                    <div onClick={() => setOpenMobileChatMenu(!openMobileChatMenu)} className={styles.selectMemberOption}>
+                    <div onClick={shiftMobileChatSidebar} className={styles.selectMemberOption}>
                         {/* selected member should be shown here in this  */}
                         {messageUid != "" ?
                             <div className={styles.messageHeaderMenuRow}>
@@ -633,11 +792,11 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                         users.length > 0 ?
                             <div className={styles.members}>
 
-                                {users.map((user) => (
+                                {users.map((user, index) => (
 
-                                    <div key={user.Uid} className={styles.MemberRow}>
+                                    <div key={user.Uid} onClick={() => AddMessageTab(user.Uid, index)} className={`${index == selectedIndex ? styles.selectedMemberRow : styles.MemberRow}`}>
 
-                                        <div className={styles.memberData} onClick={() => AddMessageTab(user.Uid)}>
+                                        <div className={styles.memberData}>
 
                                             <div className={styles.userStatusRow}>
                                                 <img className={styles.userImage} src={user.ImageUrl} alt={user.Name} />
@@ -661,14 +820,14 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                 </div>
 
                 {
-                    messageUid == "" ?
+                    messageUid == '' ?
                         <div className={styles.RightContainer}>
 
 
                             {/* task document to include styles for the reference task based input box */}
 
                             {/* adding here the conditional statment for the appication to load group message feature or the new peer to 
-                        peer normal messages  */}
+                            peer normal messages  */}
 
                             <div id="messageBox" ref={messageBoxRef} onScroll={handleScroll} className={` ${taskDocument ? styles.chatReferenceCreated : styles.chatBox}`}>
 
@@ -853,8 +1012,70 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
                         </div> :
-                        <div>
-                            <Chat messageUid={messageUid} RemoveMessage={RemoveMessage} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} openMessage={openMessage} />
+
+
+                        <div className={styles.RightContainer}>
+                            <div className={styles.chatBox} id="messageBox" ref={messageBoxRef} onScroll={handleScroll}>
+
+
+
+                                {normalChatMessages.length != 0 ?
+                                    Object.keys(normalMessages).map(date => (
+                                        <div key={date}>
+                                            <div className={styles.normalDateHeader}>{date}</div>
+                                            {normalMessages[date].map((message) => (
+                                                <div style={{ marginTop: 10 }} key={message.messageDocId} className={`${message.docData.From === uid ? styles.myNormalMessage : styles.otherNormalMessage}`} id={message.messageDocId}>
+                                                    <p>{message.docData.MessageText}</p>
+                                                    <div className={`${message.docData.From === uid ? styles.myChatMessageData : styles.chatMessageData}`}>
+                                                        <p>{message.docData.Timestamp}</p>
+                                                        {message.docData.Status && message.docData.From === uid ? <img className={styles.otherPersonImage} src={otherPersonImageUrl} alt="Other person image" /> : ''}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )
+
+                                    ) : <p className={styles.noMessageDesciption}>No messsages</p>
+                                }
+
+
+                            </div>
+                            {/* now load the peer to peer mssages  */}
+                            <div className={`${taskDocument ? styles.chatInputReference : styles.chatInput}`}>
+
+                                {/* create a function on the inout to make the chat up and look for the reference id */}
+                                <div className={styles.chatMessageReference}>
+
+                                    {
+                                        taskDocument ?
+                                            <div className={styles.referenceDiv}>
+
+
+
+                                                <div className={styles.referenceData}>
+
+                                                    <p className={styles.referenceTaskName}>{taskDocument.TaskName}</p>
+                                                    <p className={styles.referenceTaskId}>{taskDocument.DocId}</p>
+
+                                                </div>
+
+                                                <button className={styles.cancelReferenceButton} onClick={closeTaskReference}><img src="/Cross.png" alt="Close icon" /></button>
+
+
+                                            </div>
+                                            :
+                                            <div>
+
+                                            </div>
+                                    }
+
+                                    <input className={styles.chatMessageInputBox} value={messageText} onChange={handleInputChange} type="text" placeholder="Type message..." />
+
+                                </div>
+
+                                <button onClick={sendNormalMessage} className={styles.sendChatButton}>Send</button>
+                            </div>
+                            {/* <Chat messageUid={messageUid} RemoveMessage={RemoveMessage} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} openMessage={openMessage} /> */}
                         </div>
                 }
             </div>
@@ -864,7 +1085,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                 OpenViewedBy &&
                 <div className={styles.viewedByDiv}>
                     {/* show up the viewed by dict for the users  */}
-                    <div className={styles.viewedByDivHeader}><p>Viewed By</p><button className={styles.viewedByCloseButton} onClick={closeViewedBy}><img src="/Cross.png" alt="close button icon" /></button></div>
+                    <div className={styles.viewedByDivHeader}><p className={styles.viewedByHeaderHeading}>Viewed By</p><button className={styles.viewedByCloseButton} onClick={closeViewedBy}><img src="/Cross.png" alt="close button icon" /></button></div>
                     <div className={styles.viewedByColumn}>
                         {Object.entries(viewedBy).map(([url, name]) => (
                             <div key={url} className={styles.viewedByItem}>

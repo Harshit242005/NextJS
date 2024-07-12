@@ -43,28 +43,7 @@ export default function Chat({ messageUid, openMessageMenu, RemoveMessage }: Mem
 
     useEffect(() => {
 
-        // Set up listener for real-time updates to chat messages 
-        // const q = query(
-        //     collection(firestore, 'Chats'),
-        //     orderBy('Date', 'asc')
-        // );
-
-
-        // const unsubscribe = onSnapshot(q, (snapshot) => {
-        //     const messages: messageDoc[] = [];
-        //     snapshot.forEach((doc: any) => {
-        //         // here apply the function to change the status value of the text
-        //         if (doc.data().Status !== true && doc.data().To === uid) {
-        //             const docRef = doc.ref;
-        //             updateDoc(docRef, { Status: true });
-        //         }
-        //         messages.push({
-        //             messageDocId: doc.id,
-        //             docData: doc.data() as messageDoc['docData']
-        //         });
-        //     });
-        //     setChatMessages(messages);
-        // });
+        
 
         const q1 = query(
             collection(firestore, 'Chats'),

@@ -54,6 +54,7 @@
     /* Enable vertical scrolling */
     scroll-behavior: smooth;
     /* Optional: smooth scrolling behavior */
+    
 }
 
 .RightContainer::-webkit-scrollbar {
@@ -63,10 +64,17 @@
     /* Optional: just make scrollbar invisible */
 }
 
+.rowStructure
+{
+    display: flex;
+    width: 100vw;
+}
+
 .chatBox {
-    height: 73vh;
-    max-height: 73vh;
+    height: 79vh;
+    max-height: 79vh;
     width: 100%;
+    padding-bottom: 10px;
     overflow-y: auto;
     /* Enable vertical scrolling */
     scroll-behavior: smooth;
@@ -81,8 +89,8 @@
 }
 
 .chatReferenceCreated {
-    height: 62%;
-    max-height: 62%;
+    height: 64%;
+    max-height: 64%;
     overflow-y: auto;
     /* Enable vertical scrolling */
     scroll-behavior: smooth;
@@ -106,9 +114,9 @@
 }
 
 .chatInputReference {
-    height: 20%;
+    height: 25%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
     max-width: 100%;
     align-items: last baseline;
@@ -159,6 +167,19 @@
     border: 1px solid rgba(0, 0, 0, 0.25);
 }
 
+.selectedMemberRow
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: flex-start;
+    padding-left: 10px;
+    gap: 25px;
+    background-color: black;
+    color: white;
+    border: none;
+}
+
 .memberData {
     display: flex;
     flex-direction: row;
@@ -182,7 +203,7 @@
     font-size: 14px;
     font-weight: 400;
     margin-top: 15px;
-    color: rgba(0, 0, 0, 0.435);
+    
 }
 
 
@@ -305,6 +326,23 @@
 }
 
 
+.myNormalMessage
+{
+    background-color: black;
+    color: white;
+    width: 250px;
+    height: fit-content;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+    position: relative;
+    text-align: right;
+    margin-left: 620px;
+}
+
 
 
 .otherMessage {
@@ -315,6 +353,54 @@
 
     height: fit-content;
     /* padding: 10px; */
+    border: none;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+    margin-left: 15px;
+}
+
+.chatMessageData {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.myChatMessageData {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    gap: 10px;
+    margin-top: -10px;
+}
+
+.otherPersonImage {
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    margin-top: -10px;
+}
+
+.normalDateHeader {
+    font-family: 'ReadexPro';
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+    margin-left: -15%;
+}
+
+.otherNormalMessage
+{
+    background-color: #dbdbdb74;
+    color: black;
+    text-align: left;
+    width: 250px;
+
+    height: fit-content;
+    padding: 10px;
     border: none;
     border-radius: 5px;
     border-top-left-radius: 0px;
@@ -396,12 +482,20 @@
     justify-content: left;
     align-items: center;
     gap: 50px;
+    transition: 0.3s;
+}
+
+.viewedByItem:hover
+{
+    background-color: rgb(239, 239, 239);
+    font-weight: 400;
+    border: none;
 }
 
 .viewedByColumn {
     display: flex;
     flex-direction: column;
-    margin-top: 25px;
+    
     height: 100%;
     max-height: 100%;
     overflow-y: hidden;
@@ -416,6 +510,7 @@
     font-weight: 100;
     font-family: 'ReadexPro';
     margin-top: 15px;
+    font-size: 16px;
 }
 
 .viewedByDiv {
@@ -431,6 +526,7 @@
     left: 45%;
     top: 25%;
 }
+
 
 .viewedByDivHeader {
     height: 20%;
@@ -497,25 +593,15 @@
 
 
 
+
 /* now adding up the member data */
 @media (max-width: 425px) {
-    /* .LeftContainer {
-        display: none;
-        z-index: 2;
-    }
 
-    .openUp
+    .dateHeader
     {
-        display: block;
-        width: 75%;
-        
+        margin-top: 10px;
     }
-
-    .closeUp {
-        width: 0%;
-        display: none;
-        transition: 0.3s;
-    } */
+    
 
     .LeftContainer {
         width: 0;
@@ -554,6 +640,8 @@
 
     .selectMemberOption {
         width: 100%;
+        padding-top: 5px;
+        padding-left: 10px;
     }
 
     .RightContainer {
@@ -562,7 +650,7 @@
     }
 
     .myMessage {
-        margin-left: 15%;
+        margin-left: 19%;
 
     }
 
@@ -574,11 +662,14 @@
         height: 25vh;
         display: flex;
         flex-direction: column;
-        width: 100%;
-        max-width: 100%;
+        width: 100vw;
+        max-width: 100vw;
         padding: 0px;
 
     }
+
+
+   
 
     .sendChatButton {
         width: 100%;
@@ -593,7 +684,7 @@
     }
 
     .chatBox {
-        height: 68vh;
+        height: 71vh;
     }
 
     .chatReferenceCreated {
@@ -685,6 +776,37 @@
     {
         
         font-family: 'ReadexPro';
+    }
+
+    .viewedByDiv {
+        width: 87.5vw;
+        height: 250px;
+        border: 0px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25);
+        font-family: 'ReadexPro';
+        position: absolute;
+        background-color: white;
+        z-index: 999;
+        left: 6%;
+        top: 25%;
+    }
+    
+
+    .viewedByDivHeader {
+        height: 20%;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        display: flex;
+        padding-left: 10px;
+        flex-direction: row;
+        justify-content: left;
+        align-items: baseline;
+        gap: 0px;
+    }
+
+    .viewedByHeaderHeading
+    {
+        width: 71vw;
     }
 
    

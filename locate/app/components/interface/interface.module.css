@@ -596,6 +596,11 @@
 }
 
 
+.personalProfileButtonDataChange{
+    margin-top: 5px;
+}
+
+
 /* personal profile header button */
 .personalProfile {
     width: 600px;
@@ -995,6 +1000,7 @@
         color: white;
         font-family: 'ReadexPro';
         width: 200px;
+        margin-top: 5px;
     }
 
     .personalUserNameInput:focus {
