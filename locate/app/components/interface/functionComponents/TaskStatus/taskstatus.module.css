@@ -236,6 +236,14 @@
 
 }
 
+.noTask
+{
+    font-family: 'ReadexPro';
+    text-align: center;
+    font-size: 14px;
+    font-weight: 200;
+}
+
 
 /* adding media queries */
 @media (max-width: 425px) {

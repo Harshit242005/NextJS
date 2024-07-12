@@ -1,9 +1,6 @@
 // Importing a Material-UI button component
 'use client'
-// import { Typography, TextField } from '@mui/material'
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import styles from './createask.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -289,41 +286,11 @@ export default function CreateTask() {
         setFileObject(null);
         setFileObjectForView({});
         setOpenAttachmentView(false);
+
+        console.log(heading);
     }
 
-    // update the list
-    const updateListInDocument = async (collectionName: string, documentId: string, listKey: string, newData: any) => {
-        try {
-            // Reference to the document
-            const documentRef = doc(firestore, collectionName, documentId);
-
-            // Get the current data of the document
-            const documentSnapshot = await getDoc(documentRef);
-            if (!documentSnapshot.exists()) {
-                throw new Error('Document does not exist');
-            }
-
-            // Get the current data object
-            const currentData = documentSnapshot.data();
-
-            // Ensure that the listKey exists in the currentData object
-            if (!currentData.hasOwnProperty(listKey) || !Array.isArray(currentData[listKey])) {
-                throw new Error(`Key "${listKey}" is not a list in the document`);
-            }
-
-            // Add the newData to the list
-            currentData[listKey].push(newData);
-
-            // Update the document with the modified data
-            await updateDoc(documentRef, { [listKey]: currentData[listKey] });
-
-            console.log('List updated successfully');
-            return true;
-        } catch (error) {
-            console.error('Error updating list in document:', error);
-            return false;
-        }
-    };
+    
 
     const getCurrentDate = () => {
         const today = new Date();
@@ -360,16 +327,16 @@ export default function CreateTask() {
 
             <div className={styles.topBar}>
 
-                <input type="text" className={styles.TaskHeading} placeholder='Type heading...' onChange={(e) => setHeading(e.target.value)} />
+                <input type="text" className={styles.TaskHeading} value={heading} placeholder='Type heading...' onChange={(e) => setHeading(e.target.value)} />
 
                 <div className={styles.datepickerContainer}>
-                    <input type="date" onChange={handleDateChange} className={styles.datepicker} placeholder='Select deadline...' />
+                    <input type="date" onChange={handleDateChange} value={deadline} className={styles.datepicker} placeholder='Select deadline...' />
                 </div>
 
             </div>
 
             <div className={styles.midBar}>
-                <textarea className={styles.TaskDescription} onChange={(e) => (setDescription(e.target.value))} placeholder='Type description...' style={{ padding: 10, fontFamily: 'ReadexPro' }} />
+                <textarea className={styles.TaskDescription} value={description} onChange={(e) => (setDescription(e.target.value))} placeholder='Type description...' style={{ padding: 10, fontFamily: 'ReadexPro' }} />
             </div>
 
 

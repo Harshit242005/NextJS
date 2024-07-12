@@ -179,64 +179,70 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
         <main>
             <div className={styles.TaskCollection}>
                 {/* Render UI using the documents state */}
-                {documents.map((document) => (
-                    <div key={document.id} className={styles.Task}>
-                        {/* top bar of the task div */}
-                        <div className={styles.taskTopbar}>
-                            <img className={styles.creatorImage} src={document.data.CreatorImage} />
-                            <div className={styles.taskTextDescription}>
-                                <p className={styles.taskHeading}>{document.data.Heading}</p>
-                                {
-                                    !isMobile ?
-                                        <p>{document.data.Description}</p>
-                                        : ""
-                                }
-                            </div>
-                            <div className={`${isMobile ? styles.mobileTaskCardButtons : ''}`}>
-                                {isMobile ? <div><button className={styles.attachmentButton} onClick={() => openFilesDialogs(document.data.Files)}>
-                                    Files
-                                </button></div> : ""}
-                                <button
-                                    onClick={() => setTaskValues(document.data.Heading, document.id, document.data.CreatedBy)}
-                                    className={styles.taskStatus}>{document.data.Status}</button>
-                            </div>
-                        </div>
-                        <div className={styles.bottomBar}>
-
-                            <div className={styles.AssigneeDescription}>
-                                
-                                  
-                                        <p>Assignees</p>
-                                
-                                {/* image would be shown here in this  */}
-                                <div className={styles.taskAssigneesImages}>
-                                    {document.data.AssignieesImages.slice(0, 2).map((image, index) => (
-                                        <img className={styles.assigneeImage} key={index} src={image} alt={`Assignee ${index + 1}`} />
-                                    ))}
-                                </div>
-                            </div>
-                            <div className={styles.sideDescriptionTask}>
-                                <div>
+                {
+                    documents.length != 0 ? 
+                    documents.map((document) => (
+                        <div key={document.id} className={styles.Task}>
+                            {/* top bar of the task div */}
+                            <div className={styles.taskTopbar}>
+                                <img className={styles.creatorImage} src={document.data.CreatorImage} />
+                                <div className={styles.taskTextDescription}>
+                                    <p className={styles.taskHeading}>{document.data.Heading}</p>
                                     {
                                         !isMobile ?
-                                            <button className={styles.attachmentButton} onClick={() => openFilesDialogs(document.data.Files)}>
-                                                Files
-                                            </button>
+                                            <p>{document.data.Description}</p>
                                             : ""
                                     }
                                 </div>
-                                {!isMobile ?
-                                    <div className={styles.deadline}>
-                                        <h4>Deadline</h4>
-                                        <p className={getCurrentDateResult(document.data.Deadline) ? styles.invalidDate : styles.validDate}
-                                        >{document.data.Deadline}</p>
-                                    </div>
-                                    : ""}
+                                <div className={`${isMobile ? styles.mobileTaskCardButtons : ''}`}>
+                                    {isMobile ? <div><button className={styles.attachmentButton} onClick={() => openFilesDialogs(document.data.Files)}>
+                                        Files
+                                    </button></div> : ""}
+                                    <button
+                                        onClick={() => setTaskValues(document.data.Heading, document.id, document.data.CreatedBy)}
+                                        className={styles.taskStatus}>{document.data.Status}</button>
+                                </div>
                             </div>
-                        </div>
+                            <div className={styles.bottomBar}>
 
-                    </div>
-                ))}
+                                <div className={styles.AssigneeDescription}>
+
+
+                                    <p>Assignees</p>
+
+                                    {/* image would be shown here in this  */}
+                                    <div className={styles.taskAssigneesImages}>
+                                        {document.data.AssignieesImages.slice(0, 2).map((image, index) => (
+                                            <img className={styles.assigneeImage} key={index} src={image} alt={`Assignee ${index + 1}`} />
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className={styles.sideDescriptionTask}>
+                                    <div>
+                                        {
+                                            !isMobile ?
+                                                <button className={styles.attachmentButton} onClick={() => openFilesDialogs(document.data.Files)}>
+                                                    Files
+                                                </button>
+                                                : ""
+                                        }
+                                    </div>
+                                    {!isMobile ?
+                                        <div className={styles.deadline}>
+                                            <h4>Deadline</h4>
+                                            <p className={getCurrentDateResult(document.data.Deadline) ? styles.invalidDate : styles.validDate}
+                                            >{document.data.Deadline}</p>
+                                        </div>
+                                        : ""}
+                                </div>
+                            </div>
+
+                        </div>
+                    ))
+
+                    : <p className={styles.noTask}>No task has been created yet</p>
+
+                }
             </div>
 
             {showFileDialog &&

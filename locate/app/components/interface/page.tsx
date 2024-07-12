@@ -100,6 +100,7 @@ export default function Interface() {
 
         // send this to the glitch server to get the notification
         const response = await axios.post('https://fern-ivory-lint.glitch.me/sendTaskDelete', {
+            'creatorEmail': email,
             'Headline': taskHeading,
             'Members': assigniees_email
         });
