@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import styles from './page.module.css';
 
-export default function invited( { params }: { params: { invitedProjectId: string } }) {
+export default function invited({ params }: { params: { invitedProjectId: string } }) {
     const [projectName, setProjectNameFromId] = useState<string>('');
     const { setUserId } = useGlobalSocketContext();
     const { setProjectCreator, setProjectId, setProjectName, projectCreator } = useGlobalProjectIdContext();
@@ -30,6 +30,7 @@ export default function invited( { params }: { params: { invitedProjectId: strin
         }
 
         getProjectName();
+        googleSignIn();
     }, [params.invitedProjectId]);
 
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
@@ -87,7 +88,7 @@ export default function invited( { params }: { params: { invitedProjectId: strin
         if (project_snapshot.exists()) {
             const members = project_snapshot.data().members;
             const new_members = arrayUnion(...members, uid);
-            await updateDoc(project_ref, {members: new_members});
+            await updateDoc(project_ref, { members: new_members });
         }
 
 
@@ -98,7 +99,7 @@ export default function invited( { params }: { params: { invitedProjectId: strin
             const user_doc_data = user_ref_snapshot.docs[0].data()['Projects'];
             const user_one_ref = doc(firestore, 'Users', user_ref_snapshot.docs[0].id);
             const new_projects = arrayUnion(...user_doc_data, projectName);
-            await updateDoc(user_one_ref, {Projects: new_projects});
+            await updateDoc(user_one_ref, { Projects: new_projects });
         }
 
 
@@ -116,17 +117,22 @@ export default function invited( { params }: { params: { invitedProjectId: strin
             const creator_data = creator_snapshot.docs[0].data();
             creator_email = creator_data['Email'];
         }
+        console.log({
+            'projectCreatorEmail': creator_email,
+            'rejectorEmail': email,
+            'projectName': projectName
+        });
         const response = await axios.post('https://fern-ivory-lint.glitch.me/rejectInvite', {
             'projectCreatorEmail': creator_email,
             'rejectorEmail': email,
             'projectName': projectName
         })
-        .then(() => {
-            console.log(response);
-        })
-        .catch((error: any) => {
-            console.log(error);
-        })
+            .then(() => {
+                console.log(response);
+            })
+            .catch((error: any) => {
+                console.log(error);
+            })
     }
 
 
@@ -142,5 +148,5 @@ export default function invited( { params }: { params: { invitedProjectId: strin
             </div>
         </div>
     );
-    
+
 }

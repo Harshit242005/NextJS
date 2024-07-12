@@ -12,14 +12,25 @@ export default function Task({ taskId }: TaskPage) {
     const [creatorName, setCreatorName] = useState<string>('');
     const [creatorImage, setCreatorImage] = useState<string>('');
     const [taskStatus, setTaskStatus] = useState<string>('');
-
     const [deadline, setDeadline] = useState<string>('');
     const [createdAt, setCreatedAt] = useState<string>('');
     const [taskName, setTaskName] = useState<string>('');
     const [taskDescription, setTaskDescription] = useState<string>('');
 
-    useEffect(() => {
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
 
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 425);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
         const getName = async (creatorBy: string) => {
             const q = query(collection(firestore, 'Users'), where('Uid', "==", creatorBy));
             const docs = await getDocs(q);
@@ -29,6 +40,7 @@ export default function Task({ taskId }: TaskPage) {
                 return creator_name;
             }
         }
+
         const getTaskData = async () => {
             const q = query(collection(firestore, 'Tasks'), where('TaskID', "==", taskId));
             const docs = await getDocs(q);
@@ -38,7 +50,6 @@ export default function Task({ taskId }: TaskPage) {
                 setCreatorName(creator_name);
                 setCreatedAt(docData['CreatedAt']);
                 setCreatorImage(docData['CreatorImage']);
-
                 setDeadline(docData['Deadline']);
                 setTaskName(docData['Heading']);
                 setTaskDescription(docData['Description']);
@@ -49,14 +60,25 @@ export default function Task({ taskId }: TaskPage) {
         getTaskData();
     }, [taskId]);
 
+    const downloadDescription = () => {
+        const element = document.createElement("a");
+        const file = new Blob([taskDescription], { type: 'text/plain' });
+        element.href = URL.createObjectURL(file);
+        element.download = `${taskName}/task description.txt`;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    };
+
     return (
-        <main style={{padding: 25}}>
+        <main className={styles.mainContainer}>
             <div className={styles.Task}>
                 <div className={styles.creatorData}>
                     <img className={styles.creatorImage} src={creatorImage} alt="Creator image" />
                     <p className={styles.creatorName}>{creatorName}</p>
                 </div>
-                <button className={styles.taskStatus}>{taskStatus}</button>
+
+                {!isMobile && <button className={styles.taskStatus}>{taskStatus}</button>}
             </div>
 
             <div className={styles.TaskRow}>
@@ -67,7 +89,7 @@ export default function Task({ taskId }: TaskPage) {
                     </div>
                     <div className={styles.TaskData}>
                         <p className={styles.taskheading}>Task Description</p>
-                        <p style={{width:460}} className={styles.taskdata}>{taskDescription}</p>
+                        <button onClick={downloadDescription} className={styles.downloadButton}>Download Description</button>
                     </div>
                 </div>
                 <div className={styles.TaskDataColumn}>
@@ -80,7 +102,9 @@ export default function Task({ taskId }: TaskPage) {
                         <p className={styles.taskdata}>{deadline}</p>
                     </div>
                 </div>
+
+                {isMobile && <button disabled className={styles.taskStatus}>{taskStatus}</button>}
             </div>
         </main>
-    )
+    );
 }

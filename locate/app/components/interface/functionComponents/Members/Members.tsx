@@ -526,12 +526,12 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
     // function to navigate to the next Page
     const navigateToTask = (docData: string[]) => {
+        console.log(docData);
+
+
         const taskId = docData[1];
         setTaskId(taskId);
         setCurrentComponenet('Task'); // set the current component blank
-
-
-
     }
 
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
@@ -883,7 +883,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                                                             :
                                                             // styles for the text which is sent by me
                                                             <div className={styles.referenceMessageMy}>
-                                                                <div className={styles.referenceMessageHeader} >
+                                                                <div className={styles.referenceMessageHeader} onClick={() => navigateToTask(storeMessageForReference[message.messageDoc])}>
                                                                     {storeMessageForReference[message.messageDoc] && (
                                                                         <div className={styles.taskDetails}>
                                                                             {storeMessageForReference[message.messageDoc].map((detail, index) => (

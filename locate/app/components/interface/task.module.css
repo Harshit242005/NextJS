@@ -1,49 +1,42 @@
-.TaskData
-{
+.TaskData {
     display: flex;
     flex-direction: column;
     gap: 0px;
 }
 
-.TaskDataColumn
-{
+.TaskDataColumn {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.TaskRow
-{
+.TaskRow {
     display: flex;
     flex-direction: row;
     gap: 400px;
 }
 
-.creatorImage
-{
+.creatorImage {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     border: none;
 }
 
-.creatorName
-{
+.creatorName {
     font-family: 'ReadexPro';
     font-weight: 100;
     font-size: 20px;
 }
 
-.creatorData
-{
+.creatorData {
     display: flex;
     flex-direction: row;
     justify-content: left;
     align-items: last baseline;
 }
 
-.taskStatus
-{
+.taskStatus {
     background-color: transparent;
     border: 1px solid rgba(0, 0, 0, 0.25);
     width: 150px;
@@ -54,8 +47,7 @@
     border-radius: 5px;
 }
 
-.Task
-{
+.Task {
     display: flex;
     flex-direction: row;
     gap: 700px;
@@ -63,17 +55,71 @@
     align-items: right;
 }
 
-.taskheading
-{
+.taskheading {
     font-family: 'ReadexPro';
     font-size: 18px;
     font-weight: 400;
 }
 
-.taskdata
-{
+.taskdata {
     font-family: 'ReadexPro';
     font-size: 15px;
     font-weight: 100;
     margin-top: -10px;
+}
+
+.mainContainer {
+    padding: 25px;
+}
+
+.normalDescription
+{
+    width: 460px;
+}
+
+
+.downloadButton
+{
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    width: 150px;
+    height: 50px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-bottom: 25px;
+}
+
+@media (max-width: 425px) {
+    .creatorData {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .mainContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    .TaskRow {
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+        width: 90%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mobileDescription
+    {
+        width: 87.5vw;
+    }
 }
