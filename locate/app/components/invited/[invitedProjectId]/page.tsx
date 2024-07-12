@@ -32,6 +32,19 @@ export default function invited( { params }: { params: { invitedProjectId: strin
         getProjectName();
     }, [params.invitedProjectId]);
 
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 425);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
 
     const router = useRouter();
     const { setUid, setEmail, setImageUrl, setUserName, uid, email } = useGlobalUidContext();
@@ -119,7 +132,10 @@ export default function invited( { params }: { params: { invitedProjectId: strin
 
     return (
         <div className={styles.mainContainer}>
-            <p className={styles.description}>You have been invited to join the project <span className={styles.projectName}>{projectName}</span></p>
+            <p className={styles.description}>You have been invited to join the project <span className={` ${isMobile ? styles.noShow : styles.projectName}`}>{projectName}</span></p>
+            {
+                isMobile && <p className={styles.projectName}>{projectName}</p>
+            }
             <div className={styles.acceptedButtons}>
                 <button className={styles.acceptedButton} onClick={googleSignIn}>Accept</button>
                 <button className={styles.acceptedButton} onClick={rejectInvite}>Reject</button>

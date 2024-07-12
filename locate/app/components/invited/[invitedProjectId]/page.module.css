@@ -31,7 +31,8 @@
 
 .acceptedButton:hover{
     border: 1px solid black;
-    color: black;
+    color: white;
+    background-color: black;
     font-size: 20px;
 }
 
@@ -50,4 +51,33 @@
 {
     font-size: 22px;
     font-weight: 100;
+}
+
+.noShow
+{
+    display: none;
+}
+
+
+
+@media (max-width: 425px) {
+    .acceptedButtons
+    {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .mainContainer
+    {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        position: absolute;
+        top: 25%;
+        margin-top: 0%;
+    }
 }

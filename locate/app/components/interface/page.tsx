@@ -56,7 +56,7 @@ export default function Interface() {
     const [currentComponent, setCurrentComponenet] = useState<string>('Create task');
     const [openProfile, setOpenProfile] = useState<boolean>(false);
     const [showShare, setshowShare] = useState<boolean>(false);
-    const [successfulInvite, setSuccessfulInviteUser] = useState<boolean>(false);
+
     const [taskId, setTaskId] = useState<string>('');
 
 
@@ -201,6 +201,9 @@ export default function Interface() {
     }, [messageUid]);
 
     const changeShare = () => {
+        if (isMobile) {
+            setOpenProfile(false);
+        }
         setshowShare(!showShare);
         // setSuccessfulInviteUser(!successfulInvite);
     }
@@ -308,11 +311,8 @@ export default function Interface() {
         if (response.status === 200) {
             // invite sent successfully
             setshowShare(!showShare);
-            setSuccessfulInviteUser(true);
-            // After 2 seconds, reset successfulInviteUser to false
-            setTimeout(() => {
-                setSuccessfulInviteUser(false);
-            }, 2000); // 2000 milliseconds = 2 seconds
+
+
         }
 
 
@@ -770,9 +770,13 @@ export default function Interface() {
                     <p className={styles.inviteHeading}>Share your project</p>
                     <div className={styles.InviteEmailSection}>
                         <input className={styles.InviteEmail} type="email" placeholder="Type email" onChange={(e) => setInviteEmailUser(e.target.value)} />
-                        <button className={styles.InviteEmailButton} onClick={Invite}>Invite</button>
+                        <div className={`${isMobile ? styles.shareDivButtona : ''}`}>
+                            <button className={styles.InviteEmailButton} onClick={Invite}>Invite</button>
+                            {isMobile && <button className={styles.closeShareButton} onClick={() => setshowShare(false)}>Close</button>}
+                        </div>
                     </div>
-                </div>}
+                </div>
+            }
 
 
             {/* user profile for the setting page  */}
@@ -789,10 +793,19 @@ export default function Interface() {
                         <button className={styles.cancelButton} onClick={() => setOpenProfile(false)}><img src="/Cross.png" /></button>
                     </div>
 
+
+
                     {/* content for the profile component */}
                     <div className={styles.userFunctions}>
                         <button className={styles.showList} onClick={() => setShowTaskList(true)}>Show  Tasks</button> {/* to show the task list as a component */}
+                        {
+                            isMobile &&
+
+                            <button className={styles.shareButtonForMobile} onClick={changeShare}>Share</button>
+
+                        }
                         <button onClick={logout} className={styles.logOutButton}>Log out</button>
+
                     </div>
 
 
@@ -805,12 +818,7 @@ export default function Interface() {
             {/* show the Task list profile */}
             {showTaskList && <TaskList setShowTaskList={setShowTaskList} setCurrentComponent={setCurrentComponenet} setTaskDocumentId={setTaskDocumentId} />}
 
-            {successfulInvite &&
-                <div className={`${successfulInvite} ? ${styles.successfullyInvited} : ' '`}>
-                    <img src="/invite.png" alt="Successful invite icon" />
-                    <p>Successfully invited</p>
-                </div>
-            }
+
 
 
             {/* user profile with personal data to use */}
