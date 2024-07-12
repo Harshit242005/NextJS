@@ -269,7 +269,7 @@ export default function CreateTask() {
         }
 
 
-        
+
         const response = await axios.post('https://fern-ivory-lint.glitch.me/sendTaskCreate', {
             'Headline': heading,
             'Deadline': deadline,
@@ -363,7 +363,7 @@ export default function CreateTask() {
                 <input type="text" className={styles.TaskHeading} placeholder='Type heading...' onChange={(e) => setHeading(e.target.value)} />
 
                 <div className={styles.datepickerContainer}>
-                    <input type="date" onChange={handleDateChange} className={styles.datepicker} />
+                    <input type="date" onChange={handleDateChange} className={styles.datepicker} placeholder='Select deadline...' />
                 </div>
 
             </div>
@@ -404,13 +404,13 @@ export default function CreateTask() {
 
                     <div className={styles.attachementViewPopup}>
                         <div className={styles.attachmentHeader}>
-                            <p className={styles.attachmentHeaderHeading}>Files to upload</p>
+                            <p className={styles.attachmentHeaderHeading}>Upload files</p>
                             <button className={styles.closeButton} onClick={() => setOpenAttachmentView(false)}><img src='/Cross.png' /></button>
                         </div>
                         <div className={styles.files}>
                             {Object.keys(fileObjectView).map((fileName, index) => (
                                 <div key={index} className={styles.fileData}>
-                                    <p style={{ width: 150 }}>{fileName}</p>
+                                    <p className={styles.fileName}>{fileName}</p>
                                     <button className={styles.deleteFileButton} onClick={() => handleDeleteFile(fileName)}><FontAwesomeIcon icon={faTrash} /></button>
                                 </div>
                             ))}
@@ -423,7 +423,7 @@ export default function CreateTask() {
                 }
 
                 {/* button to add assignies */}
-                <div style={{marginTop: 5}}>
+                <div style={{ marginTop: 5 }}>
                     <button onClick={() => SetShowAssigniesOption(true)} className={styles.assignButton}>
                         <img src="/Peoples.png" alt="Peoples icon" />
                         {assignies.length} Assign</button>
@@ -439,8 +439,8 @@ export default function CreateTask() {
 
             {
                 isDisabled() ?
-                <button onClick={createTaskFunction} disabled  className={styles.createButton}>Create</button> :
-                <button onClick={createTaskFunction}  className={styles.createButton}>Create</button>
+                    <button onClick={createTaskFunction} disabled className={styles.createButton}>Create</button> :
+                    <button onClick={createTaskFunction} className={styles.createButton}>Create</button>
             }
         </main>
     )
