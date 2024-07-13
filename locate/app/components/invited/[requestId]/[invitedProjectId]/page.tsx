@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import styles from './page.module.css';
 
-export default function invited({ params }: { params: { invitedProjectId: string } }) {
+export default function invited({ params }: { params: { requestId: string, invitedProjectId: string } }) {
     const [projectName, setProjectNameFromId] = useState<string>('');
     const { setUserId } = useGlobalSocketContext();
     const { setProjectCreator, setProjectId, setProjectName, projectCreator } = useGlobalProjectIdContext();
@@ -32,6 +32,9 @@ export default function invited({ params }: { params: { invitedProjectId: string
         getProjectName();
         googleSignIn();
     }, [params.invitedProjectId]);
+
+
+    // check the requestId for the users 
 
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
 
@@ -102,6 +105,12 @@ export default function invited({ params }: { params: { invitedProjectId: string
             await updateDoc(user_one_ref, { Projects: new_projects });
         }
 
+        // send an update method to update the supabase database for the user 
+        const accept_request_response = await axios.post('https://supabaseAdd.glitch.me/acceptedRequest', {
+            'RequestId': params.requestId
+        });
+
+
 
         // Document exists, navigate to the landing page
         router.push('/components/interface');
@@ -132,7 +141,12 @@ export default function invited({ params }: { params: { invitedProjectId: string
             })
             .catch((error: any) => {
                 console.log(error);
-            })
+            });
+
+        const accept_request_response = await axios.post('https://supabaseAdd.glitch.me/rejectRequest', {
+            'RequestId': params.requestId
+        });
+
     }
 
 

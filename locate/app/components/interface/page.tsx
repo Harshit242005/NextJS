@@ -295,26 +295,50 @@ export default function Interface() {
     // function to invite the gamil user
     const Invite = async () => {
 
-        // let's see how to run a nodemailer service to send the mail
-        // for the unique URL formation
-        const unique_url = `https://locatetest.netlify.app/components/invited/${projectId}`;
-        // inviteViaEmail(unique_url);
+        // store the data on the supabase database 
+        const response_id = await axios.post('https://supabaseAdd.glitch.me/createRequest', {
+            'From': email,
+            'To': inviteEmailUser
 
-        const response = await axios.post('https://fern-ivory-lint.glitch.me/sendInvite', {
-            'inviteFrom': email,
-            'inviteTo': inviteEmailUser,
-            'projectName': projectName,
-            'UniqueUrl': unique_url
         });
 
-        console.log(response);
+        console.log(response_id.data.requestId);
 
-        if (response.status === 200) {
-            // invite sent successfully
-            setshowShare(!showShare);
+        if (response_id.status == 200) {
+            if (response_id.data.requestStatus == 'Accpted') {
+                console.log('member already accepted');
+            }
+            if (response_id.data.requestStatus == 'Rejected') {
+                console.log('alredy rejected');
+            }
+            else {
+                const unique_url = `https://locatetest.netlify.app/components/invited/${response_id.data.requestId}/${projectId}`;
+                // inviteViaEmail(unique_url);
 
+                const response = await axios.post('https://fern-ivory-lint.glitch.me/sendInvite', {
+                    'inviteFrom': email,
+                    'inviteTo': inviteEmailUser,
+                    'projectName': projectName,
+                    'UniqueUrl': unique_url
+                });
+
+                console.log(response);
+
+                if (response.status === 200) {
+                    // invite sent successfully
+                    setshowShare(!showShare);
+
+
+                }
+            }
 
         }
+
+        else {
+            console.log('not been able to add the request in the supabase database');
+        }
+
+
 
 
     };
