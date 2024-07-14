@@ -19,6 +19,7 @@ export default function landing() {
 
 
     const router = useRouter();
+    const [showProjectOptions, setShowProjectOptions] = useState<boolean>(false);
     const [joinProjectName, setJoinProject] = useState('');
     const [showNewProject, setShowCreateNewProject] = useState<boolean>(false);
     const { uid, imageUrl, userName, setEmail, setImageUrl, setUserName, setUid } = useGlobalUidContext();
@@ -73,7 +74,7 @@ export default function landing() {
             console.error('Error fetching documents: ', error);
         });
 
-        return() => unsubscribe();
+        return () => unsubscribe();
 
     }, [uid]);
 
@@ -217,7 +218,7 @@ export default function landing() {
                     // Update the document with the modified requests list
                     await updateDoc(docRef, { requests: updatedRequestsList });
 
-                    
+
                 } else {
                     console.log(`Member ID ${uid} not found in requests list.`);
                 }
@@ -243,7 +244,7 @@ export default function landing() {
                     // Update the document with the modified Requests map
                     await updateDoc(doc(collection(firestore, 'Users'), documentId), { Requests: requestsMap });
 
-                   
+
                 } else {
                     console.log(`Project ${projectName} not found in user's requests.`);
                 }
@@ -273,7 +274,7 @@ export default function landing() {
             // Add the document to the collection
             const docRef = await addDoc(collectionRef, documentData);
             const document_id = docRef.id;
-         
+
 
 
             // setting up the global context id 
@@ -293,6 +294,7 @@ export default function landing() {
                 await updateDoc(doc_refre, { Projects: updatedProjects });
             }
 
+            setShowCreateNewProject(false);
             // after creating the project navigate the interface pgae 
             router.push(`/components/interface`);
 
@@ -344,7 +346,7 @@ export default function landing() {
                     {/* building map button for the project */}
 
 
-                    <div className="container">
+                    {/* <div className="container">
                         <div className={`${styles.projectsButton}`}>
                             {projects.map((element, index) => (
                                 <div className="col-md-4 mb-3" key={index}>
@@ -355,8 +357,12 @@ export default function landing() {
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </div> */}
 
+
+                    <div className="container">
+                        <button style={{marginBottom: 25}} onClick={() => setShowProjectOptions(true)} className={styles.projectButton}>Projects</button>
+                    </div>
                     <button onClick={() => setShowCreateNewProject(true)} style={{ width: 200 }} className={styles.projectButton}>Create new project</button>
                 </div>
                 :
@@ -424,6 +430,30 @@ export default function landing() {
                             </div>
                         ))}
                     </div>
+                </div>
+            }
+
+            {showProjectOptions &&
+                <div className={styles.projectsOptionsPopup}>
+                    <div className={styles.projectsOptionsPopupHeader}>
+
+                        <p className={styles.projectsOptionsPopupHeading}>Projects</p>
+                        <button onClick={() => setShowProjectOptions(false)} className={styles.projectsOptionsPopupCloseButton}><img src="/Cross.png" alt="close icon" /></button>
+
+                    </div>
+
+                    {/* <p>{projects}</p> */}
+
+                    <div className={styles.projectsOptionsPopupData}>
+                        {
+                            projects.map((element, index) => (
+                                <div onClick={() => navigateProject(element)} className={styles.projectsPopupName} key={index}>
+                                    {element}
+                                </div>
+                            ))
+                        }
+                    </div>
+
                 </div>
             }
 
