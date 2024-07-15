@@ -18,6 +18,8 @@ export default function invited({ params }: { params: { inviteEmail: string, req
     const [senderImage, setSenderImage] = useState('');
     const [senderName, setSenderName] = useState('');
 
+    
+
     useEffect(() => {
         const getProjectName = async () => {
             const projectRef = doc(firestore, 'Projects', params.invitedProjectId);
@@ -37,6 +39,7 @@ export default function invited({ params }: { params: { inviteEmail: string, req
             const senderDocSnapshot = await getDocs(senderDocRef);
             if (!senderDocSnapshot.empty) {
                 const senderDoc = senderDocSnapshot.docs[0].data();
+                console.log('Sender data', senderDoc);
                 setSenderImage(senderDoc['Imageurl']);
                 setSenderName(senderDoc['Name']);
             }
@@ -44,7 +47,6 @@ export default function invited({ params }: { params: { inviteEmail: string, req
         }
 
         getProjectName();
-        googleSignIn();
         getSenderData();
     }, [params.inviteEmail ,params.invitedProjectId]);
 
@@ -106,6 +108,8 @@ export default function invited({ params }: { params: { inviteEmail: string, req
 
 
     const accptedRequest = async () => {
+
+        await googleSignIn();
         // add the uid in the members list 
         const project_ref = doc(firestore, 'Projects', params.invitedProjectId);
         const project_snapshot = await getDoc(project_ref);
