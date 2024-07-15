@@ -290,7 +290,7 @@ export default function CreateTask() {
         console.log(heading);
     }
 
-    
+
 
     const getCurrentDate = () => {
         const today = new Date();
@@ -319,6 +319,16 @@ export default function CreateTask() {
         setFileObjectForView(updatedFileObject);
     };
 
+    const handleFocus = (event: { target: { type: string; }; }) => {
+        event.target.type = 'date';
+      };
+    
+      const handleBlur = (event: { target: { value: string; type: string; }; }) => {
+        if (event.target.value === '') {
+          event.target.type = 'text';
+        }
+      };
+
 
 
     return (
@@ -330,7 +340,16 @@ export default function CreateTask() {
                 <input type="text" className={styles.TaskHeading} value={heading} placeholder='Type heading...' onChange={(e) => setHeading(e.target.value)} />
 
                 <div className={styles.datepickerContainer}>
-                    <input type="date" onChange={handleDateChange} value={deadline} className={styles.datepicker} placeholder='Select deadline...' />
+                    <input
+                        placeholder='Select deadline...'
+                        onChange={handleDateChange}
+                        value={deadline}
+                        className={styles.datepicker}
+                        type="text"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                    />
+                    {/* <input type="date" onChange={handleDateChange} value={deadline} className={styles.datepicker} placeholder='Select deadline...' /> */}
                 </div>
 
             </div>

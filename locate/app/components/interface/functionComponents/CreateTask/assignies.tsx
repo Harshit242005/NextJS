@@ -11,7 +11,7 @@ interface memberData {
     imageUrl: string,
     name: string,
     uid: string,
-  
+
 }
 
 interface AssigniesProps {
@@ -23,12 +23,12 @@ interface AssigniesProps {
     selectedId: string[];
 }
 
-export default function Assignies({  setShowAssignOption, selectedId, setSelectedUid,  setAssignies }: AssigniesProps) {
+export default function Assignies({ setShowAssignOption, selectedId, setSelectedUid, setAssignies }: AssigniesProps) {
     const { projectId } = useGlobalProjectIdContext();
     const { uid } = useGlobalUidContext();
     const [memberData, setMemberData] = useState<memberData[]>([]);
     const [filteredMembers, setFilteredMembers] = useState<memberData[]>([]);
-    
+
 
     useEffect(() => {
 
@@ -70,7 +70,7 @@ export default function Assignies({  setShowAssignOption, selectedId, setSelecte
 
     const addUid = (selectedUid: string) => {
         if (!selectedId.includes(selectedUid)) {
-        setSelectedUid(selectedId => [...selectedId, selectedUid]);
+            setSelectedUid(selectedId => [...selectedId, selectedUid]);
         }
         else {
             removeUid(selectedUid);
@@ -105,7 +105,7 @@ export default function Assignies({  setShowAssignOption, selectedId, setSelecte
             <div className={styles.membersOptions}>
 
                 <div className={styles.membersOptionsHeader}>
-                    <p className={styles.assigneeDialogHeading} style={{paddingLeft: 10, marginTop: 10}}>Members for assginees</p>
+                    <p className={styles.assigneeDialogHeading} style={{ paddingLeft: 10, marginTop: 10 }}>Members for assginees</p>
                     <button onClick={closeMemberOptions} className={styles.memberOptionCloseButton}><img src="/Cross.png" alt="close icon" /></button>
                 </div>
 
@@ -113,6 +113,7 @@ export default function Assignies({  setShowAssignOption, selectedId, setSelecte
 
                 <div className={styles.membersList}>
                     {filteredMembers.length > 0 ? (
+
 
                         filteredMembers.map(member => (
 
@@ -127,16 +128,19 @@ export default function Assignies({  setShowAssignOption, selectedId, setSelecte
 
                     ) : (
 
-                        memberData.map(member => (
+                        memberData.length > 0 ?
+                            memberData.map(member => (
 
-                            <div key={member.uid} className={`${styles.memberTile} ${selectedId.includes(member.uid) ? styles.selectedUser : ''}`} onClick={() => addUid(member.uid)}>
-                                <div className={styles.memberTileData}>
-                                    <img src={member.imageUrl} className={styles.memberImage} alt={member.name} />
-                                    <p className={styles.memberName}>{member.name}</p>
+                                <div key={member.uid} className={`${styles.memberTile} ${selectedId.includes(member.uid) ? styles.selectedUser : ''}`} onClick={() => addUid(member.uid)}>
+                                    <div className={styles.memberTileData}>
+                                        <img src={member.imageUrl} className={styles.memberImage} alt={member.name} />
+                                        <p className={styles.memberName}>{member.name}</p>
+                                    </div>
                                 </div>
-                            </div>
 
-                        ))
+                            ))
+                            :
+                            <p className={styles.noMember}>No member exist</p>
                     )}
                 </div>
             </div>

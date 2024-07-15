@@ -8,6 +8,16 @@
     
 }
 
+.noMember
+{
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    padding-top: 5px;
+    text-align: center;
+}
+
+
+
 .ChatInterface {
     width: 100%;
     max-width: 100%;

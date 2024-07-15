@@ -56,7 +56,7 @@ export default function Interface() {
     const [currentComponent, setCurrentComponenet] = useState<string>('Create task');
     const [openProfile, setOpenProfile] = useState<boolean>(false);
     const [showShare, setshowShare] = useState<boolean>(false);
-
+    const [shareStatus, setShareStatus] = useState('');
     const [taskId, setTaskId] = useState<string>('');
 
 
@@ -290,11 +290,7 @@ export default function Interface() {
     };
 
 
-
-
-    // function to invite the gamil user
-    const Invite = async () => {
-
+    const sendInvite = async () => {
         // store the data on the supabase database 
         const response_id = await axios.post('https://supabaseAdd.glitch.me/createRequest', {
             'From': email,
@@ -312,7 +308,7 @@ export default function Interface() {
                 console.log('alredy rejected');
             }
             else {
-                const unique_url = `https://locatetest.netlify.app/components/invited/${response_id.data.requestId}/${projectId}`;
+                const unique_url = `https://locatetest.netlify.app/components/invited/${email}/${response_id.data.requestId}/${projectId}`;
                 // inviteViaEmail(unique_url);
 
                 const response = await axios.post('https://fern-ivory-lint.glitch.me/sendInvite', {
@@ -336,6 +332,37 @@ export default function Interface() {
 
         else {
             console.log('not been able to add the request in the supabase database');
+        }
+    }
+
+    // function to invite the gamil user
+    const Invite = async () => {
+        let invite_uid = '';
+        // get the uid of the inviting email if exist then check the subconditon
+        const user_invite_ref = query(collection(firestore, 'Users'), where('Email', "==", inviteEmailUser));
+        const user_invite_snapshot = await getDocs(user_invite_ref);
+        if (!user_invite_snapshot.empty) {
+            invite_uid = user_invite_snapshot.docs[0].data()['Uid'];
+        }
+
+        if (invite_uid != '') {
+            // check for being already a member of the project 
+            const projectDocRef = query(collection(firestore, 'Projects'), where('members', "==", invite_uid));
+            const projectDocRefSnapshot = await getDocs(projectDocRef);
+            if (projectDocRefSnapshot.empty) {
+                await  sendInvite();
+            }
+            else {
+                // notify he is already in the group 
+                setShareStatus('Member already existed');
+            }
+        }
+        else {
+
+
+
+
+            
         }
 
 
@@ -542,6 +569,12 @@ export default function Interface() {
     }
 
 
+    const OpenShowTasks = () => {
+        setOpenProfile(false);
+        setShowTaskList(true);
+    }
+
+
 
     return (
 
@@ -611,7 +644,7 @@ export default function Interface() {
                     <div className={styles.sidebarColumn}>
 
                         <div className={styles.profileDescription}>
-                            <img src={imageUrl} onClick={() => setUserProfile(true)} alt="Profile image" className={styles.sidebarProfileImage} />
+                            <img src={imageUrl} onClick={() => setUserProfile(true)} style={{ borderRadius: 50 }} alt="Profile image" className={styles.sidebarProfileImage} />
                             {/* <p className={styles.projectName}>{projectName}</p> */}
                         </div>
 
@@ -822,7 +855,7 @@ export default function Interface() {
 
                     {/* content for the profile component */}
                     <div className={styles.userFunctions}>
-                        <button className={styles.showList} onClick={() => setShowTaskList(true)}>Show  Tasks</button> {/* to show the task list as a component */}
+                        <button className={styles.showList} onClick={OpenShowTasks}>Show  Tasks</button> {/* to show the task list as a component */}
                         {
                             isMobile &&
 

@@ -813,7 +813,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
                             </div> :
                             <div>
-                                <p>No Member exist yet</p>
+                                <p className={styles.noMember}>No Member exist yet</p>
                             </div>
                     }
 
@@ -831,7 +831,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
                             <div id="messageBox" ref={messageBoxRef} onScroll={handleScroll} className={` ${taskDocument ? styles.chatReferenceCreated : styles.chatBox}`}>
 
-                                {Object.keys(groupedMessages).map(date => (
+                                {
+                                    groupedMessages ? 
+                                Object.keys(groupedMessages).map(date => (
 
                                     <div key={date}>
 
@@ -968,7 +970,8 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
                                     </div>
 
-                                ))}
+                                )) : <p className={styles.noMember}>No chat Messages</p>
+                                }
 
 
                             </div>
@@ -1035,7 +1038,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                                         </div>
                                     )
 
-                                    ) : <p className={styles.noMessageDesciption}>No messsages</p>
+                                    ) : <p className={styles.noMember}>No messsages</p>
                                 }
 
 

@@ -72,6 +72,14 @@
     height: 60px;
 }
 
+.noMember
+{
+    font-family: 'ReadexPro';
+    text-align: center;
+    font-size: 14px;
+    font-weight: 200;
+}
+
 .memberTile:hover
 {
     background-color: rgb(243, 242, 242);

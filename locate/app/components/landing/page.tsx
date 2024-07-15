@@ -24,8 +24,7 @@ export default function landing() {
     const [showNewProject, setShowCreateNewProject] = useState<boolean>(false);
     const { uid, imageUrl, userName, setEmail, setImageUrl, setUserName, setUid } = useGlobalUidContext();
     const { projectId, projectName, setProjectId, setProjectName, setProjectCreator } = useGlobalProjectIdContext();
-    console.log('uid value is', uid);
-    console.log('image url is', imageUrl);
+    
 
     const [projects, setProjects] = useState([]);
     const [userPreference, SetUserPreference] = useState('Create')
@@ -369,7 +368,8 @@ export default function landing() {
                 <div>
                     {projects.length == 0 ?
                         <div>
-                            <h3 className={styles.projectsStatus}>Oops! No project exist yet!</h3></div> : ''
+                            <p className={styles.projectsStatus}>Oops! No project exist yet!</p>
+                        </div> : ''
                     }
                     <div className={styles.userPreferenceButtons} style={{ gap: 10 }}>
                         <button className={`${styles.userPreferenceButton} ${userPreference === 'Create' ? styles.preferred : ''}`} onClick={() => SetUserPreference('Create')}>Create one</button>

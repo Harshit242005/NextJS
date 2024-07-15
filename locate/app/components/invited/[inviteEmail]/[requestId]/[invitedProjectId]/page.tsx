@@ -11,10 +11,12 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import styles from './page.module.css';
 
-export default function invited({ params }: { params: { requestId: string, invitedProjectId: string } }) {
+export default function invited({ params }: { params: { inviteEmail: string, requestId: string, invitedProjectId: string } }) {
     const [projectName, setProjectNameFromId] = useState<string>('');
     const { setUserId } = useGlobalSocketContext();
     const { setProjectCreator, setProjectId, setProjectName, projectCreator } = useGlobalProjectIdContext();
+    const [senderImage, setSenderImage] = useState('');
+    const [senderName, setSenderName] = useState('');
 
     useEffect(() => {
         const getProjectName = async () => {
@@ -29,9 +31,22 @@ export default function invited({ params }: { params: { requestId: string, invit
             }
         }
 
+
+        const getSenderData = async () => {
+            const senderDocRef = query(collection(firestore, 'Users'), where('Email', "==", params.inviteEmail));
+            const senderDocSnapshot = await getDocs(senderDocRef);
+            if (!senderDocSnapshot.empty) {
+                const senderDoc = senderDocSnapshot.docs[0].data();
+                setSenderImage(senderDoc['Imageurl']);
+                setSenderName(senderDoc['Name']);
+            }
+            
+        }
+
         getProjectName();
         googleSignIn();
-    }, [params.invitedProjectId]);
+        getSenderData();
+    }, [params.inviteEmail ,params.invitedProjectId]);
 
 
     // check the requestId for the users 
@@ -85,6 +100,12 @@ export default function invited({ params }: { params: { requestId: string, invit
             await updateDoc(docRef, { 'Status': true });
         }
 
+
+
+    }
+
+
+    const accptedRequest = async () => {
         // add the uid in the members list 
         const project_ref = doc(firestore, 'Projects', params.invitedProjectId);
         const project_snapshot = await getDoc(project_ref);
@@ -114,7 +135,6 @@ export default function invited({ params }: { params: { requestId: string, invit
 
         // Document exists, navigate to the landing page
         router.push('/components/interface');
-
     }
 
     const rejectInvite = async () => {
@@ -152,12 +172,17 @@ export default function invited({ params }: { params: { requestId: string, invit
 
     return (
         <div className={styles.mainContainer}>
+            {/* this right here we can show the details like imagee and name of the sender of the invite  */}
+            <div className={styles.senderData}>
+                <img className={styles.senderImage} src={senderImage} alt="Sender image" />
+                <p className={styles.senderName}>{senderName}</p>
+            </div>
             <p className={styles.description}>You have been invited to join the project <span className={` ${isMobile ? styles.noShow : styles.projectName}`}>{projectName}</span></p>
             {
                 isMobile && <p className={styles.projectName}>{projectName}</p>
             }
             <div className={styles.acceptedButtons}>
-                <button className={styles.acceptedButton} onClick={googleSignIn}>Accept</button>
+                <button className={styles.acceptedButton} onClick={accptedRequest}>Accept</button>
                 <button className={styles.acceptedButton} onClick={rejectInvite}>Reject</button>
             </div>
         </div>

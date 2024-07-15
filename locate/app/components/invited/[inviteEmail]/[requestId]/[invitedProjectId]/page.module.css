@@ -14,6 +14,30 @@
     gap: 25px;
 }
 
+.senderData
+{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.senderImage
+{
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+}
+
+.senderName
+{
+    font-size: 20px;
+    font-family: 'ReadexdPro';
+    font-weight: 200;
+}
+
 .acceptedButton
 {
     width: 250px;
@@ -79,5 +103,10 @@
         position: absolute;
         top: 25%;
         margin-top: 0%;
+    }
+
+    .senderData
+    {
+        flex-direction: column;
     }
 }

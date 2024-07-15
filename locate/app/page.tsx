@@ -38,11 +38,14 @@ export default function Home() {
       const userDocRef = collection(firestore, 'Users');
       const q = query(userDocRef, where('Uid', '==', localStorage.getItem('UserUid')));
       const userDocSnapshot = await getDocs(q);
+      if (!userDocSnapshot.empty) {
       const userDocId = userDocSnapshot.docs[0].id;
       const docRef = doc(firestore, 'Users', userDocId);
       await updateDoc(docRef, { 'Status': true });
-
+      }
       // Document exists, navigate to the landing page
+
+
       router.push('/components/landing');
     }
     else {
