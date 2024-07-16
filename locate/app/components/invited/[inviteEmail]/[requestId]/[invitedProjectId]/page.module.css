@@ -82,6 +82,13 @@
     display: none;
 }
 
+.noInvite
+{
+    font-family: 'ReadexPro';
+    text-align: center;
+    font-size: 20px;
+    font-weight: 200;
+}
 
 
 @media (max-width: 425px) {

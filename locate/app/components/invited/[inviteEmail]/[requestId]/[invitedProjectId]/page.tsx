@@ -17,8 +17,28 @@ export default function invited({ params }: { params: { inviteEmail: string, req
     const { setProjectCreator, setProjectId, setProjectName, projectCreator } = useGlobalProjectIdContext();
     const [senderImage, setSenderImage] = useState('');
     const [senderName, setSenderName] = useState('');
+    const [requestValidity, setRequestValidity] = useState<boolean>(false);
 
-    
+
+    useEffect(() => {
+        console.log(params.requestId)
+        const checkRequestValidity = async () => {
+            const validityResponse = await axios.post('https://supabaseAdd.glitch.me/checkRequest', {
+                RequestId: params.requestId
+            });
+
+            console.log(validityResponse);
+            if (validityResponse.status == 200) {
+                setRequestValidity(validityResponse.data.Status);
+            }
+        }
+
+        return () => {
+            checkRequestValidity();
+        }
+    }, [params.requestId]);
+
+
 
     useEffect(() => {
         const getProjectName = async () => {
@@ -43,12 +63,12 @@ export default function invited({ params }: { params: { inviteEmail: string, req
                 setSenderImage(senderDoc['Imageurl']);
                 setSenderName(senderDoc['Name']);
             }
-            
+
         }
 
         getProjectName();
         getSenderData();
-    }, [params.inviteEmail ,params.invitedProjectId]);
+    }, [params.inviteEmail, params.invitedProjectId]);
 
 
     // check the requestId for the users 
@@ -176,19 +196,27 @@ export default function invited({ params }: { params: { inviteEmail: string, req
 
     return (
         <div className={styles.mainContainer}>
-            {/* this right here we can show the details like imagee and name of the sender of the invite  */}
-            <div className={styles.senderData}>
-                <img className={styles.senderImage} src={senderImage} alt="Sender image" />
-                <p className={styles.senderName}>{senderName}</p>
-            </div>
-            <p className={styles.description}>You have been invited to join the project <span className={` ${isMobile ? styles.noShow : styles.projectName}`}>{projectName}</span></p>
-            {
-                isMobile && <p className={styles.projectName}>{projectName}</p>
-            }
-            <div className={styles.acceptedButtons}>
-                <button className={styles.acceptedButton} onClick={accptedRequest}>Accept</button>
-                <button className={styles.acceptedButton} onClick={rejectInvite}>Reject</button>
-            </div>
+            {requestValidity ?
+                <div>
+                    {/* this right here we can show the details like imagee and name of the sender of the invite  */}
+                    <div className={styles.senderData}>
+                        <img className={styles.senderImage} src={senderImage} alt="Sender image" />
+                        <p className={styles.senderName}>{senderName}</p>
+                    </div>
+                    <p className={styles.description}>You have been invited to join the project <span className={` ${isMobile ? styles.noShow : styles.projectName}`}>{projectName}</span></p>
+                    {
+                        isMobile && <p className={styles.projectName}>{projectName}</p>
+                    }
+                    <div className={styles.acceptedButtons}>
+                        <button className={styles.acceptedButton} onClick={accptedRequest}>Accept</button>
+                        <button className={styles.acceptedButton} onClick={rejectInvite}>Reject</button>
+                    </div>
+                </div>
+                :
+                <div className={styles.noInvite}>
+                    <p>Invite link has been expired</p>
+                </div>
+}
         </div>
     );
 
