@@ -12,6 +12,8 @@ import axios from 'axios';
 import styles from './page.module.css';
 
 export default function invited({ params }: { params: { inviteEmail: string, requestId: string, invitedProjectId: string } }) {
+    const decodedInviteEmail = decodeURIComponent(params.inviteEmail);
+
     const [projectName, setProjectNameFromId] = useState<string>('');
     const { setUserId } = useGlobalSocketContext();
     const { setProjectCreator, setProjectId, setProjectName, projectCreator } = useGlobalProjectIdContext();
@@ -41,6 +43,7 @@ export default function invited({ params }: { params: { inviteEmail: string, req
 
 
     useEffect(() => {
+        console.log(params)
         const getProjectName = async () => {
             const projectRef = doc(firestore, 'Projects', params.invitedProjectId);
             const projectSnapshot = await getDoc(projectRef);
@@ -55,20 +58,23 @@ export default function invited({ params }: { params: { inviteEmail: string, req
 
 
         const getSenderData = async () => {
-            const senderDocRef = query(collection(firestore, 'Users'), where('Email', "==", params.inviteEmail));
+            console.log(params.inviteEmail);
+            const senderDocRef = query(collection(firestore, 'Users'), where('Email', "==", decodedInviteEmail));
             const senderDocSnapshot = await getDocs(senderDocRef);
             if (!senderDocSnapshot.empty) {
                 const senderDoc = senderDocSnapshot.docs[0].data();
                 console.log('Sender data', senderDoc);
-                setSenderImage(senderDoc['Imageurl']);
+                setSenderImage(senderDoc['ImageUrl']);
                 setSenderName(senderDoc['Name']);
+                console.log(senderImage, senderName);
             }
 
         }
-
+        return () => {
         getProjectName();
         getSenderData();
-    }, [params.inviteEmail, params.invitedProjectId]);
+        }
+    }, [decodedInviteEmail, params.invitedProjectId]);
 
 
     // check the requestId for the users 

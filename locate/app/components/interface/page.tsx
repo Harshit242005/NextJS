@@ -41,6 +41,8 @@ export default function Interface() {
         };
     }, []);
 
+    console.log(new Date().toISOString());
+
     const openMobileMenuSection = () => {
         console.log(isMobile, openMobileMenu);
         setOpenMobileMenu(!openMobileMenu);
@@ -206,6 +208,7 @@ export default function Interface() {
             setOpenProfile(false);
         }
         setshowShare(!showShare);
+        setShareStatus('');
         // setSuccessfulInviteUser(!successfulInvite);
     }
 
@@ -320,13 +323,12 @@ export default function Interface() {
 
                 console.log(response);
 
-                if (response.status === 200) {
-                    // invite sent successfully
-                    setshowShare(!showShare);
-
-
-                }
+               
             }
+            
+             // invite sent successfully
+             setshowShare(!showShare);
+             setShareStatus('');
 
         }
 
@@ -345,7 +347,9 @@ export default function Interface() {
             invite_uid = user_invite_snapshot.docs[0].data()['Uid'];
         }
 
-        if (invite_uid != '') {
+        console.log(invite_uid);
+
+        if (invite_uid == '') {
             // check for being already a member of the project 
             const projectDocRef = query(collection(firestore, 'Projects'), where('members', "==", invite_uid));
             const projectDocRefSnapshot = await getDocs(projectDocRef);
@@ -826,6 +830,7 @@ export default function Interface() {
             {showShare &&
                 <div className={styles.shareProject}>
                     <p className={styles.inviteHeading}>Share your project</p>
+                    {shareStatus && <p>{shareStatus}</p>}
                     <div className={styles.InviteEmailSection}>
                         <input className={styles.InviteEmail} type="email" placeholder="Type email" onChange={(e) => setInviteEmailUser(e.target.value)} />
                         <div className={`${isMobile ? styles.shareDivButtona : ''}`}>
