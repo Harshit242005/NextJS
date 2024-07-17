@@ -1,4 +1,4 @@
-.body {
+/* .body {
   font-family: 'ReadexPro';
   display: flex;
   flex-direction: column;
@@ -47,7 +47,7 @@
 
 @media (max-width: 425px) {
 
-  /* defining the width with the viewport for the max mobile width for this component */
+  
   .body {
     
     width: 87.5vw;
@@ -76,4 +76,146 @@
     font-weight: 200;
     
   }
+} */
+
+
+.landingPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.FirstImage {
+  filter: blur(0.5px);
+  z-index: 3;
+  position: absolute;
+  left: 15%;
+}
+
+.SecondImage {
+  filter: blur(1px);
+  z-index: 2;
+  transform: rotate(-45deg);
+}
+
+.ThirdImage {
+  filter: blur(1px);
+  z-index: 1;
+  transform: rotate(45deg);
+  position: relative;
+  left: -5%;
+}
+
+
+
+.FirstSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* top: 15%;
+  position: absolute; */
+ 
+  margin-top: 7.5%;
+  gap: 400px;
+}
+
+.FirstSectionText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 5%;
+}
+
+.FirstSectioHeading {
+  font-family: 'ReadexPro';
+  font-size: 32px;
+  font-weight: 600;
+  text-decoration: underline 1px solid black;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 10px;
+}
+
+.FirstSectionSubHeading {
+  font-family: 'ReadexPro';
+  font-size: 20px;
+  font-weight: 200;
+  margin-top: -5%;
+}
+
+.FirstSectionButton {
+  width: fit-content;
+  height: fit-content;
+  border: none;
+  border-radius: 30px;
+  font-family: 'ReadexPro';
+  background-color: black;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: 200;
+  padding-left: 25px;
+  padding-right: 25px;
+  transition: 0.3s;
+  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.531);
+  margin-top: 5%;
+}
+
+.FirstSectionButton:hover {
+  box-shadow: none;
+}
+
+
+
+@media (max-width: 430px) {
+  .FistSectionApplicationImage {
+    display: none;
+  }
+
+  .FirstSectionText {
+    z-index: 4;
+    position: relative;
+    margin-top: 10%;
+    text-align: center;
+    left: 50%;
+  }
+
+  .FirstSectionImage {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .FirstImage {
+    position: relative;
+    left: 55%;
+    filter: blur(0px);
+  }
+
+  .SecondImage {
+    position: relative;
+    left: 0vw;
+    top: 10vh;
+    filter: blur(0px);
+
+
+  }
+
+  .ThirdImage {
+    top: 15vh;
+    position: relative;
+    left: 0vw;
+    transform: rotate(45deg);
+    filter: blur(0px);
+  }
+
+  .FirstSectionButton {
+    font-weight: 200;
+  }
+
+  
 }

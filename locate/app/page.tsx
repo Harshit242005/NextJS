@@ -16,7 +16,7 @@ import axios from "axios";
 
 export default function Home() {
   const { setUserId } = useGlobalSocketContext();
- 
+
 
 
 
@@ -30,18 +30,18 @@ export default function Home() {
       setEmail(localStorage.getItem('UserEmail'));
       setImageUrl(localStorage.getItem('UserImageUrl') || '');
       setUserName(localStorage.getItem('UserName'));
-  
+
       setUserId(localStorage.getItem('UserUid') || '');
-      
+
 
       // update the doc itself for the true status 
       const userDocRef = collection(firestore, 'Users');
       const q = query(userDocRef, where('Uid', '==', localStorage.getItem('UserUid')));
       const userDocSnapshot = await getDocs(q);
       if (!userDocSnapshot.empty) {
-      const userDocId = userDocSnapshot.docs[0].id;
-      const docRef = doc(firestore, 'Users', userDocId);
-      await updateDoc(docRef, { 'Status': true });
+        const userDocId = userDocSnapshot.docs[0].id;
+        const docRef = doc(firestore, 'Users', userDocId);
+        await updateDoc(docRef, { 'Status': true });
       }
       // Document exists, navigate to the landing page
 
@@ -53,14 +53,14 @@ export default function Home() {
 
 
       const provider = new GoogleAuthProvider();
-      
+
 
 
       // Set prompt option to select_account
       provider.setCustomParameters({ prompt: 'select_account' });
       const result = await signInWithPopup(auth, provider);
-      
-     
+
+
 
 
 
@@ -105,14 +105,40 @@ export default function Home() {
     }
   }
 
- 
+
   return (
-    <main className={styles.body}>
-      <h1 className={styles.heading}>ProjeKt</h1>
-      <button className={styles.signupButton} onClick={googleSignIn}>
-        <img src="google.png" className={styles.googleImageIcon} />
-        Sign up with google
-      </button>
+    // <main className={styles.body}>
+
+    //   <h1 className={styles.heading}>ProjeKt</h1>
+    //   <button className={styles.signupButton} onClick={googleSignIn}>
+    //     <img src="google.png" className={styles.googleImageIcon} />
+    //     Sign up with google
+    //   </button>
+
+    // </main>
+
+    <main className={styles.landingPage}>
+
+   
+        <div className={styles.FirstSection}>
+          <div className={styles.FirstSectionImage}>
+            <img className={styles.FirstImage} src="./FirstImage.svg" alt="First Image" />
+            <img className={styles.SecondImage} src="./SecondImage.svg" alt="Second Image" />
+            <img className={styles.ThirdImage} src="./ThirdImage.svg" alt="" />
+          </div>
+          <div className={styles.FistSectionApplicationImage}>
+            <img src="./ApplicationFirstSectionIcon.svg" alt="" />
+          </div>
+
+
+        </div>
+
+        <div className={styles.FirstSectionText}>
+          <p className={styles.FirstSectioHeading}>ProjeKt</p>
+          <p className={styles.FirstSectionSubHeading}>We help you stay productive</p>
+          <button className={styles.FirstSectionButton} onClick={googleSignIn}>Get Stated</button>
+        </div>
+    
 
     </main>
   );
