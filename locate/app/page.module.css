@@ -84,23 +84,24 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .FirstImage {
-  filter: blur(0.5px);
+  filter: blur(0px);
   z-index: 3;
   position: absolute;
   left: 15%;
 }
 
 .SecondImage {
-  filter: blur(1px);
+  filter: blur(0.5px);
   z-index: 2;
   transform: rotate(-45deg);
 }
 
 .ThirdImage {
-  filter: blur(1px);
+  filter: blur(0.75px);
   z-index: 1;
   transform: rotate(45deg);
   position: relative;
@@ -160,7 +161,7 @@
   padding-left: 25px;
   padding-right: 25px;
   transition: 0.3s;
-  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.531);
+  box-shadow: 1px 2px 5px 1px rgba(0, 0, 0, 0.531);
   margin-top: 5%;
 }
 
@@ -168,19 +169,210 @@
   box-shadow: none;
 }
 
+.SecondSection
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.SecondSectionStart
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 25%;
+}
+
+.SecondSectionStartHeading
+{
+  font-family: 'ReadexPro';
+  font-size: 40px;
+}
+
+@media (min-width: 319px ) and (max-width: 374px) {
+  .FirstImage
+  {
+    margin-left: -30%;
+    position: relative;
+    width: 75vw;
+  }
+
+  .FirstSectionText{
+    margin-top: 0%;
+  }
 
 
-@media (max-width: 430px) {
+
   .FistSectionApplicationImage {
     display: none;
+  }
+
+  .landingPage
+  {
+    width: 100vw;
+    overflow-x: hidden;
   }
 
   .FirstSectionText {
     z-index: 4;
     position: relative;
-    margin-top: 10%;
+    margin-top: 0%;
     text-align: center;
-    left: 50%;
+    
+  }
+
+  .FirstSectionImage {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: -10%;
+  }
+
+  .FirstImage {
+    
+    filter: blur(0px);
+  }
+
+  .SecondImage {
+    position: absolute;
+    margin-left: -50%;
+    top: 10vh;
+    filter: blur(0.5px);
+    transform: rotate(0deg);
+  }
+
+  .ThirdImage {
+    top: 15vh;
+    position: absolute;
+    left: 20vw;
+    transform: rotate(0deg);
+    filter: blur(1px);
+  }
+
+  .FirstSectionButton {
+    font-weight: 200;
+  }
+
+  .SecondSection{
+    margin-top: 10%;
+    
+  }
+
+  .SecondSectionStartHeading
+  {
+  
+    font-size: 24px;
+    width: 71vw;
+    font-weight: 400;
+  }
+
+  .SecondSectionImage
+  {
+    display: none;
+  }
+
+}
+
+@media (min-width: 375px) and (max-width: 430px) {
+  .FirstImage
+  {
+   margin-left: -5%;
+   margin-top: -15%;
+  }
+
+  .SecondImage
+  {
+    transform: rotate(0deg);
+    margin-top: 15%;
+  }
+
+  .ThirdImage
+  {
+    transform: rotate(0deg);
+  }
+
+  .FistSectionApplicationImage {
+    display: none;
+  }
+
+  .landingPage
+  {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .FirstSectionText {
+    z-index: 4;
+    position: relative;
+    margin-top: 0%;
+    text-align: center;
+    
+  }
+
+  .FirstSectionImage {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+ 
+
+  .FirstSectionButton {
+    font-weight: 200;
+  }
+
+  .SecondSectionStartHeading
+  {
+    font-size: 24px;
+    
+  }
+
+  .SecondSection{
+    margin-top: 10%;
+    
+  }
+
+  .SecondSectionStartHeading
+  {
+  
+    font-size: 24px;
+    width: 71vw;
+    font-weight: 400;
+  }
+
+  .SecondSectionImage
+  {
+    display: none;
+  }
+
+}
+
+
+
+@media (max-width: 318px) {
+  .FistSectionApplicationImage {
+    display: none;
+  }
+
+  .landingPage
+  {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .FirstSectionText {
+    z-index: 4;
+    position: relative;
+    margin-top: 0%;
+    text-align: center;
+    
   }
 
   .FirstSectionImage {
@@ -192,30 +384,54 @@
 
   .FirstImage {
     position: relative;
-    left: 55%;
+    left: 55vw;
     filter: blur(0px);
   }
 
   .SecondImage {
     position: relative;
-    left: 0vw;
+    left: -30vw;
     top: 10vh;
-    filter: blur(0px);
-
+    filter: blur(0.5px);
+    transform: rotate(0deg);
 
   }
 
   .ThirdImage {
     top: 15vh;
     position: relative;
-    left: 0vw;
-    transform: rotate(45deg);
-    filter: blur(0px);
+    left: -50vw;
+    transform: rotate(0deg);
+    filter: blur(1px);
   }
 
   .FirstSectionButton {
     font-weight: 200;
   }
 
+
+  .SecondSectionStartHeading
+  {
+    font-size: 24px;
+    width: 71vw;
+  }
+
+  .SecondSection{
+    margin-top: 10%;
+    
+  }
+
+  .SecondSectionStartHeading
+  {
+  
+    font-size: 24px;
+    width: 71vw;
+    font-weight: 400;
+  }
+
+  .SecondSectionImage
+  {
+    display: none;
+  }
   
 }

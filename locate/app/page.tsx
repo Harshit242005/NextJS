@@ -10,7 +10,7 @@ import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "fireb
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import Image from "next/image";
 
 
 
@@ -119,26 +119,37 @@ export default function Home() {
 
     <main className={styles.landingPage}>
 
-   
-        <div className={styles.FirstSection}>
-          <div className={styles.FirstSectionImage}>
-            <img className={styles.FirstImage} src="./FirstImage.svg" alt="First Image" />
-            <img className={styles.SecondImage} src="./SecondImage.svg" alt="Second Image" />
-            <img className={styles.ThirdImage} src="./ThirdImage.svg" alt="" />
-          </div>
-          <div className={styles.FistSectionApplicationImage}>
-            <img src="./ApplicationFirstSectionIcon.svg" alt="" />
-          </div>
 
-
+      <div className={styles.FirstSection}>
+        <div className={styles.FirstSectionImage}>
+          <Image className={styles.FirstImage} src="./FirstImage.svg" alt="First Image" width={300} height={300} />
+          <Image className={styles.SecondImage} src="./SecondImage.svg" alt="Second Image" width={300} height={300} />
+          <Image className={styles.ThirdImage} src="./ThirdImage.svg" alt="" width={250} height={250}/>
+        </div>
+        <div className={styles.FistSectionApplicationImage}>
+          <img src="./ApplicationFirstSectionIcon.svg" alt="" />
         </div>
 
-        <div className={styles.FirstSectionText}>
-          <p className={styles.FirstSectioHeading}>ProjeKt</p>
-          <p className={styles.FirstSectionSubHeading}>We help you stay productive</p>
-          <button className={styles.FirstSectionButton} onClick={googleSignIn}>Get Stated</button>
+
+      </div>
+
+      <div className={styles.FirstSectionText}>
+        <p className={styles.FirstSectioHeading}>ProjeKt</p>
+        <p className={styles.FirstSectionSubHeading}>We help you stay productive</p>
+        <button className={styles.FirstSectionButton} onClick={googleSignIn}>Get Stated</button>
+      </div>
+
+
+      <div className={styles.SecondSection}>
+        <div className={styles.SecondSectionStart}>
+          <p className={styles.SecondSectionStartHeading}>How ProjeKt Works</p>
+          <Image src="./RightArrow.svg" className={styles.SecondSectionImage} alt="" width={100} height={100} />
         </div>
-    
+
+
+        
+      </div>
+
 
     </main>
   );
