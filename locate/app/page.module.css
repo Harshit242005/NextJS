@@ -120,7 +120,7 @@
   align-items: center;
   /* top: 15%;
   position: absolute; */
- 
+
   margin-top: 7.5%;
   gap: 400px;
 }
@@ -172,16 +172,14 @@
   box-shadow: none;
 }
 
-.SecondSection
-{
+.SecondSection {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.SecondSectionStart
-{
+.SecondSectionStart {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -190,21 +188,19 @@
   margin-top: 25%;
 }
 
-.SecondSectionStartHeading
-{
+.SecondSectionStartHeading {
   font-family: 'ReadexPro';
   font-size: 40px;
 }
 
-@media (min-width: 319px ) and (max-width: 374px) {
-  .FirstImage
-  {
+@media (min-width: 319px) and (max-width: 374px) {
+  .FirstImage {
     margin-left: -30%;
     position: relative;
     width: 75vw;
   }
 
-  .FirstSectionText{
+  .FirstSectionText {
     margin-top: 0%;
   }
 
@@ -214,8 +210,7 @@
     display: none;
   }
 
-  .landingPage
-  {
+  .landingPage {
     width: 100vw;
     overflow-x: hidden;
   }
@@ -225,7 +220,7 @@
     position: relative;
     margin-top: 0%;
     text-align: center;
-    
+
   }
 
   .FirstSectionImage {
@@ -237,7 +232,7 @@
   }
 
   .FirstImage {
-    
+
     filter: blur(0px);
   }
 
@@ -261,41 +256,44 @@
     font-weight: 200;
   }
 
-  .SecondSection{
+  .SecondSection {
     margin-top: 10%;
-    
+
   }
 
-  .SecondSectionStartHeading
-  {
-  
+  .SecondSectionStartHeading {
+
     font-size: 24px;
     width: 71vw;
     font-weight: 400;
   }
 
-  .SecondSectionImage
-  {
+  .SecondSectionImage {
     display: none;
+  }
+
+  .SecondSectionLine {
+    width: 87.5%;
   }
 
 }
 
+.SecondSectionLine {
+  margin-top: 10%;
+}
+
 @media (min-width: 375px) and (max-width: 430px) {
-  .FirstImage
-  {
-   margin-left: -5%;
-   margin-top: -15%;
+  .FirstImage {
+    margin-left: -5%;
+    margin-top: -15%;
   }
 
-  .SecondImage
-  {
+  .SecondImage {
     transform: rotate(0deg);
     margin-top: 15%;
   }
 
-  .ThirdImage
-  {
+  .ThirdImage {
     transform: rotate(0deg);
   }
 
@@ -303,8 +301,7 @@
     display: none;
   }
 
-  .landingPage
-  {
+  .landingPage {
     width: 100%;
     overflow-x: hidden;
   }
@@ -314,7 +311,7 @@
     position: relative;
     margin-top: 0%;
     text-align: center;
-    
+
   }
 
   .FirstSectionImage {
@@ -325,34 +322,35 @@
   }
 
 
- 
+
 
   .FirstSectionButton {
     font-weight: 200;
   }
 
-  .SecondSectionStartHeading
-  {
+  .SecondSectionStartHeading {
     font-size: 24px;
-    
+
   }
 
-  .SecondSection{
+  .SecondSection {
     margin-top: 10%;
-    
+
   }
 
-  .SecondSectionStartHeading
-  {
-  
+  .SecondSectionStartHeading {
+
     font-size: 32px;
     width: 71vw;
     font-weight: 400;
   }
 
-  .SecondSectionImage
-  {
+  .SecondSectionImage {
     display: none;
+  }
+
+  .SecondSectionLine {
+    width: 87.5%;
   }
 
 }
@@ -360,12 +358,16 @@
 
 
 @media (max-width: 318px) {
+
+  .SecondSectionLine {
+    width: 87.5%;
+  }
+
   .FistSectionApplicationImage {
     display: none;
   }
 
-  .landingPage
-  {
+  .landingPage {
     width: 100%;
     overflow-x: hidden;
   }
@@ -375,7 +377,7 @@
     position: relative;
     margin-top: 0%;
     text-align: center;
-    
+
   }
 
   .FirstSectionImage {
@@ -413,28 +415,25 @@
   }
 
 
-  .SecondSectionStartHeading
-  {
+  .SecondSectionStartHeading {
     font-size: 24px;
     width: 71vw;
   }
 
-  .SecondSection{
+  .SecondSection {
     margin-top: 10%;
-    
+
   }
 
-  .SecondSectionStartHeading
-  {
-  
+  .SecondSectionStartHeading {
+
     font-size: 24px;
     width: 71vw;
     font-weight: 400;
   }
 
-  .SecondSectionImage
-  {
+  .SecondSectionImage {
     display: none;
   }
-  
+
 }

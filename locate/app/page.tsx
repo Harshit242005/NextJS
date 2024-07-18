@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import CreateProject from "./landingComponents/CreateProject";
+import Invite from "./landingComponents/Invite";
 
 
 
@@ -148,11 +149,12 @@ export default function Home() {
         </div>
       </div>
 
-      <div className={styles.ThirdSection}>
-
-      </div>
+     
 
       <CreateProject />
+      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10}/>
+      <Invite />
+      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10}/>
 
     </main>
   );
