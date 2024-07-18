@@ -1,0 +1,225 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+
+.createProjectButton
+{
+    background-color: transparent;
+    border: none;
+   
+}
+
+.containerText
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    gap: 50px;
+}
+
+.heading
+{
+    font-family: "Cedarville Cursive", cursive;
+    font-size: 40px;
+    text-align: left;
+}
+
+.subText
+{
+    font-family: "Cedarville Cursive", cursive;
+    font-size: 32px;
+    width: 40vw;
+    text-align: left;
+}
+
+.createProjectBlock
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    margin-top: 10%;
+}
+
+.projectInput
+{
+    width: 250px;
+    height: 53.5px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    font-family: 'ReadexPro';
+    font-weight: 16px;
+    font-weight: 100;
+    padding-left: 10px;
+}
+
+.projectInput:focus
+{
+    outline: none;
+}
+
+.projectInput::placeholder
+{
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.Container
+{
+    height: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+   
+    border-radius: 5px;
+}
+
+.noProjects
+{
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    padding-top: 30%;
+}
+
+.showProjects
+{
+    height: 82%;
+    max-height: 82%;
+    background-color: black;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: none;
+}
+
+.createProjectSection
+{
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.Projects
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    height: 245px;
+    max-height: 245px;
+    overflow-y: auto;
+    scroll-behavior: auto;
+}
+
+.Projects::-webkit-scrollbar
+{
+    width: none;
+    display: none;
+}
+
+.projectItem
+{
+    width: 100%;
+    height: 50px;
+  
+    padding-top: 10px;
+    gap: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: baseline;
+}
+
+.deleteProject
+{
+    background-color: transparent;
+    border: none;
+}
+
+.projectName
+{
+    color: white;
+    font-family: "Cedarville Cursive", cursive;
+    font-size: 16px;
+    font-weight: 200;
+    padding-left: 10px;
+    text-align: left;
+    width: 200px;
+}
+
+
+/* developing the responsive design */
+@media (min-width: 375px) and (max-width: 430px)
+{
+    .createProjectBlock
+    {
+        flex-direction: column;
+    }
+
+    .containerText
+    {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .heading
+    {
+        text-align: center;
+    }
+
+    .subText
+    {
+        text-align: center;
+    }
+}
+
+@media (min-width: 319px ) and (max-width: 374px)
+{
+    .createProjectBlock
+    {
+        flex-direction: column;
+    }
+
+    .containerText
+    {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .heading
+    {
+        text-align: center;
+    }
+
+    .subText
+    {
+        text-align: center;
+    }
+}
+
+@media (max-width: 318px) 
+{
+    .createProjectBlock
+    {
+        flex-direction: column;
+    }
+
+    .containerText
+    {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .heading
+    {
+        text-align: center;
+    }
+
+    .subText
+    {
+        text-align: center;
+    }
+}

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import CreateProject from "./landingComponents/CreateProject";
 
 
 
@@ -124,7 +125,7 @@ export default function Home() {
         <div className={styles.FirstSectionImage}>
           <Image className={styles.FirstImage} src="./FirstImage.svg" alt="First Image" width={300} height={300} />
           <Image className={styles.SecondImage} src="./SecondImage.svg" alt="Second Image" width={300} height={300} />
-          <Image className={styles.ThirdImage} src="./ThirdImage.svg" alt="" width={250} height={250}/>
+          <Image className={styles.ThirdImage} src="./ThirdImage.svg" alt="" width={250} height={250} />
         </div>
         <div className={styles.FistSectionApplicationImage}>
           <img src="./ApplicationFirstSectionIcon.svg" alt="" />
@@ -145,11 +146,13 @@ export default function Home() {
           <p className={styles.SecondSectionStartHeading}>How ProjeKt Works</p>
           <Image src="./RightArrow.svg" className={styles.SecondSectionImage} alt="" width={100} height={100} />
         </div>
-
-
-        
       </div>
 
+      <div className={styles.ThirdSection}>
+
+      </div>
+
+      <CreateProject />
 
     </main>
   );
