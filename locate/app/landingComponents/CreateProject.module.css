@@ -171,6 +171,12 @@
     .subText
     {
         text-align: center;
+        width: 87.5vw;
+    }
+
+    .createProjectSection
+    {
+        margin-top: -16px;
     }
 }
 
@@ -196,6 +202,12 @@
     .subText
     {
         text-align: center;
+        width: 87.5vw;
+    }
+
+    .createProjectSection
+    {
+        margin-top: -16px;
     }
 }
 
@@ -221,5 +233,10 @@
     .subText
     {
         text-align: center;
+    }
+
+    .createProjectSection
+    {
+        margin-top: -16px;
     }
 }
