@@ -13,6 +13,7 @@ import axios from "axios";
 import Image from "next/image";
 import CreateProject from "./landingComponents/CreateProject";
 import Invite from "./landingComponents/Invite";
+import CreateTask from "./landingComponents/CreateTask";
 
 
 
@@ -154,6 +155,8 @@ export default function Home() {
       <CreateProject />
       <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10}/>
       <Invite />
+      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10}/>
+      <CreateTask/>
       <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10}/>
 
     </main>

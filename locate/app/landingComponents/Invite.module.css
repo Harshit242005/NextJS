@@ -186,12 +186,14 @@
     .heading
     {
         text-align: center;
+        font-size: 32px;
     }
 
     .subText
     {
         text-align: center;
         width: 87.5vw;
+        font-size: 24px;
     }
 
     /* .createProjectSection
@@ -217,6 +219,7 @@
     .heading
     {
         text-align: center;
+        font-size: 32px;
     }
 
     .container
@@ -228,6 +231,7 @@
     {
         text-align: center;
         width: 87.5vw;
+        font-size: 24px;
     }
 
     /* .createProjectSection
@@ -258,11 +262,13 @@
     .heading
     {
         text-align: center;
+        font-size: 32px;
     }
 
     .subText
     {
         text-align: center;
+        font-size: 24px;
     }
 
     /* .createProjectSection
