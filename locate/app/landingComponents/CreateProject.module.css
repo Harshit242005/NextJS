@@ -14,22 +14,24 @@
     flex-direction: column;
     justify-content: left;
     align-items: flex-start;
-    gap: 50px;
+    gap: 25px;
 }
 
 .heading
 {
-    font-family: "Cedarville Cursive", cursive;
-    font-size: 40px;
+    font-size: 32px;
+    font-family: 'ReadexPro';
     text-align: left;
+    font-weight: 200;
 }
 
 .subText
 {
-    font-family: "Cedarville Cursive", cursive;
-    font-size: 32px;
+    font-family: 'ReadexPro';
+    font-size: 24px;
     width: 40vw;
     text-align: left;
+    font-weight: 100;
 }
 
 .createProjectBlock

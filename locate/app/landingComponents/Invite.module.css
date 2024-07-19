@@ -9,21 +9,23 @@
     flex-direction: column;
     justify-content: right;
     align-items: flex-end;
-    gap: 50px;
+    gap: 25px;
 }
 
 .heading
 {
-    font-family: "Cedarville Cursive", cursive;
-    font-size: 40px;
+    font-size: 32px;
+    font-family: 'ReadexPro';
     text-align: right;
+    font-weight: 200;
 }
 
 .subText
 {
-    font-family: "Cedarville Cursive", cursive;
-    font-size: 32px;
+    font-family: 'ReadexPro';
+    font-size: 24px;
     width: 40vw;
+    font-weight: 100;
     text-align: right;
 }
 
