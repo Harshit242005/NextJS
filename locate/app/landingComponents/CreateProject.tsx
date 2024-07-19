@@ -31,7 +31,7 @@ export default function CreateProject() {
             {/* some text description for the container */}
             <div className={styles.containerText}>
                 <p className={styles.heading}>1.<br />
-                    Create Task
+                    Create Project
                 </p>
                 <p className={styles.subText}>We help you create
                     projects to start-up your

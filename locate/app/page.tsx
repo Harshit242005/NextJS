@@ -14,6 +14,7 @@ import Image from "next/image";
 import CreateProject from "./landingComponents/CreateProject";
 import Invite from "./landingComponents/Invite";
 import CreateTask from "./landingComponents/CreateTask";
+import Chat from "./landingComponents/Chat";
 
 
 
@@ -150,14 +151,26 @@ export default function Home() {
         </div>
       </div>
 
-     
+
 
       <CreateProject />
-      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10}/>
+      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10} />
       <Invite />
-      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10}/>
-      <CreateTask/>
-      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10}/>
+      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10} />
+      <CreateTask />
+      <Image className={styles.SecondSectionLine} src="./Line.svg" alt="Line Vector" width={800} height={10} />
+      <Chat />
+
+
+
+      <div className={styles.SecondSection}>
+        <div className={styles.SecondSectionStart}>
+          <p className={styles.SecondSectionStartHeading}>Start Creating Projets</p>
+          <Image src="./RightArrow.svg" className={styles.SecondSectionImage} alt="" width={100} height={100} />
+        </div>
+      </div>
+      <button className={styles.FirstSectionButton} onClick={googleSignIn}>Get Stated</button>
+
 
     </main>
   );

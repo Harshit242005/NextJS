@@ -1,0 +1,297 @@
+.containerText {
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    align-items: flex-end;
+    gap: 25px;
+}
+
+.heading {
+    /* font-family: "Cedarville Cursive", cursive; */
+    font-size: 32px;
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    text-align: right;
+}
+
+.subText {
+    /* font-family: "Cedarville Cursive", cursive; */
+    font-family: 'ReadexPro';
+    font-size: 24px;
+    width: 40vw;
+    font-weight: 100;
+    text-align: right;
+}
+
+.chatBlock {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    margin-top: 10%;
+}
+
+.noMessags {
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    padding-top: 15%;
+}
+
+
+.sendMessage:focus {
+    outline: none;
+}
+
+.container {
+    height: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    width: 300px;
+    border-radius: 5px;
+}
+
+.showMessaeges {
+    height: 70%;
+    background-color: black;
+}
+
+.createMessageSction
+{
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.sendMessage
+{
+    background-color: black;
+    width: 100%;
+    height: 50%;
+    border: none;
+}
+
+.sendMessage:focus
+{
+    outline: none;
+}
+
+.messageInput
+{
+    width: 100%;
+    height: 50%;
+    padding-left: 10px;
+    font-size: 15px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+}
+
+.messageInput:focus
+{
+    outline: none;
+}
+
+.messageInput::placeholder
+{
+    font-size: 14px;
+    font-family: 'ReadexPro';
+    font-weight: 100;
+}
+
+.messages
+{
+    height: 100%;
+    overflow-y: auto;
+    scroll-behavior: auto;
+    background-color: white;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    align-items: flex-end;
+}
+
+.messages:first-child{
+    padding-top: 5px;
+}
+
+.messages::-webkit-scrollbar
+{
+    display: none;
+    width: none;
+}
+
+.mymessage
+{
+    width: 150px;
+    max-width: 150px;
+    border: none;
+    background-color: black;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    align-items: flex-end;
+    border-top-left-radius: 33px;
+    border-bottom-left-radius: 33px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 50px;
+}
+
+.messageText
+{
+    font-family: 'ReadexPro';
+    font-size: 15px;
+    font-weight: 100;
+    color: white;
+}
+
+.messageTime
+{
+    font-family: 'ReadexPro';
+    font-size: 12px;
+    font-weight: 200;
+    color: white;
+}
+
+.messageHeader
+{
+    height: 20%;
+    background-color: black;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+}
+
+.messageImage
+{
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.messageName
+{
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    font-size: 14px;
+    color: white;
+    margin-top: 15px;
+}
+
+
+/* making it more responsive */
+
+@media (min-width: 375px) and (max-width: 430px)
+{
+    .chatBlock
+    {
+        flex-direction: column;
+    }
+
+    .containerText
+    {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .heading
+    {
+        text-align: center;
+        font-size: 32px;
+    }
+
+    .subText
+    {
+        text-align: center;
+        width: 87.5vw;
+        font-size: 24px;
+    }
+}
+
+
+
+@media (min-width: 319px ) and (max-width: 374px)
+{
+    .chatBlock
+    {
+        flex-direction: column-reverse;
+    }
+
+    .containerText
+    {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .heading
+    {
+        text-align: center;
+        font-size: 32px;
+    }
+
+    .container
+    {
+        width: 87.5%;
+    }
+
+    .subText
+    {
+        text-align: center;
+        width: 87.5vw;
+        font-size: 24px;
+    }
+
+    /* .createProjectSection
+    {
+        margin-top: -16px;
+    } */
+}
+
+@media (max-width: 318px) 
+{
+    .chatBlock
+    {
+        flex-direction: column-reverse;
+    }
+
+    .containerText
+    {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .container
+    {
+        width: 87.5%;
+    }
+
+    .heading
+    {
+        text-align: center;
+        font-size: 32px;
+    }
+
+    .subText
+    {
+        text-align: center;
+        font-size: 24px;
+    }
+
+    /* .createProjectSection
+    {
+        margin-top: -16px;
+    } */
+}
