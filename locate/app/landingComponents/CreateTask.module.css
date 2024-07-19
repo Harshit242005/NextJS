@@ -9,21 +9,25 @@
     flex-direction: column;
     justify-content: left;
     align-items: flex-start;
-    gap: 50px;
+    gap: 25px;
 }
 
 .heading
 {
-    font-family: "Cedarville Cursive", cursive;
-    font-size: 40px;
+    /* font-family: "Cedarville Cursive", cursive; */
+    font-size: 32px;
+    font-family: 'ReadexPro';
+    font-weight: 200;
     text-align: left;
 }
 
 .subText
 {
-    font-family: "Cedarville Cursive", cursive;
-    font-size: 32px;
+    /* font-family: "Cedarville Cursive", cursive; */
+    font-family: 'ReadexPro';
+    font-size: 24px;
     width: 40vw;
+    font-weight: 100;
     text-align: left;
 }
 
