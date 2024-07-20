@@ -70,10 +70,10 @@ export default function invited({ params }: { params: { inviteEmail: string, req
             }
 
         }
-        return () => {
+
         getProjectName();
         getSenderData();
-        }
+
     }, [decodedInviteEmail, params.invitedProjectId]);
 
 
@@ -157,7 +157,7 @@ export default function invited({ params }: { params: { inviteEmail: string, req
         }
 
         // send an update method to update the supabase database for the user 
-        const accept_request_response = await axios.post('https://supabaseAdd.glitch.me/acceptedRequest', {
+        await axios.post('https://supabaseAdd.glitch.me/acceptedRequest', {
             'RequestId': params.requestId
         });
 
@@ -193,7 +193,7 @@ export default function invited({ params }: { params: { inviteEmail: string, req
                 console.log(error);
             });
 
-        const accept_request_response = await axios.post('https://supabaseAdd.glitch.me/rejectRequest', {
+        await axios.post('https://supabaseAdd.glitch.me/rejectRequest', {
             'RequestId': params.requestId
         });
 
@@ -222,7 +222,7 @@ export default function invited({ params }: { params: { inviteEmail: string, req
                 <div className={styles.noInvite}>
                     <p>Invite link has been expired</p>
                 </div>
-}
+            }
         </div>
     );
 

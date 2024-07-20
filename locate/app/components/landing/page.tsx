@@ -346,7 +346,9 @@ export default function landing() {
 
                     {
                         projects && projects.length > 0 ?
-                            <div className={styles.projectsData}>
+                            <div className={styles.projectsData}>12  
+
+                            
 
 
 
