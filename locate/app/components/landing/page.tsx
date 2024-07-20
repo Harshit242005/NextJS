@@ -10,7 +10,7 @@ import { firestore } from "@/app/firebase";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-
+import Image from "next/image";
 export default function landing() {
 
     interface RequestsMap {
@@ -24,7 +24,7 @@ export default function landing() {
     const [showNewProject, setShowCreateNewProject] = useState<boolean>(false);
     const { uid, imageUrl, userName, setEmail, setImageUrl, setUserName, setUid } = useGlobalUidContext();
     const { projectId, projectName, setProjectId, setProjectName, setProjectCreator } = useGlobalProjectIdContext();
-    
+
 
     const [projects, setProjects] = useState([]);
     const [userPreference, SetUserPreference] = useState('Create')
@@ -329,23 +329,30 @@ export default function landing() {
         router.push(`/components/interface`);
     }
 
+    const handlePreferenceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        SetUserPreference(event.target.value);
+    };
+
     return (
 
-        <main className={styles.body}>
+        <main >
 
-            <div className={styles.profileImageDescription}>
-                <img src={imageUrl} alt="Profile image" className={styles.profileImage} />
-                {/* <p>{userName}</p> */}
-            </div>
-
-            {projects && projects.length > 0 ?
-                <div className={styles.projectsData}>
-                    {/* projects exist then allow user to select one and navigate using dynamic routing  */}
-                    <p className={styles.projectsStatus}>Select Project</p>
-                    {/* building map button for the project */}
+           <p className={styles.appName}>ProjeKt</p>
+            <div className={styles.RowPage}>
+                <Image className={styles.backImage} src="../../LandingPageBackImage.svg" height={500} width={500} alt="Background images" />
+                <div className={styles.body}>
 
 
-                    {/* <div className="container">
+
+                    {
+                        projects && projects.length > 0 ?
+                            <div className={styles.projectsData}>
+                                {/* projects exist then allow user to select one and navigate using dynamic routing  */}
+                                <p className={styles.projectsStatus}>Select Project</p>
+                                {/* building map button for the project */}
+
+
+                                {/* <div className="container">
                         <div className={`${styles.projectsButton}`}>
                             {projects.map((element, index) => (
                                 <div className="col-md-4 mb-3" key={index}>
@@ -359,54 +366,64 @@ export default function landing() {
                     </div> */}
 
 
-                    <div className="container">
-                        <button style={{marginBottom: 25}} onClick={() => setShowProjectOptions(true)} className={styles.projectButton}>Projects</button>
-                    </div>
-                    <button onClick={() => setShowCreateNewProject(true)} style={{ width: 200 }} className={styles.projectButton}>Create new project</button>
-                </div>
-                :
-                <div>
-                    {projects.length == 0 ?
-                        <div>
-                            <p className={styles.projectsStatus}>Oops! No project exist yet!</p>
-                        </div> : ''
-                    }
-                    <div className={styles.userPreferenceButtons} style={{ gap: 10 }}>
-                        <button className={`${styles.userPreferenceButton} ${userPreference === 'Create' ? styles.preferred : ''}`} onClick={() => SetUserPreference('Create')}>Create one</button>
-                        <button className={`${styles.userPreferenceButton} ${userPreference === 'Join' ? styles.preferred : ''}`} onClick={() => SetUserPreference('Join')}>Join one</button>
-                    </div>
-
-                    {/* this section should be changeable according to the user pref */}
-                    {
-                        userPreference === 'Create' ?
-                            <div style={{ marginTop: 25 }}>
-                                <div className={styles.createProject}>
-                                    <p className={styles.createProjectHeading}>Project name</p>
-                                    <input type="text" className={styles.projectName} placeholder="Type name of project..." onChange={(e) => setProjectNameCreate(e.target.value)} />
+                                <div className="container">
+                                    <button style={{ marginBottom: 25 }} onClick={() => setShowProjectOptions(true)} className={styles.projectButton}>Projects</button>
                                 </div>
-                                <button onClick={createProject} className={styles.createButton}>Create</button>
-                            </div> :
+                                <button onClick={() => setShowCreateNewProject(true)} style={{ width: 200 }} className={styles.projectButton}>Create new project</button>
+                            </div>
+                            :
+                            <div>
+                                <div className={styles.topSection}>
+                                    <img src={imageUrl} alt="Profile image" className={styles.profileImage} />
+                                    <p className={styles.userPreferenceText}>{userPreference}</p>
 
 
-                            <div style={{ marginTop: 25 }}>
-
-
-                                <div>
-                                    <div className={styles.createProject}>
-                                        <p className={styles.createProjectHeading}>Project name</p>
-                                        <input type="text" className={styles.projectName} placeholder="Type name of project..." onChange={(e) => setJoinProject(e.target.value)} />
-                                    </div>
-                                    <div className={styles.joinProjectButtons} style={{ gap: 10 }}>
-                                        <button onClick={joinProject} className={styles.createButton}>Join</button>
-                                        <button onClick={showOldRequests} className={styles.requestButton}>Old Requests</button>
-                                    </div>
+                                    <select
+                                        id="userPreference"
+                                        className={styles.userPreferenceDropdown}
+                                        value={userPreference}
+                                        onChange={handlePreferenceChange}
+                                    >
+                                        <option value="Create">Create one</option>
+                                        <option value="Join">Join one</option>
+                                    </select>
                                 </div>
 
+                                {/* this section should be changeable according to the user pref */}
+                                {
+                                    userPreference === 'Create' ?
+                                        <div >
 
+
+                                            <input type="text" className={styles.projectName} placeholder="Type name of project..." onChange={(e) => setProjectNameCreate(e.target.value)} />
+
+                                            <button onClick={createProject} className={styles.createButton}>Create</button>
+                                        </div> :
+
+
+                                        <div >
+
+
+                                            <div>
+                                                <div className={styles.createProject}>
+
+                                                    <input type="text" className={styles.projectName} placeholder="Type name of project..." onChange={(e) => setJoinProject(e.target.value)} />
+                                                </div>
+                                                <div className={styles.joinProjectButtons}>
+                                                    <button onClick={joinProject} className={styles.createButton}>Join</button>
+                                                    <button onClick={showOldRequests} className={styles.requestButton}>Requests</button>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                }
                             </div>
 
                     }
-                </div>}
+                </div>
+            </div>
 
 
             {/* show the user it's requests data */}
@@ -479,12 +496,13 @@ export default function landing() {
             }
 
 
-            {successfulJoinRequest &&
+            {/* {
+            successfulJoinRequest &&
                 <div className={`${successfulJoinRequest} ? ${styles.successfullyInvited} : ' '`}>
                     <img src="/invite.png" alt="Successful invite icon" />
                     <p>Successfully invited</p>
                 </div>
-            }
+            } */}
         </main>
     )
 }

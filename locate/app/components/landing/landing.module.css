@@ -2,42 +2,54 @@
     font-family: 'ReadexPro';
     display: flex;
     flex-direction: column;
+    z-index: 2;
+    gap: 10px;
+   
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.512);
+    margin-left: -300px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    margin-top: 50px;
+    width: 400px;
+    color: white;
+    height: fit-content;
+    background-color: white;
+}
+
+.appName
+{
+    font-family: 'ReadexPro';
+    font-size: 40px;
+    text-align: left;
+    font-weight: 400;
+    padding-left: 5%;
+    padding-top: 5%;
+}
+
+
+.RowPage
+{
+    display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    position: relative;
-    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.512);
-    top: 20vh;
-    border: none;
-    border-radius: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
-    color: white;
-    padding: 20px;
-    background-color: black;
-
-
-
+    margin-left: -10%;
+    margin-top: -10%;
 }
 
-.createProject {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 10px;
-    font-family: 'ReadexPro';
-    font-size: 20px;
-    font-weight: 600;
-}
 
-.createProject input {
-    width: 400px;
+.projectName {
+    width: 100%;
     height: 50px;
     border: 1px solid rgba(0, 0, 0, 0.227);
-    border-radius: 5px;
+    border-radius: 0px;
     padding-left: 10px;
+    font-family: 'ReadexPro';
+}
+
+.projectName::placeholder
+{
+    font-weight: 100;
     font-family: 'ReadexPro';
 }
 
@@ -96,31 +108,43 @@
 }
 
 .requestButton {
-    background-color: transparent;
+    background-color: black;
     color: black;
     font-family: 'ReadexPro';
     width: 150px;
     height: 50px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    border-radius: 5px;
-    font-weight: 600;
+    border-radius: 0px;
+    font-size: 14px;
+    font-weight: 200;
+    transition: 0.3s;
     color: rgba(255, 255, 255, 0.577);
     box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.requestButton:hover
+{
+    color: white;
+}
+
+.requestButton:focus
+{
+    outline: none;
 }
 
 .createButton {
     background-color: black;
     color: white;
     font-family: 'ReadexPro';
-    width: 150px;
+    width: 100%;
     height: 50px;
     border: 1px solid rgba(255, 255, 255, 0.253);
     cursor: pointer;
-    border-radius: 5px;
-    font-weight: 600;
+    border-radius: 0px;
+    font-weight: 200;
 
-    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.1);
+    
 }
 
 
@@ -176,11 +200,52 @@
 
 .profileImage {
 
-    width: 100px;
-    height: 100px;
+    width: 40px;
+    height: 40px;
     border: none;
     border-radius: 50%;
     float: left;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+.topSection
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    height: 30%;
+    gap: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.255);
+}
+
+
+.userPreferenceText
+{
+    font-family: 'ReadexPro';
+    font-size: 20px;
+    color: black;
+    font-weight: 200;
+    margin-top: 15px;
+}
+
+.userPreferenceDropdown
+{
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    font-family: 'ReadexPro';
+    font-weight: 100;
+    font-size: 16px;
+    width: 100%;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    height: 60px;
+}
+
+.userPreferenceDropdown:focus
+{
+    outline: none;
 }
 
 .NewProjectPopup {
@@ -504,22 +569,17 @@
     }
 }
 
-@media (max-width: 425px) {
+@media (max-width: 430px) {
 
     .body {
 
         top: 20vh;
         position: relative;
         width: 87.5vw;
-
-
+        height: fit-content;
+        box-shadow: none;
     }
 
-
-    .createProject {
-        font-size: 1.5rem;
-        font-weight: 400;
-    }
 
     .createProject input {
         width: 100%;
@@ -565,7 +625,9 @@
     .createButton {
         width: 100%;
         font-weight: 400;
-        border: 0.5px solid white;
+        border: none;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
     }
 
     .createProject::placeholder {
@@ -583,13 +645,14 @@
     }
 
     .requestButton {
-
+        border: none;
         width: 100%;
         height: 50px;
         text-align: center;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
-
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
     }
 
     .projectName::placeholder {
@@ -716,5 +779,36 @@
 
     
 
+    .RowPage
+    {
+        margin-left: 0%;
+        margin-top: 0%;
+        flex-direction: column;
+    }
+
+    .appName
+    {
+        font-size: 32px;
+        font-weight: 200;
+        text-align: center;
+        padding-left: 0px;
+        margin-left: 40%;
+    }
+
+    .body
+    {
+        margin-left: 5%; 
+        position: relative;
+        /* margin-left: auto; */
+        margin-left: 45%;
+        /* margin-right: auto; */
+        margin-top: -77%;
+    }
+
+    .backImage
+    {
+        transform: rotate(35deg);
+        margin-left: 40%;
+    }
 
 }
