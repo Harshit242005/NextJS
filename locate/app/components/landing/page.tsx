@@ -339,7 +339,7 @@ export default function landing() {
 
             <p className={styles.appName}>ProjeKt</p>
             <div className={styles.RowPage}>
-                <Image className={styles.backImage} src="../../LandingPageBackImage.svg" height={200} width={200} alt="Background images" />
+                <Image className={styles.backImage} src="../../LandingPageBackImage.svg" height={500} width={500} alt="Background images" />
                 <div className={styles.body}>
 
 
