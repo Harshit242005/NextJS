@@ -35,9 +35,9 @@ export default function invited({ params }: { params: { inviteEmail: string, req
             }
         }
 
-        return () => {
-            checkRequestValidity();
-        }
+
+        checkRequestValidity();
+
     }, [params.requestId]);
 
 
