@@ -337,9 +337,9 @@ export default function landing() {
 
         <main >
 
-           <p className={styles.appName}>ProjeKt</p>
+            <p className={styles.appName}>ProjeKt</p>
             <div className={styles.RowPage}>
-                <Image className={styles.backImage} src="../../LandingPageBackImage.svg" height={500} width={500} alt="Background images" />
+                <Image className={styles.backImage} src="../../LandingPageBackImage.svg" height={200} width={200} alt="Background images" />
                 <div className={styles.body}>
 
 
@@ -347,29 +347,16 @@ export default function landing() {
                     {
                         projects && projects.length > 0 ?
                             <div className={styles.projectsData}>
-                                {/* projects exist then allow user to select one and navigate using dynamic routing  */}
-                                <p className={styles.projectsStatus}>Select Project</p>
-                                {/* building map button for the project */}
 
 
-                                {/* <div className="container">
-                        <div className={`${styles.projectsButton}`}>
-                            {projects.map((element, index) => (
-                                <div className="col-md-4 mb-3" key={index}>
-                                    <button className="btn btn-dark btn-lg btn-block"
-                                        style={{ fontSize: 16, width: 200, marginLeft: -15 }}
-                                        onClick={() => navigateProject(element)}
-                                    >{element}</button>
-                                </div>
-                            ))}
-                        </div>
-                    </div> */}
 
 
-                                <div className="container">
-                                    <button style={{ marginBottom: 25 }} onClick={() => setShowProjectOptions(true)} className={styles.projectButton}>Projects</button>
-                                </div>
-                                <button onClick={() => setShowCreateNewProject(true)} style={{ width: 200 }} className={styles.projectButton}>Create new project</button>
+
+
+
+                                <button  onClick={() => setShowProjectOptions(true)} className={styles.projectExistButton}>Projects</button>
+
+                                <button onClick={() => setShowCreateNewProject(true)}  className={styles.projectExistButton}>Create new project</button>
                             </div>
                             :
                             <div>

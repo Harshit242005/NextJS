@@ -11,6 +11,16 @@ export default function workspace() {
     // get the data from global context and present here in this 
     const { imageUrl, uid, email } = useGlobalUidContext();
     const [Name, setName] = useState<string>('');
+    console.log({
+        'Name': Name,
+        'Uid': uid,
+        'Email': email,
+        'ImageUrl': imageUrl,
+        'Status': false,
+        'Tasks': [],
+        'Projects': [],
+        'CompletedTasks': []
+    });
     const SaveUser = async () => {
         await addDoc(collection(firestore, 'Users'), {
             'Name': Name,

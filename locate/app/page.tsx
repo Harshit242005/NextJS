@@ -72,14 +72,16 @@ export default function Home() {
       // here we would set up the application side of our websocket 
       setUserId(result.user.uid);
       localStorage.setItem('UserUid', result.user.uid);
-
+      localStorage.setItem('UserName', result.user.displayName || '');
 
       if (result.user.photoURL != null) {
         setImageUrl(result.user.photoURL);
         localStorage.setItem('UserImageUrl', result.user.photoURL);
       }
       setEmail(result.user.email);
+      setUserName(result.user.displayName || '');
       localStorage.setItem('UserEmail', result.user.email || '');
+      setUid(result.user.uid);
       // setUserName(result.user.displayName);
 
       // Fetch the document corresponding to the user's UID
@@ -103,6 +105,8 @@ export default function Home() {
         // Document exists, navigate to the landing page
         router.push('/components/landing');
       } else {
+
+
         // Document doesn't exist, navigate to the workspace page
         router.push('/components/workspace');
       }
