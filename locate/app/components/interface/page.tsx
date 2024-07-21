@@ -323,12 +323,12 @@ export default function Interface() {
 
                 console.log(response);
 
-               
+
             }
-            
-             // invite sent successfully
-             setshowShare(!showShare);
-             setShareStatus('');
+
+            // invite sent successfully
+            setshowShare(!showShare);
+            setShareStatus('');
 
         }
 
@@ -354,7 +354,7 @@ export default function Interface() {
             const projectDocRef = query(collection(firestore, 'Projects'), where('members', "==", invite_uid));
             const projectDocRefSnapshot = await getDocs(projectDocRef);
             if (projectDocRefSnapshot.empty) {
-                await  sendInvite();
+                await sendInvite();
             }
             else {
                 // notify he is already in the group 
@@ -366,7 +366,7 @@ export default function Interface() {
 
 
 
-            
+
         }
 
 
@@ -398,6 +398,11 @@ export default function Interface() {
     const [uploadedImage, setUploadedImage] = useState<null | string>(null);
     const [showCompletedTask, setShowCompletedTask] = useState<boolean>(false);
     const [showProjects, setShowProjects] = useState<boolean>(false);
+
+    const openJoinDialog = () => {
+        setOpenJoinProject(true);
+        setShowProjects(false);
+    }
     const [completedTaskList, setCompletedTaskList] = useState<string[]>([]);
     const [projects, setProjectsName] = useState<string[]>([]);
 
@@ -525,28 +530,25 @@ export default function Interface() {
             try {
 
                 // Query for projects where the user is a member
-                const memberQuery = query(collection(firestore, 'Projects'), where('members', 'array-contains', uid));
+                const memberQuery = query(collection(firestore, 'Users'), where('Uid', '==', uid));
                 const memberSnap = await getDocs(memberQuery);
 
-                // Use a Set to store project names to avoid duplicates
-                const projectNamesSet: Set<string> = new Set();
+                if (!memberSnap.empty) {
+                    const all_projects = memberSnap.docs[0].data()['Projects'];
+                    console.log(all_projects);
+                    // Convert Set to Array and update the state
+                    setProjectsName(all_projects);
+                }
 
-                // Process member query results
-                memberSnap.forEach(doc => {
-                    const data = doc.data();
-                    projectNamesSet.add(data.projectName);
-                });
 
-                // Convert Set to Array and update the state
-                setProjectsName(Array.from(projectNamesSet));
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }
         };
 
-        if (uid) {
-            getProjects();
-        }
+       
+        getProjects();
+        
     }, [uid]);
 
     // showing data related to the project
@@ -576,6 +578,101 @@ export default function Interface() {
     const OpenShowTasks = () => {
         setOpenProfile(false);
         setShowTaskList(true);
+    }
+
+    const [openJoinProject, setOpenJoinProject] = useState(false);
+    const [joinProject, setJoinProject] = useState<string>('');
+
+
+    const addProjectNameInMap = async () => {
+        try {
+            // addingg the project name with false value in the map of the user document
+            const q = query(collection(firestore, 'Users'), where('Uid', '==', uid));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const documentId = querySnapshot.docs[0].id;
+                const documentData = querySnapshot.docs[0].data();
+
+                // Check if Requests map exists in the document data
+                const requestsMap = documentData.Requests || {};
+
+                // Check if the project name already exists in the requests map
+                if (!(joinProject in requestsMap)) {
+                    // Add the project name to the requests map with a false value
+                    requestsMap[joinProject] = false;
+
+                    // Update the user document with the modified requests map
+                    await updateDoc(doc(firestore, 'Users', documentId), { Requests: requestsMap });
+
+                    console.log('Project name added to the requests map successfully.');
+                } else {
+                    console.log('Project name already exists in the requests map.');
+                }
+
+            }
+            else {
+                console.log('user does not exist for updating his requests hash map');
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    // function for the join project, send request
+    const Join = async () => {
+        console.log('project name for join is', joinProject);
+        // add thje user uid in the requests list of the project by using the name 
+        try {
+            const q = query(collection(firestore, 'Projects'), where('projectName', '==', joinProject));
+            const querySnapshot = await getDocs(q);
+            // Check if any documents were found
+            if (!querySnapshot.empty) {
+                // Extract the document ID from the first document found
+                const documentId = querySnapshot.docs[0].id;
+                const documentData = querySnapshot.docs[0].data();
+
+                // Get the current requests array
+                let requests = documentData.requests || [];
+
+                // Check if the UID already exists in the requests array
+                if (!requests.includes(uid)) {
+                    // Push the new UID into the requests array
+                    requests.push(uid);
+                    console.log('UID added to requests successfully.');
+
+
+
+
+
+
+                } else {
+                    console.log('UID already exists in the requests array.');
+                }
+
+                // add the project name with the false value in the user Requests map if not already exist
+                await addProjectNameInMap();
+
+
+                // Update the Firestore document with the modified data
+                await updateDoc(doc(firestore, 'Projects', documentId), {
+                    requests: requests
+                });
+            } else {
+                console.log('no project with this name exist');
+                // show a dialog to the user about that no project with that name exist
+            }
+        }
+        catch (error) {
+            console.log('we have faced an error', error);
+        }
+
+
+        // close the dialogs for the join project
+        setOpenJoinProject(false);
+        setJoinProject('');
     }
 
 
@@ -842,6 +939,22 @@ export default function Interface() {
             }
 
 
+            {/* join project */}
+            {openJoinProject &&
+                <div className={styles.shareProject}>
+                    <p className={styles.inviteHeading}>Join project</p>
+                    {shareStatus && <p>{shareStatus}</p>}
+                    <div className={styles.InviteEmailSection}>
+                        <input className={styles.InviteEmail} type="text" placeholder="Type project name" onChange={(e) => setJoinProject(e.target.value)} value={joinProject} />
+                        <div className={styles.shareDivButtona}>
+                            <button className={styles.InviteEmailButton} onClick={Join}>Join</button>
+                            <button className={styles.closeShareButton} onClick={() => setOpenJoinProject(false)}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
             {/* user profile for the setting page  */}
             {openProfile &&
                 <div className={styles.showProfile} >
@@ -949,19 +1062,21 @@ export default function Interface() {
 
 
             {showProjects &&
-                <div className={styles.completedTask}>
-                    <div className={styles.completedTaskHeader}>
-                        <p className={styles.taskNameDialogHeading}>Projects</p>
-                        <button onClick={() => setShowProjects(false)} className={styles.closeCompletedTaskButton}><img src="/Cross.png" alt="close icon" /></button>
+                <div className={styles.userProjects}>
+                    <div className={styles.userProjectsHeader}>
+                        <p className={styles.userProjectsDialogHeading}>Projects</p>
+                        <button onClick={() => setShowProjects(false)} className={styles.closeCompletedUserProjectsButton}><img src="/Cross.png" alt="close icon" /></button>
                     </div>
+
                     {/* use map to show the data from the completed task list */}
-                    <div className={styles.completedTaskNames}>
+                    <div className={styles.userProjectsName}>
                         {projects.map((project, index) => (
-                            <div className={styles.taskName} onClick={() => selectedProject(project)}>
+                            <div className={styles.userProjectsNames} onClick={() => selectedProject(project)}>
                                 <p style={{ marginTop: 10 }} key={index}>{project}</p>
                             </div>
                         ))}
                     </div>
+                    <button onClick={openJoinDialog} className={styles.joinProjectButton}>Join Project</button>
                 </div>
             }
 

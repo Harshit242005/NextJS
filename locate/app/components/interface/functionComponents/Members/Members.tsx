@@ -169,7 +169,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             getDoc(docRef).then((document) => {
                 if (document.exists()) {
                     const memberIds = document.data().members || [];
-
+                    console.log(memberIds);
                     const filteredMemberIds = memberIds.filter((memberId: any) => memberId !== uid);
                     console.log('Filtered members of the projects are', filteredMemberIds);
 

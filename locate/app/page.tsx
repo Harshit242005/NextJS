@@ -22,6 +22,21 @@ export default function Home() {
   const { setUserId } = useGlobalSocketContext();
 
 
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 425);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
 
 
   const router = useRouter();
@@ -125,15 +140,16 @@ export default function Home() {
 
     // </main>
 
-    <main className={styles.landingPage}>
+    <main className={styles.landingPage} style={{ overflowY: 'scroll', scrollBehavior: 'smooth', height: '100vh', scrollbarWidth: 'none' }}>
 
 
       <div className={styles.FirstSection}>
-        <div className={styles.FirstSectionImage}>
-          <Image className={styles.FirstImage} src="./FirstImage.svg" alt="First Image" width={300} height={300} />
-          <Image className={styles.SecondImage} src="./SecondImage.svg" alt="Second Image" width={300} height={300} />
-          <Image className={styles.ThirdImage} src="./ThirdImage.svg" alt="" width={250} height={250} />
-        </div>
+
+        {isMobile ? <Image className={styles.DesktopLandingSectionImage} src="./LandingMobile.svg" alt="Landing Image" width={400} height={400} />
+          :
+          <Image src="./LandingDesktop.svg" alt="Landing Image" width={600} height={600} />
+        }
+
         <div className={styles.FistSectionApplicationImage}>
           <img src="./ApplicationFirstSectionIcon.svg" alt="" />
         </div>

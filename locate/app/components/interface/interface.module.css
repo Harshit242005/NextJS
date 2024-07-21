@@ -26,6 +26,12 @@
     border-radius: 50%;
 }
 
+.shareDivButtona {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 
 .showProfile {
     width: 600px;
@@ -319,8 +325,8 @@
     max-width: 100%;
     height: 100%;
     max-height: 100%;
- 
-  
+
+
 }
 
 
@@ -369,6 +375,21 @@
     font-size: 20px;
     font-weight: 200;
     color: black;
+    font-family: 'ReadexPro';
+}
+
+.closeShareButton {
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+    font-weight: 200;
+    text-align: center;
     font-family: 'ReadexPro';
 }
 
@@ -758,6 +779,8 @@
     font-weight: 400;
 }
 
+
+
 /* task list to show */
 .completedTask {
     display: flex;
@@ -774,6 +797,38 @@
     z-index: 999;
 }
 
+.joinProjectButton {
+    height: 55px;
+    width: 100%;
+    background-color: black;
+    border: none;
+    color: white;
+    font-family: 'ReadexPro';
+    text-align: center;
+    font-size: 16px;
+}
+
+.joinProjectButton:focus {
+    outline: none;
+}
+
+
+.userProjects {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 300px;
+    border: none;
+    border-radius: 5px;
+    position: absolute;
+    top: 25%;
+    left: 35%;
+    font-family: 'ReadexPro';
+    background-color: white;
+    z-index: 999;
+    box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.255);
+}
+
 .completedTaskHeader {
     height: 15%;
     display: flex;
@@ -785,7 +840,26 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
 
+.userProjectsHeader {
+    height: 15%;
+    display: flex;
+    flex-direction: row;
+    gap: 410px;
+    flex-direction: left;
+    align-items: center;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
 .taskNameDialogHeading {
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    padding-left: 10px;
+    margin-top: 10px;
+    width: 200px;
+}
+
+.userProjectsDialogHeading {
     font-family: 'ReadexPro';
     font-weight: 200;
     padding-left: 10px;
@@ -805,6 +879,20 @@
     outline: none;
 }
 
+.closeCompletedUserProjectsButton {
+    background-color: black;
+    border: none;
+    width: 70px;
+    height: 100%;
+    border-top-right-radius: 5px;
+}
+
+.closeCompletedUserProjectsButton:focus {
+    outline: none;
+}
+
+
+
 .completedTaskNames {
     display: flex;
     flex-direction: column;
@@ -818,6 +906,20 @@
     /* Adjust this value as needed to limit the height */
 }
 
+.userProjectsName {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0px;
+    gap: 5px;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    scroll-behavior: smooth;
+    height: 200px;
+    /* Optional: smooth scrolling behavior */
+    max-height: 200px;
+    /* Adjust this value as needed to limit the height */
+}
+
 .completedTaskNames::-webkit-scrollbar {
     width: 0;
     /* Remove scrollbar space */
@@ -825,7 +927,22 @@
     /* Optional: just make scrollbar invisible */
 }
 
+.userProjectsName::-webkit-scrollbar {
+    width: 0;
+    /* Remove scrollbar space */
+    background: transparent;
+    /* Optional: just make scrollbar invisible */
+}
+
 .taskName {
+    font-family: 'ReadexPro';
+    font-weight: 400;
+    background-color: #e8e8e86d;
+    padding-left: 10px;
+
+}
+
+.userProjectsNames {
     font-family: 'ReadexPro';
     font-weight: 400;
     background-color: #e8e8e86d;
@@ -1062,10 +1179,29 @@
         z-index: 999;
     }
 
+    
+    .userProjects {
+        display: flex;
+        flex-direction: column;
+        width: 87.5vw;
+        height: 300px;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+        position: absolute;
+        top: 25%;
+        left: 6%;
+        font-family: 'ReadexPro';
+        background-color: white;
+        z-index: 8;
+    }
+
     .completedTaskHeader {
-
         gap: 0px;
+    }
 
+    .userProjectsHeader
+    {
+        gap: 0px;
     }
 
     .taskNameDialogHeading {
@@ -1073,13 +1209,31 @@
         width: 71vw;
     }
 
-    .messageHeaderData
+    .userProjectsDialogHeading
     {
+        width: 71vw;
+    }
+
+    .messageHeaderData {
         gap: 15vw;
     }
 
 
     .completedTaskNames {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0px;
+        gap: 5px;
+        overflow-y: auto;
+        /* Enable vertical scrolling */
+        scroll-behavior: smooth;
+        /* Optional: smooth scrolling behavior */
+        max-height: 200px;
+        /* Adjust this value as needed to limit the height */
+    }
+
+    .userProjectsName
+    {
         display: flex;
         flex-direction: column;
         margin-top: 0px;
@@ -1099,12 +1253,27 @@
         /* Optional: just make scrollbar invisible */
     }
 
+    .userProjectsName::-webkit-scrollbar
+    {
+        width: 0;
+        /* Remove scrollbar space */
+        background: transparent;
+        /* Optional: just make scrollbar invisible */
+    }
+
     .taskName {
         font-family: 'ReadexPro';
         font-weight: 400;
         background-color: #e8e8e86d;
         padding-left: 10px;
+    }
 
+    .userProjectsNames
+    {
+        font-family: 'ReadexPro';
+        font-weight: 400;
+        background-color: #e8e8e86d;
+        padding-left: 10px;
     }
 
     .userFunctions {
@@ -1120,17 +1289,16 @@
         position: absolute;
         left: 6.5%;
         top: 30%;
+        z-index: 10;
     }
 
-    .shareDivButtona
-    {
+    .shareDivButtona {
         display: flex;
         flex-direction: row;
         gap: 10px;
     }
 
-    .closeShareButton
-    {
+    .closeShareButton {
         width: fit-content;
         height: fit-content;
         padding: 10px;
@@ -1153,6 +1321,10 @@
         width: 50vw;
     }
 
+    .joinProjectButton {
+        font-size: 14px;
+    }
+
 
 }
 
@@ -1161,6 +1333,10 @@
 
         gap: 24px;
     }
+
+    .joinProjectButton {
+        font-size: 14px;
+    }
 }
 
 
@@ -1168,5 +1344,9 @@
     .profileDescriptionHeader {
 
         gap: 66px;
+    }
+
+    .joinProjectButton {
+        font-size: 14px;
     }
 }
