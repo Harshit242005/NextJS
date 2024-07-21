@@ -141,6 +141,7 @@ export default function invited({ params }: { params: { inviteEmail: string, req
         const project_snapshot = await getDoc(project_ref);
         if (project_snapshot.exists()) {
             const members = project_snapshot.data().members;
+            
             const new_members = arrayUnion(...members, uid);
             await updateDoc(project_ref, { members: new_members });
         }

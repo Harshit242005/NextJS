@@ -263,7 +263,11 @@ export default function landing() {
         if (projectNameCreate.length != 0) {
             const documentData = {
                 'projectName': projectNameCreate,
-                'createdBy': uid
+                'createdBy': uid,
+                'requests': [],
+                'TasksIds': [],
+                'members': [],
+                
             }
 
 
@@ -336,8 +340,10 @@ export default function landing() {
     return (
 
         <main >
-
-            <p className={styles.appName}>ProjeKt</p>
+            <div className={styles.UserData}>
+                <img className={styles.userImage} src={imageUrl} alt="User Image" />
+                <p className={styles.appName}>ProjeKt</p>
+            </div>
             <div className={styles.RowPage}>
                 <Image className={styles.backImage} src="../../LandingPageBackImage.svg" height={500} width={500} alt="Background images" />
                 <div className={styles.body}>
@@ -346,19 +352,11 @@ export default function landing() {
 
                     {
                         projects && projects.length > 0 ?
-                            <div className={styles.projectsData}>12  
+                            <div className={styles.projectsData}>
 
-                            
+                                <button onClick={() => setShowProjectOptions(true)} className={styles.projectExistButton}>Projects</button>
 
-
-
-
-
-
-
-                                <button  onClick={() => setShowProjectOptions(true)} className={styles.projectExistButton}>Projects</button>
-
-                                <button onClick={() => setShowCreateNewProject(true)}  className={styles.projectExistButton}>Create new project</button>
+                                <button onClick={() => setShowCreateNewProject(true)} className={styles.projectExistButton}>Create new project</button>
                             </div>
                             :
                             <div>
