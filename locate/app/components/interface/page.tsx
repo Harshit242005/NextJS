@@ -41,7 +41,7 @@ export default function Interface() {
         };
     }, []);
 
-    console.log(new Date().toISOString());
+    // console.log(new Date().toISOString());
 
     const openMobileMenuSection = () => {
         console.log(isMobile, openMobileMenu);

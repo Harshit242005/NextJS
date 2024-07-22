@@ -7,10 +7,8 @@ import { useGlobalUidContext } from "@/app/context/uid"
 import { firestore } from "@/app/firebase"
 import { where, doc, getDoc, collection, query, onSnapshot, getDocs, orderBy, addDoc, updateDoc } from "firebase/firestore"
 import styles from './members.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faL, faMessage } from '@fortawesome/free-solid-svg-icons';
-import { useRouter } from "next/navigation"
-import Chat from "./Chat"
+import { PeerChatUseEffect } from "./PeerChat"
+
 
 
 // group chat message 
@@ -91,7 +89,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
     useEffect(() => {
 
-        console.log('project id is', projectId);
+
         const q = query(
             collection(firestore, 'GroupChat'),
             where('ProjectId', '==', projectId),
@@ -120,22 +118,19 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             // should add a for loop to iterate over the array to get the new userId added in the chatmessage viewedby
             for (const message of messages) {
                 const viewed_by = message.docData.ViewedBy || [];
+                const original_viewed_by = message.docData.ViewedBy || [];
                 const message_from = message.docData.From;
                 if (uid && !viewed_by.includes(uid) && message_from != uid) {
                     viewed_by.push(uid);
                 }
 
+                // if the change data does not change then you should not update it and thus can reduce the write operations
 
-
-                // update the message in the Firestore core itself
-                const docRef = doc(firestore, 'GroupChat', message.messageDoc);
-                updateDoc(docRef, { ViewedBy: viewed_by })
-                    .then(() => {
-                        console.log('updated the viewedby array of the doc');
-                    })
-                    .catch((error) => {
-                        console.error('facing error while updating the viewedby', error);
-                    });
+                if (original_viewed_by != viewed_by) {
+                    // update the message in the Firestore core itself
+                    const docRef = doc(firestore, 'GroupChat', message.messageDoc);
+                    updateDoc(docRef, { ViewedBy: viewed_by });
+                }
 
             }
 
@@ -177,9 +172,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             getDoc(docRef).then((document) => {
                 if (document.exists()) {
                     const memberIds = document.data().members || [];
-                    console.log(memberIds);
+                    // console.log(memberIds);
                     const filteredMemberIds = memberIds.filter((memberId: any) => memberId !== uid);
-                    console.log('Filtered members of the projects are', filteredMemberIds);
+                    // console.log('Filtered members of the projects are', filteredMemberIds);
 
                     const users_data: userData[] = [];
                     let completedRequests = 0;
@@ -206,9 +201,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                             // Increment the completedRequests counter and check if all requests are done
                             completedRequests += 1;
                             if (completedRequests === filteredMemberIds.length) {
-                                console.log(users_data);
+                                // console.log(users_data);
                                 setUsers(users_data);
-                                console.log('All users:', users_data);
+                                // console.log('All users:', users_data);
                             }
                         });
                     });
@@ -353,7 +348,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         if (index_number == selectedIndex) {
             setSelectedIndex(null);
             setMessageUid('');
-            console.log(messageUid, selectedIndex);
+            // console.log(messageUid, selectedIndex);
 
         }
         else {
@@ -387,7 +382,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     const chatTyping = async (message: string) => {
         const regex = /@\w+-\w+-\w+-\w+-\w+/g;
         const matches = message.match(regex);
-        console.log(matches);
+        // console.log(matches);
         if (matches) {
             const id = matches[0].slice(1); // Extract the first matched ID without the @
 
@@ -552,7 +547,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
     // function to navigate to the next Page
     const navigateToTask = (docData: string[]) => {
-        console.log(docData);
+        // console.log(docData);
 
 
         const taskId = docData[1];
@@ -633,123 +628,136 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
     }
 
-
-    // Getting the normal messaages 
-
-    useEffect(() => {
-
-
-
-        const q1 = query(
-            collection(firestore, 'Chats'),
-            where('From', '==', messageUid),
-            where('To', '==', uid),
-            orderBy('Date', 'asc')
-        );
-
-        // Define query q2
-        const q2 = query(
-            collection(firestore, 'Chats'),
-            where('From', '==', uid),
-            where('To', '==', messageUid),
-            orderBy('Date', 'asc')
-        );
-
-        // Listen to q1
-        const unsubscribeQ1 = onSnapshot(q1, (snapshot) => {
+    PeerChatUseEffect(
+        messageUid,
+        uid,
+        normalMessageIdsSet,
+        setNormalChatMessages,
+        setOtherPersonImageUrl
+    )
 
 
-            const messages: normalMessageDoc[] = [];
-            snapshot.forEach((doc) => {
-                console.log('q1 member query doc', doc);
-                const docId = doc.id as normalMessageDoc['messageDocId'];
-                if (!normalMessageIdsSet.has(docId)) {
-                    if (doc.data().Status !== true && doc.data().To === uid) {
-                        const docRef = doc.ref;
-                        updateDoc(docRef, { Status: true });
-                    }
-                    messages.push({
-                        messageDocId: doc.id,
-                        docData: doc.data() as normalMessageDoc['docData']
-                    });
-                    normalMessageIdsSet.add(docId);
+    // // Getting the normal messaages [ for peer to peer com,unication ]
+    // useEffect(() => {
+    //     const q1 = query(
+    //         collection(firestore, 'Chats'),
+    //         where('From', '==', messageUid),
+    //         where('To', '==', uid),
+    //         orderBy('Date', 'asc')
+    //     );
 
-                    // autoscroll the chat box div 
-                    const messageBox = document.getElementById('messageBox');
-                    if (messageBox) {
-                        messageBox.scrollTop = messageBox.scrollHeight;
-                    }
+    //     // Define query q2
+    //     const q2 = query(
+    //         collection(firestore, 'Chats'),
+    //         where('From', '==', uid),
+    //         where('To', '==', messageUid),
+    //         orderBy('Date', 'asc')
+    //     );
 
-
-                }
-                else {
-                    normalMessageIdsSet
-                }
-            });
-            console.log(normalChatMessages);
-            // Merge the messages from q1 with existing chatMessages
-            setNormalChatMessages((prevMessages) => [...prevMessages, ...messages]);
-        });
-
-        // Listen to q2
-        const unsubscribeQ2 = onSnapshot(q2, (snapshot) => {
-            const messages: normalMessageDoc[] = [];
-            snapshot.forEach((doc) => {
-                console.log('q2 member query doc', doc);
-                const docId = doc.id as normalMessageDoc['messageDocId'];
-                if (!normalMessageIdsSet.has(docId)) {
-                    if (doc.data().Status !== true && doc.data().To === uid) {
-                        const docRef = doc.ref;
-                        updateDoc(docRef, { Status: true });
-                    }
-                    messages.push({
-                        messageDocId: doc.id,
-                        docData: doc.data() as normalMessageDoc['docData']
-                    });
-
-                    normalMessageIdsSet.add(docId);
-
-                    // autoscroll the chat box div 
-                    const messageBox = document.getElementById('messageBox');
-                    if (messageBox) {
-                        messageBox.scrollTop = messageBox.scrollHeight;
-                    }
-
-                }
-                else {
-                    normalMessageIdsSet
-                }
-            });
-            console.log(normalChatMessages);
-            // Merge the messages from q2 with existing chatMessages
-            setNormalChatMessages((prevMessages) => [...prevMessages, ...messages]);
-        });
-
-        const getOtherPersonImageUrl = async () => {
-
-            const q = query(collection(firestore, 'Users'), where('Uid', "==", messageUid));
-
-            const usersDocs = await getDocs(q);
-
-            if (!usersDocs.empty) {
-                const userImage = usersDocs.docs[0].data().ImageUrl;
-                setOtherPersonImageUrl(userImage);
-            }
-
-        }
+    //     // Listen to q1
+    //     const unsubscribeQ1 = onSnapshot(q1, (snapshot) => {
 
 
+    //         const messages: normalMessageDoc[] = [];
+    //         snapshot.forEach((doc) => {
+
+    //             // console.log('q1 member query doc', doc);
+
+    //             const docId = doc.id as normalMessageDoc['messageDocId'];
+
+    //             if (!normalMessageIdsSet.has(docId)) {
+    //                 console.log(normalMessageIdsSet, docId);
+    //                 if (doc.data().Status !== true && doc.data().To === uid)
+    //                      {
+    //                     const docRef = doc.ref;
+    //                     updateDoc(docRef, { Status: true });
+    //                 }
+    //                 messages.push({
+    //                     messageDocId: doc.id,
+    //                     docData: doc.data() as normalMessageDoc['docData']
+    //                 });
+    //                 normalMessageIdsSet.add(docId);
+
+    //                 // autoscroll the chat box div 
+    //                 const messageBox = document.getElementById('messageBox');
+    //                 if (messageBox) {
+    //                     messageBox.scrollTop = messageBox.scrollHeight;
+    //                 }
 
 
-        // Clean up the listener when component unmounts
-        console.log('calling to load the member chats', messageUid, uid);
-        return () => {
-            unsubscribeQ1();
-            unsubscribeQ2();
-            getOtherPersonImageUrl();
-        }
+    //             }
+    //             else {
+    //                 console.log(normalMessageIdsSet);
+    //             }
+    //         });
+    //         console.log(normalChatMessages);
+    //         // Merge the messages from q1 with existing chatMessages
+    //         setNormalChatMessages((prevMessages) => [...prevMessages, ...messages]);
+    //     });
 
-    }, [messageUid]); // Empty dependency array to run only once when component mounts
+    //     // Listen to q2
+    //     const unsubscribeQ2 = onSnapshot(q2, (snapshot) => {
+    //         const messages: normalMessageDoc[] = [];
+    //         snapshot.forEach((doc) => {
+
+    //             // console.log('q2 member query doc', doc);
+    //             const docId = doc.id as normalMessageDoc['messageDocId'];
+    //             if (!normalMessageIdsSet.has(docId)) {
+    //                 console.log(normalMessageIdsSet, docId);
+
+
+    //                 if (doc.data().Status !== true && doc.data().To === uid) {
+    //                     const docRef = doc.ref;
+    //                     updateDoc(docRef, { Status: true });
+    //                 }
+    //                 messages.push({
+    //                     messageDocId: doc.id,
+    //                     docData: doc.data() as normalMessageDoc['docData']
+    //                 });
+
+    //                 normalMessageIdsSet.add(docId);
+
+    //                 // autoscroll the chat box div 
+    //                 const messageBox = document.getElementById('messageBox');
+    //                 if (messageBox) {
+    //                     messageBox.scrollTop = messageBox.scrollHeight;
+    //                 }
+
+    //             }
+    //             else {
+    //                 console.log(normalMessageIdsSet);
+    //             }
+    //         });
+    //         console.log(normalChatMessages);
+    //         // Merge the messages from q2 with existing chatMessages
+    //         setNormalChatMessages((prevMessages) => [...prevMessages, ...messages]);
+    //     });
+
+    //     const getOtherPersonImageUrl = async () => {
+
+    //         const q = query(collection(firestore, 'Users'), where('Uid', "==", messageUid));
+
+    //         const usersDocs = await getDocs(q);
+
+    //         if (!usersDocs.empty) {
+    //             const userImage = usersDocs.docs[0].data().ImageUrl;
+    //             setOtherPersonImageUrl(userImage);
+    //         }
+
+    //     }
+
+
+
+
+    //     // Clean up the listener when component unmounts
+    //     console.log('calling to load the member chats', messageUid, uid);
+    //     return () => {
+    //         unsubscribeQ1();
+    //         unsubscribeQ2();
+    //         getOtherPersonImageUrl();
+    //     }
+
+    // }, [messageUid]); // Empty dependency array to run only once when component mounts
 
 
 
