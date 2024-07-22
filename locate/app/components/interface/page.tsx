@@ -525,30 +525,56 @@ export default function Interface() {
     }
 
 
+    // useEffect(() => {
+    //     const memberQuery = query(collection(firestore, 'Users'), where('Uid', '==', uid));
+
+    //     const unsubscribe = onSnapshot(memberQuery, (querySnapshot) => {
+    //       if (!querySnapshot.empty) {
+    //         const memberSnap = querySnapshot.docs[0];
+    //         const all_projects = memberSnap.data()['Projects'];
+    //         const filter_projects = all_projects.filter(project => project !== projectName);
+
+    //         console.log(filter_projects);
+    //         setProjectsName(filter_projects);
+    //       }
+    //     });
+
+    //     // Clean up the listener when the component unmounts
+    //     return () => unsubscribe();
+    //   }, [uid, projectName, setProjectsName]);
+
+
     useEffect(() => {
-        const getProjects = async () => {
+
+        const memberQuery = query(collection(firestore, 'Users'), where('Uid', '==', uid));
+        const unsubscribe = onSnapshot(memberQuery, (querySnapshot) => {
             try {
 
-                // Query for projects where the user is a member
-                const memberQuery = query(collection(firestore, 'Users'), where('Uid', '==', uid));
-                const memberSnap = await getDocs(memberQuery);
 
-                if (!memberSnap.empty) {
-                    const all_projects = memberSnap.docs[0].data()['Projects'];
-                    console.log(all_projects);
-                    // Convert Set to Array and update the state
-                    setProjectsName(all_projects);
+
+                if (!querySnapshot.empty) {
+                    const memberSnap = querySnapshot.docs[0];
+                    const all_projects = memberSnap.data()['Projects'];
+                    const filter_projects = [];
+                    for (const project of all_projects) {
+                        if (project != projectName) {
+                            filter_projects.push(project);
+                        }
+                    }
+
+                    console.log(filter_projects);
+                    setProjectsName(filter_projects);
                 }
 
 
             } catch (error) {
                 console.error('Error fetching projects:', error);
             }
-        };
+        });
 
-       
-        getProjects();
-        
+
+        unsubscribe();
+
     }, [uid]);
 
     // showing data related to the project

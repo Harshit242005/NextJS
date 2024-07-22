@@ -88,12 +88,11 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         chatTyping(message);
     };
 
-    // for holding the query
-    let q
+    
     useEffect(() => {
 
         console.log('project id is', projectId);
-        q = query(
+        const q = query(
             collection(firestore, 'GroupChat'),
             where('ProjectId', '==', projectId),
             orderBy('Date', 'asc')
@@ -213,12 +212,13 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
         // clean up the listner after unmounting the component
 
-        if (messageUid == "") {
+        if (messageUid != '') {
             unsubscribe();
         }
 
+        
         getUsersData();
-
+        
 
 
 
@@ -330,15 +330,19 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
     const AddMessageTab = (Uid: string, index_number: number) => {
+        console.log(Uid, index_number, selectedIndex);
         if (index_number == selectedIndex) {
             setSelectedIndex(null);
+            setMessageUid('');
+
+            console.log(messageUid, selectedIndex);
         }
         else {
             setSelectedIndex(index_number);
+            setMessageUid(Uid);
         }
-        // setOpenMessage(true);
-        // setting up the new call up
-        setMessageUid(Uid);
+       
+        
         // close the chat options
         if (isMobile) {
             setOpenMobileChatMenu(!openMobileChatMenu);
@@ -596,7 +600,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
     const shiftMobileChatSidebar = () => {
-        console.log(openMobileChatMenu);
+        
 
         if (openMobileChatMenu == true) {
             setOpenMobileChatMenu(false);
@@ -604,7 +608,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         else {
             setOpenMobileChatMenu(true);
         }
-        console.log(openMobileChatMenu);
+       
     }
 
 
@@ -631,8 +635,11 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
         // Listen to q1
         const unsubscribeQ1 = onSnapshot(q1, (snapshot) => {
+
+
             const messages: normalMessageDoc[] = [];
             snapshot.forEach((doc) => {
+                console.log('q1 member query doc', doc);
                 const docId = doc.id as normalMessageDoc['messageDocId'];
                 if (!normalMessageIdsSet.has(docId)) {
                     if (doc.data().Status !== true && doc.data().To === uid) {
@@ -645,6 +652,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                     });
                     normalMessageIdsSet.add(docId);
                 }
+                else {
+                    normalMessageIdsSet
+                }
             });
             console.log(normalChatMessages);
             // Merge the messages from q1 with existing chatMessages
@@ -655,6 +665,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         const unsubscribeQ2 = onSnapshot(q2, (snapshot) => {
             const messages: normalMessageDoc[] = [];
             snapshot.forEach((doc) => {
+                console.log('q2 member query doc', doc);
                 const docId = doc.id as normalMessageDoc['messageDocId'];
                 if (!normalMessageIdsSet.has(docId)) {
                     if (doc.data().Status !== true && doc.data().To === uid) {
@@ -667,6 +678,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                     });
 
                     normalMessageIdsSet.add(docId);
+                }
+                else {
+                    normalMessageIdsSet
                 }
             });
             console.log(normalChatMessages);
@@ -691,10 +705,12 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
         // Clean up the listener when component unmounts
-
+        console.log('calling to load the member chats', messageUid, uid);
+        return () => {
         unsubscribeQ1();
         unsubscribeQ2();
         getOtherPersonImageUrl();
+        }
 
     }, [messageUid]); // Empty dependency array to run only once when component mounts
 

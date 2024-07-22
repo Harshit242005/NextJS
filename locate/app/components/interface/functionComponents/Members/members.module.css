@@ -669,11 +669,11 @@
     }
 
     .chatInput {
-        height: 25vh;
+        height: 26vh;
         display: flex;
         flex-direction: column;
-        width: 100vw;
-        max-width: 100vw;
+        width: 99.5vw;
+        max-width: 99.5vw;
         padding: 0px;
 
     }
@@ -694,7 +694,7 @@
     }
 
     .chatBox {
-        height: 71vh;
+        height: 70vh;
     }
 
     .chatReferenceCreated {
