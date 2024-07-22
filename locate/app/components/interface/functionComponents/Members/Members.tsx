@@ -88,7 +88,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         chatTyping(message);
     };
 
-    
+
     useEffect(() => {
 
         console.log('project id is', projectId);
@@ -108,6 +108,13 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                     messageDoc: doc.id,
                     docData: doc.data() as messageDoc['docData']
                 });
+
+                // autoscroll the chat box div 
+                const messageBox = document.getElementById('messageBox');
+                if (messageBox) {
+                    messageBox.scrollTop = messageBox.scrollHeight;
+                }
+
             });
 
             // should add a for loop to iterate over the array to get the new userId added in the chatmessage viewedby
@@ -136,6 +143,8 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
             setChatMessages(messages);
             // console.log(chatMessages);
+
+
 
 
             // store the message in the dict and then in the useState hook
@@ -216,32 +225,38 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             unsubscribe();
         }
 
-        
+
         getUsersData();
-        
+
 
 
 
     }, [projectId, projectName, messageUid]); // Listen for changes in projectId
 
+
+
     const messageBoxRef = useRef<HTMLDivElement>(null);
-    const isAtBottomRef = useRef<boolean>(true);
+    const isAtBottomRef = useRef<boolean>(false);
 
 
 
     useEffect(() => {
-        const messageBox = messageBoxRef.current;
+
+        // autoscroll the chat box div 
+        const messageBox = document.getElementById('messageBox');
         if (messageBox) {
-            if (isAtBottomRef.current) {
-                messageBox.scrollTop = messageBox.scrollHeight;
-            }
+            messageBox.scrollTop = messageBox.scrollHeight;
         }
+
     }, [chatMessages]);
 
 
 
+
     const handleScroll = () => {
-        const messageBox = messageBoxRef.current;
+
+        const messageBox = document.getElementById('messageBox');
+
         if (messageBox) {
             const isAtBottom = messageBox.scrollHeight - messageBox.scrollTop === messageBox.clientHeight;
             isAtBottomRef.current = isAtBottom;
@@ -249,7 +264,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     };
 
     useEffect(() => {
-        const messageBox = messageBoxRef.current;
+        // autoscroll the chat box div 
+        const messageBox = document.getElementById('messageBox');
+
         if (messageBox) {
 
             messageBox.addEventListener('scroll', handleScroll);
@@ -259,6 +276,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             };
         }
     }, []);
+
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -319,12 +337,13 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             setTaskDocument(null);
         }
         setMessageText('');
-        const messageBox = messageBoxRef.current;
+
+        // autoscroll the chat box div 
+        const messageBox = document.getElementById('messageBox');
         if (messageBox) {
-            if (isAtBottomRef.current) {
-                messageBox.scrollTop = messageBox.scrollHeight;
-            }
+            messageBox.scrollTop = messageBox.scrollHeight;
         }
+
 
     };
 
@@ -334,15 +353,18 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         if (index_number == selectedIndex) {
             setSelectedIndex(null);
             setMessageUid('');
-
             console.log(messageUid, selectedIndex);
+
         }
         else {
             setSelectedIndex(index_number);
             setMessageUid(Uid);
+
         }
-       
-        
+
+
+
+
         // close the chat options
         if (isMobile) {
             setOpenMobileChatMenu(!openMobileChatMenu);
@@ -600,7 +622,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
     const shiftMobileChatSidebar = () => {
-        
+
 
         if (openMobileChatMenu == true) {
             setOpenMobileChatMenu(false);
@@ -608,7 +630,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         else {
             setOpenMobileChatMenu(true);
         }
-       
+
     }
 
 
@@ -651,6 +673,14 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                         docData: doc.data() as normalMessageDoc['docData']
                     });
                     normalMessageIdsSet.add(docId);
+
+                    // autoscroll the chat box div 
+                    const messageBox = document.getElementById('messageBox');
+                    if (messageBox) {
+                        messageBox.scrollTop = messageBox.scrollHeight;
+                    }
+
+
                 }
                 else {
                     normalMessageIdsSet
@@ -678,6 +708,13 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                     });
 
                     normalMessageIdsSet.add(docId);
+
+                    // autoscroll the chat box div 
+                    const messageBox = document.getElementById('messageBox');
+                    if (messageBox) {
+                        messageBox.scrollTop = messageBox.scrollHeight;
+                    }
+
                 }
                 else {
                     normalMessageIdsSet
@@ -707,9 +744,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         // Clean up the listener when component unmounts
         console.log('calling to load the member chats', messageUid, uid);
         return () => {
-        unsubscribeQ1();
-        unsubscribeQ2();
-        getOtherPersonImageUrl();
+            unsubscribeQ1();
+            unsubscribeQ2();
+            getOtherPersonImageUrl();
         }
 
     }, [messageUid]); // Empty dependency array to run only once when component mounts
@@ -756,6 +793,12 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             const collectionRef = collection(firestore, 'Chats');
             await addDoc(collectionRef, messageData);
             setMessageText('');
+
+            // autoscroll the chat box div 
+            const messageBox = document.getElementById('messageBox');
+            if (messageBox) {
+                messageBox.scrollTop = messageBox.scrollHeight;
+            }
 
         }
     };
