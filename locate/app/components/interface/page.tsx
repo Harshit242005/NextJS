@@ -67,14 +67,10 @@ export default function Interface() {
     const [messageImageUrl, setMessagUserImageUrl] = useState<string>('');
     const [messageName, setMessageUserName] = useState<string>('');
     const [messageUserStatus, setMessageUserStatus] = useState<boolean>(false);
-    const [showDeleteButton, setShowDeleteButton] = useState<boolean>(false); // to hide and show the delete button for the message header
 
-    const changeDeleteButtonShow = () => {
-        setShowDeleteButton(!showDeleteButton)
-    }
+  
 
-    // to hold the function that i am going to call for the deletion of the chat
-    const [deleteFunction, setDeleteFunction] = useState<(() => void) | undefined>(undefined);
+ 
     const [openMessageMenu, setOpenMessageMenu] = useState<boolean>(false);
 
     // for the task status 
