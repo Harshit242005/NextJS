@@ -375,9 +375,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         });
 
         // Cleanup function to unsubscribe from snapshot listener
-    
+        return () => {
             unsubscribe();
-        
+        }
     }, [messageCollectionId]);
 
     const OpenChat = async (fromUid: string) => {
