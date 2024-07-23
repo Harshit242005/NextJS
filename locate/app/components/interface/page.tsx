@@ -151,11 +151,11 @@ export default function Interface() {
             const documents = await getDocs(q);
             if (!documents.empty) {
                 const createdBy = documents.docs[0].data().createdBy;
-                console.log('created by', createdBy);
-                console.log('uid is', uid);
+                // console.log('created by', createdBy);
+                // console.log('uid is', uid);
                 if (createdBy != uid) {
                     setIsProjectMember(true);
-                    console.log('is project member value ', isProjectMember);
+                    // console.log('is project member value ', isProjectMember);
                 }
             }
         }

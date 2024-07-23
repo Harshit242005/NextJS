@@ -669,7 +669,7 @@
     }
 
     .chatInput {
-        height: 28vh;
+        height: 30vh;
         display: flex;
         flex-direction: column;
         width: 99.5vw;

@@ -7,7 +7,7 @@ import { useGlobalUidContext } from "@/app/context/uid"
 import { firestore } from "@/app/firebase"
 import { where, doc, getDoc, collection, query, onSnapshot, getDocs, orderBy, addDoc, updateDoc } from "firebase/firestore"
 import styles from './members.module.css';
-import { PeerChatUseEffect } from "./PeerChat"
+
 
 
 
@@ -74,10 +74,16 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     const [messageText, setMessageText] = useState<string>('');
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [chatMessages, setChatMessages] = useState<messageDoc[]>([]);
+
+
     const [normalChatMessages, setNormalChatMessages] = useState<normalMessageDoc[]>([]);
+    const [messageCollectionId, setMessageCollectionId] = useState('');
+
+
     const [otherPersonImageUrl, setOtherPersonImageUrl] = useState('');
     const [openMobileChatMenu, setOpenMobileChatMenu] = useState<boolean>(false);
-    const normalMessageIdsSet = new Set<string>();
+    // const normalMessageIdsSet = new Set<string>();
+
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -343,17 +349,86 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     };
 
 
-    const AddMessageTab = (Uid: string, index_number: number) => {
+    useEffect(() => {
+        if (!messageCollectionId) {
+            console.log('messages collection ref id does not exist');
+        }; // If messageCollectionId is not set, don't run the effect
+
+        const messagesRef = query(
+            collection(firestore, 'Messages'),
+            where('ChatRefId', '==', messageCollectionId),
+            orderBy('Date', 'asc')
+        );
+
+        console.log('calling the messages from the chat reference');
+        const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
+            console.log('calling unsubscribe');
+            const messages: normalMessageDoc[] = [];
+            snapshot.forEach((doc) => {
+                messages.push({
+                    messageDocId: doc.id,
+                    docData: doc.data() as normalMessageDoc['docData']
+                });
+            });
+            console.log(messages);
+            setNormalChatMessages(messages);
+        });
+
+        // Cleanup function to unsubscribe from snapshot listener
+    
+            unsubscribe();
+        
+    }, [messageCollectionId]);
+
+    const OpenChat = async (fromUid: string) => {
+        console.log('calling open chat');
+        const chatCollectionRef = query(collection(firestore, 'Chats'), where('Members', 'array-contains-any', [fromUid, uid]));
+        const getChatCollection = await getDocs(chatCollectionRef);
+        let foundMessageCollectionId = '';
+
+        if (!getChatCollection.empty) {
+            getChatCollection.forEach((doc) => {
+                const memberArray = doc.data().Members;
+                console.log(memberArray);
+                if (memberArray && memberArray.includes(fromUid) && memberArray.includes(uid)) {
+                    foundMessageCollectionId = doc.id;
+                    console.log(foundMessageCollectionId);
+                    setMessageCollectionId(foundMessageCollectionId);
+                }
+            });
+        }
+
+        if (!foundMessageCollectionId) {
+            // Create a new chat document if it doesn't exist
+            const newChatDocRef = await addDoc(collection(firestore, 'Chats'), {
+                Members: [fromUid, uid]
+            });
+
+            const newChatDocId = newChatDocRef.id;
+            setMessageCollectionId(newChatDocId);
+        }
+    };
+
+    useEffect(() => {
+        if (messageUid) {
+            OpenChat(messageUid);
+        }
+    }, [messageUid]);
+
+    const AddMessageTab = async (Uid: string, index_number: number) => {
         console.log(Uid, index_number, selectedIndex);
         if (index_number == selectedIndex) {
             setSelectedIndex(null);
             setMessageUid('');
             // console.log(messageUid, selectedIndex);
-
+            setMessageCollectionId('');
         }
         else {
             setSelectedIndex(index_number);
             setMessageUid(Uid);
+
+            // // check for if the document exist in the chats collection 
+            // await OpenChat(Uid);
 
         }
 
@@ -628,13 +703,8 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
     }
 
-    PeerChatUseEffect(
-        messageUid,
-        uid,
-        normalMessageIdsSet,
-        setNormalChatMessages,
-        setOtherPersonImageUrl
-    )
+    // peer to peer chat messages 
+
 
 
     // // Getting the normal messaages [ for peer to peer com,unication ]
@@ -795,10 +865,11 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                 'MessageText': messageText.trim(),
                 'Timestamp': formattedTime,
                 'Status': false,
-                'Date': currentDate
+                'Date': currentDate,
+                'ChatRefId': messageCollectionId
             };
 
-            const collectionRef = collection(firestore, 'Chats');
+            const collectionRef = collection(firestore, 'Messages');
             await addDoc(collectionRef, messageData);
             setMessageText('');
 
@@ -1083,7 +1154,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
                         </div> :
 
-
+                        // this is for the normal peer to peer chats messages  
                         <div className={styles.RightContainer}>
                             <div className={styles.chatBox} id="messageBox" ref={messageBoxRef} onScroll={handleScroll}>
 
