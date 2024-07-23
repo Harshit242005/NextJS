@@ -251,6 +251,14 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
     }, [chatMessages]);
 
+    useEffect(() => {
+         // autoscroll the chat box div 
+         const messageBox = document.getElementById('messageBox');
+         if (messageBox) {
+             messageBox.scrollTop = messageBox.scrollHeight;
+         }
+    }, [normalChatMessages]);
+
 
 
 
@@ -379,6 +387,8 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             unsubscribe();
         }
     }, [messageCollectionId]);
+
+    
 
     const OpenChat = async (fromUid: string) => {
         console.log('calling open chat');

@@ -664,12 +664,17 @@
 
     }
 
+    .myNormalMessage
+    {
+        margin-left: 19%;
+    }
+
     .otherMessage {
         margin-left: 0px;
     }
 
     .chatInput {
-        height: 30vh;
+        height: 32vh;
         display: flex;
         flex-direction: column;
         width: 99.5vw;
@@ -829,6 +834,10 @@
         margin-left: 28%;
 
     }
+    .myNormalMessage
+    {
+        margin-left: 28%;
+    }
 }
 
 
@@ -836,5 +845,10 @@
     .myMessage {
         margin-left: 38%;
 
+    }
+
+    .myNormalMessage
+    {
+        margin-left: 38%;
     }
 }
