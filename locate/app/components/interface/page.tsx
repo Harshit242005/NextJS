@@ -933,7 +933,7 @@ export default function Interface() {
                                 :
                                 <div>
                                     {/* here the component should be rendered  */}
-                                    {currentComponent === 'Create task' && <CreateTask />}
+                                    {currentComponent === 'Create task' && <CreateTask setCurrentComponenet={setCurrentComponenet}/>}
                                     {currentComponent === 'Task status' && <TaskStatus setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} setTaskHeading={setTaskHeading} setTaskDocumentId={setTaskDocumentId} setTaskAuthor={setTaskAuthor} />}
                                     {currentComponent === 'Members' && <Members RemoveMessage={RemoveMessage} setTaskId={setTaskId} openMessage={openMessage} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} setOpenMessageMenu={setOpenMessageMenu} messageUid={messageUid} setMessageUid={setMessageUid} />}
                                     {/* this should be load conditionally */}

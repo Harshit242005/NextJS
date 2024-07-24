@@ -8,6 +8,24 @@
     font-family: 'ReadexPro';
 }
 
+.taskHeading
+{
+    font-family: 'ReadexPro';
+    font-size: 20px;
+    width: 50vw;
+    font-weight: 600;
+}
+
+.taskDescription
+{
+    font-weight: 200;
+    font-family: 'ReadexPro';
+    font-size: 16px;
+    width: 40vw;
+    height: 10vh;
+}
+
+
 .TaskCollection {
     display: flex;
     flex-direction: column;
@@ -110,7 +128,7 @@
 
 
 .attachmentButton {
-    background-color: black;
+    background-color: transparent;
     border: none;
     border-radius: 2px;
     font-family: 'ReadexPro';
@@ -160,9 +178,7 @@
     width: 100px;
 }
 
-.fileDialogBottom {
-    margin-top: 50px;
-}
+
 
 .cancelFileDialogButton {
     height: 100%;
@@ -213,6 +229,15 @@
     font-size: 16px;
     font-weight: 100;
     margin-top: 15px;
+}
+
+.fileDeadlineStatus
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    gap: 25px;
+    align-items: flex-end;
 }
 
 .closeFileDialog {

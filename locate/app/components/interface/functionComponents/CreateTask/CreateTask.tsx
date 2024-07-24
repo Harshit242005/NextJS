@@ -15,7 +15,13 @@ import Assignies from './assignies';
 import Image from 'next/image';
 import axios from 'axios';
 
-export default function CreateTask() {
+
+interface CreateTaskProps {
+    setCurrentComponenet: React.Dispatch<React.SetStateAction<string>>;
+}
+
+
+export default function CreateTask({setCurrentComponenet}: CreateTaskProps) {
 
 
 
@@ -276,18 +282,8 @@ export default function CreateTask() {
         });
         console.log(response);
 
-        // let releve the useState variable 
-        SetShowAssigniesOption(false);
-        setAttachedFiles(false);
-        setHeading('');
-        setDescription('');
-        setDeadline('');
-        setAssignies([]);
-        setFileObject(null);
-        setFileObjectForView({});
-        setOpenAttachmentView(false);
-
-        console.log(heading);
+        // navigate to the task status page 
+        setCurrentComponenet('Task status');
     }
 
 
