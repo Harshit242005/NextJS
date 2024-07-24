@@ -5,9 +5,9 @@ import { useState, useEffect, SetStateAction, useRef } from "react"
 import { useGlobalProjectIdContext } from "@/app/context/projectId"
 import { useGlobalUidContext } from "@/app/context/uid"
 import { firestore } from "@/app/firebase"
-import { where, doc, getDoc, collection, query, onSnapshot, getDocs, orderBy, addDoc, updateDoc } from "firebase/firestore"
+import { where, doc, getDoc, collection, query, onSnapshot, getDocs, orderBy, addDoc, updateDoc, deleteDoc } from "firebase/firestore"
 import styles from './members.module.css';
-
+import Image from "next/image"
 
 
 
@@ -66,7 +66,7 @@ interface MemberFunctionProps {
 }
 
 export default function Members({ RemoveMessage, setOpenMessage, setTaskId, messageUid, setCurrentComponenet, openMessageMenu, setOpenMessageMenu, setMessageUid, openMessage }: MemberFunctionProps) {
-    const { projectId, projectName } = useGlobalProjectIdContext();
+    const { projectId, projectName, projectCreator } = useGlobalProjectIdContext();
     const { uid } = useGlobalUidContext();
     const [users, setUsers] = useState<userData[]>([]);
     const [selectedButton, setSelectedButton] = useState(projectName);
@@ -76,6 +76,8 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     const [chatMessages, setChatMessages] = useState<messageDoc[]>([]);
 
 
+    const [enableSelectChats, setEnableSelectChats] = useState<boolean>(false);
+    const [openMessageFunctionButtons, setOpenMessageFunctionButtons] = useState<boolean>(false);
     const [normalChatMessages, setNormalChatMessages] = useState<normalMessageDoc[]>([]);
     const [messageCollectionId, setMessageCollectionId] = useState('');
 
@@ -252,11 +254,11 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     }, [chatMessages]);
 
     useEffect(() => {
-         // autoscroll the chat box div 
-         const messageBox = document.getElementById('messageBox');
-         if (messageBox) {
-             messageBox.scrollTop = messageBox.scrollHeight;
-         }
+        // autoscroll the chat box div 
+        const messageBox = document.getElementById('messageBox');
+        if (messageBox) {
+            messageBox.scrollTop = messageBox.scrollHeight;
+        }
     }, [normalChatMessages]);
 
 
@@ -371,24 +373,44 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         console.log('calling the messages from the chat reference');
         const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
             console.log('calling unsubscribe');
+
             const messages: normalMessageDoc[] = [];
-            snapshot.forEach((doc) => {
+            snapshot.forEach(async (document) => {
+                if (!document.data()['Status']) {
+                    const messageChatDocRef = doc(firestore, 'Messages', document.id);
+                    await updateDoc(messageChatDocRef, { Status: true });
+                }
+
                 messages.push({
-                    messageDocId: doc.id,
-                    docData: doc.data() as normalMessageDoc['docData']
+                    messageDocId: document.id,
+                    docData: document.data() as normalMessageDoc['docData']
                 });
             });
             console.log(messages);
             setNormalChatMessages(messages);
         });
 
+        const getOtherPersonImageUrl = async () => {
+
+            const q = query(collection(firestore, 'Users'), where('Uid', "==", messageUid));
+
+            const usersDocs = await getDocs(q);
+
+            if (!usersDocs.empty) {
+                const userImage = usersDocs.docs[0].data().ImageUrl;
+                setOtherPersonImageUrl(userImage);
+            }
+
+        }
+
         // Cleanup function to unsubscribe from snapshot listener
         return () => {
             unsubscribe();
+            getOtherPersonImageUrl();
         }
-    }, [messageCollectionId]);
+    }, [messageCollectionId, messageUid]);
 
-    
+
 
     const OpenChat = async (fromUid: string) => {
         console.log('calling open chat');
@@ -432,6 +454,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             setMessageUid('');
             // console.log(messageUid, selectedIndex);
             setMessageCollectionId('');
+
         }
         else {
             setSelectedIndex(index_number);
@@ -439,10 +462,10 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
             // // check for if the document exist in the chats collection 
             // await OpenChat(Uid);
-
         }
 
-
+        setSelectedMessages([]);
+        setEnableSelectChats(false);
 
 
         // close the chat options
@@ -713,131 +736,6 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
     }
 
-    // peer to peer chat messages 
-
-
-
-    // // Getting the normal messaages [ for peer to peer com,unication ]
-    // useEffect(() => {
-    //     const q1 = query(
-    //         collection(firestore, 'Chats'),
-    //         where('From', '==', messageUid),
-    //         where('To', '==', uid),
-    //         orderBy('Date', 'asc')
-    //     );
-
-    //     // Define query q2
-    //     const q2 = query(
-    //         collection(firestore, 'Chats'),
-    //         where('From', '==', uid),
-    //         where('To', '==', messageUid),
-    //         orderBy('Date', 'asc')
-    //     );
-
-    //     // Listen to q1
-    //     const unsubscribeQ1 = onSnapshot(q1, (snapshot) => {
-
-
-    //         const messages: normalMessageDoc[] = [];
-    //         snapshot.forEach((doc) => {
-
-    //             // console.log('q1 member query doc', doc);
-
-    //             const docId = doc.id as normalMessageDoc['messageDocId'];
-
-    //             if (!normalMessageIdsSet.has(docId)) {
-    //                 console.log(normalMessageIdsSet, docId);
-    //                 if (doc.data().Status !== true && doc.data().To === uid)
-    //                      {
-    //                     const docRef = doc.ref;
-    //                     updateDoc(docRef, { Status: true });
-    //                 }
-    //                 messages.push({
-    //                     messageDocId: doc.id,
-    //                     docData: doc.data() as normalMessageDoc['docData']
-    //                 });
-    //                 normalMessageIdsSet.add(docId);
-
-    //                 // autoscroll the chat box div 
-    //                 const messageBox = document.getElementById('messageBox');
-    //                 if (messageBox) {
-    //                     messageBox.scrollTop = messageBox.scrollHeight;
-    //                 }
-
-
-    //             }
-    //             else {
-    //                 console.log(normalMessageIdsSet);
-    //             }
-    //         });
-    //         console.log(normalChatMessages);
-    //         // Merge the messages from q1 with existing chatMessages
-    //         setNormalChatMessages((prevMessages) => [...prevMessages, ...messages]);
-    //     });
-
-    //     // Listen to q2
-    //     const unsubscribeQ2 = onSnapshot(q2, (snapshot) => {
-    //         const messages: normalMessageDoc[] = [];
-    //         snapshot.forEach((doc) => {
-
-    //             // console.log('q2 member query doc', doc);
-    //             const docId = doc.id as normalMessageDoc['messageDocId'];
-    //             if (!normalMessageIdsSet.has(docId)) {
-    //                 console.log(normalMessageIdsSet, docId);
-
-
-    //                 if (doc.data().Status !== true && doc.data().To === uid) {
-    //                     const docRef = doc.ref;
-    //                     updateDoc(docRef, { Status: true });
-    //                 }
-    //                 messages.push({
-    //                     messageDocId: doc.id,
-    //                     docData: doc.data() as normalMessageDoc['docData']
-    //                 });
-
-    //                 normalMessageIdsSet.add(docId);
-
-    //                 // autoscroll the chat box div 
-    //                 const messageBox = document.getElementById('messageBox');
-    //                 if (messageBox) {
-    //                     messageBox.scrollTop = messageBox.scrollHeight;
-    //                 }
-
-    //             }
-    //             else {
-    //                 console.log(normalMessageIdsSet);
-    //             }
-    //         });
-    //         console.log(normalChatMessages);
-    //         // Merge the messages from q2 with existing chatMessages
-    //         setNormalChatMessages((prevMessages) => [...prevMessages, ...messages]);
-    //     });
-
-    //     const getOtherPersonImageUrl = async () => {
-
-    //         const q = query(collection(firestore, 'Users'), where('Uid', "==", messageUid));
-
-    //         const usersDocs = await getDocs(q);
-
-    //         if (!usersDocs.empty) {
-    //             const userImage = usersDocs.docs[0].data().ImageUrl;
-    //             setOtherPersonImageUrl(userImage);
-    //         }
-
-    //     }
-
-
-
-
-    //     // Clean up the listener when component unmounts
-    //     console.log('calling to load the member chats', messageUid, uid);
-    //     return () => {
-    //         unsubscribeQ1();
-    //         unsubscribeQ2();
-    //         getOtherPersonImageUrl();
-    //     }
-
-    // }, [messageUid]); // Empty dependency array to run only once when component mounts
 
 
 
@@ -893,17 +791,63 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     };
 
 
+    const [selectedMessages, setSelectedMessages] = useState<string[]>([]);
+
+
+    const SelectMessage = (fromUid: string, docId: string) => {
+        if (fromUid === uid) {
+            if (!selectedMessages.includes(docId)) {
+                setSelectedMessages([...selectedMessages, docId]);
+            } else {
+                // filter out the doc id from the messages that has been selected 
+                const filteredMessages = selectedMessages.filter((id) => id !== docId);
+                setSelectedMessages(filteredMessages);
+            }
+        }
+    };
+
+
+    // Handler for single click
+    const handleSingleClick = (fromUid: string, docId: string) => {
+        console.log('handle click for chat is clicked', enableSelectChats, selectedMessages);
+        if (enableSelectChats) {
+            SelectMessage(fromUid, docId);
+        }
+
+    };
+
+
+    const DeleteSelectedChats = async  () => {
+        console.log(selectedMessages);
+        // delete the selected chats
+        for (const deleteMessageId of selectedMessages) {
+            console.log(deleteMessageId);
+            const docRef = doc(firestore, 'Messages', deleteMessageId);
+            await deleteDoc(docRef);
+        }
+
+        setSelectedMessages([]);
+        setEnableSelectChats(false);
+        setOpenMessageFunctionButtons(false);
+    }
+
+
+    const enableChatSelection = () => {
+        setEnableSelectChats(!enableSelectChats);
+        setOpenMessageFunctionButtons(false);
+    }
+
 
     return (
         <main className={styles.ChatInterface}>
             {/* need to develop a header in this */}
             {
                 isMobile ?
-                    <div onClick={shiftMobileChatSidebar} className={styles.selectMemberOption}>
+                    <div className={styles.selectMemberOption}>
                         {/* selected member should be shown here in this  */}
                         {messageUid != "" ?
                             <div className={styles.messageHeaderMenuRow}>
-                                <div className={styles.messageHeaderData}>
+                                <div className={styles.messageHeaderData} onClick={shiftMobileChatSidebar} >
 
                                     <div className={styles.messageUserStatus}>
 
@@ -918,10 +862,10 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
                                 {/* menu button for the member */}
-                                <button onClick={() => setOpenMessageMenu(!openMessageMenu)} className={styles.menuButtonMessage}><img src="/MenuVertical.png" alt="Menu button" /></button>
+                                <button onClick={() => setOpenMessageFunctionButtons(!openMessageFunctionButtons)} className={styles.menuButtonMessage}><img src="/MenuVertical.png" alt="Menu button" /></button>
                             </div>
                             :
-                            <p className={styles.projectNameButtonSwitch}>{projectName}</p>
+                            <p onClick={shiftMobileChatSidebar} className={styles.projectNameButtonSwitch}>{projectName}</p>
                         }
                     </div>
                     :
@@ -942,9 +886,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
                                 {users.map((user, index) => (
 
-                                    <div key={user.Uid} onClick={() => AddMessageTab(user.Uid, index)} className={`${index == selectedIndex ? styles.selectedMemberRow : styles.MemberRow}`}>
+                                    <div key={user.Uid} className={`${index == selectedIndex ? styles.selectedMemberRow : styles.MemberRow}`}>
 
-                                        <div className={styles.memberData}>
+                                        <div className={styles.memberData} onClick={() => AddMessageTab(user.Uid, index)}>
 
                                             <div className={styles.userStatusRow}>
                                                 <img className={styles.userImage} src={user.ImageUrl} alt={user.Name} />
@@ -955,6 +899,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
                                         </div>
 
+                                        {!isMobile && index == selectedIndex && <button onClick={() => setOpenMessageFunctionButtons(!openMessageFunctionButtons)} className={styles.messageMenuButton}><Image src="../../MenuVerticalWhite.svg" width={25} height={25} alt="vertical menu icon" /></button>}
                                     </div>
 
                                 ))}
@@ -1170,23 +1115,27 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
 
 
 
-                                {normalChatMessages.length != 0 ?
-                                    Object.keys(normalMessages).map(date => (
-                                        <div key={date}>
-                                            <div className={styles.normalDateHeader}>{date}</div>
-                                            {normalMessages[date].map((message) => (
-                                                <div style={{ marginTop: 10 }} key={message.messageDocId} className={`${message.docData.From === uid ? styles.myNormalMessage : styles.otherNormalMessage}`} id={message.messageDocId}>
-                                                    <p>{message.docData.MessageText}</p>
-                                                    <div className={`${message.docData.From === uid ? styles.myChatMessageData : styles.chatMessageData}`}>
-                                                        <p>{message.docData.Timestamp}</p>
-                                                        {message.docData.Status && message.docData.From === uid ? <img className={styles.otherPersonImage} src={otherPersonImageUrl} alt="Other person image" /> : ''}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )
+                                {
+                                    normalChatMessages.length != 0 ?
+                                        Object.keys(normalMessages).map(date => (
+                                            <div key={date}>
+                                                <div className={styles.normalDateHeader}>{date}</div>
+                                                {normalMessages[date].map((message) => (
+                                                    <div style={{ marginTop: 10 }} key={message.messageDocId}
+                                                        onClick={() => handleSingleClick(message.docData.From, message.messageDocId)}
 
-                                    ) : <p className={styles.noMember}>No messsages</p>
+                                                        className={`${selectedMessages.includes(message.messageDocId) ? styles.myNormalSelectedMessage : message.docData.From == uid ? styles.myNormalMessage : styles.otherNormalMessage}`} id={message.messageDocId}>
+                                                        <p>{message.docData.MessageText}</p>
+                                                        <div className={`${message.docData.From === uid ? styles.myChatMessageData : styles.chatMessageData}`}>
+                                                            <p>{message.docData.Timestamp}</p>
+                                                            {message.docData.Status && message.docData.From === uid ? <img className={styles.otherPersonImage} src={messageImageUrl} alt="Other person image" /> : ''}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )
+
+                                        ) : <p className={styles.noMember}>No messsages</p>
                                 }
 
 
@@ -1230,6 +1179,26 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                         </div>
                 }
             </div>
+
+
+            {
+                openMessageFunctionButtons &&
+                <div className={styles.chatFunctionsDialog}>
+                    {
+                        projectCreator == uid ?
+                            <div className={styles.chatFunctionButtons}>
+                                <button className={styles.chatFunctionButton}>Remove User</button>
+                                <button onClick={DeleteSelectedChats} className={styles.chatFunctionButton}>Delete Chats</button>
+                                <button onClick={enableChatSelection} className={styles.chatFunctionButton}>{enableSelectChats ? 'Disable Selection' : 'Enable Selection'}</button>
+                            </div> :
+                            <div className={styles.chatFunctionButtons}>
+                                <button onClick={DeleteSelectedChats} className={styles.chatFunctionButton}>Delete Chats</button>
+                                <button onClick={enableChatSelection} className={`${enableSelectChats ? styles.enableChatFunctionButton : styles.chatFunctionButton}`}>{enableSelectChats ? 'Disable Selection' : 'Enable Selection'}</button>
+                            </div>
+                    }
+                </div>
+            }
+
 
 
             {
