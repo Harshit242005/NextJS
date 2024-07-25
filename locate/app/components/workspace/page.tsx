@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 export default function workspace() {
     const router = useRouter();
     // get the data from global context and present here in this 
-    const { imageUrl, uid, email } = useGlobalUidContext();
+    const { imageUrl, uid, email, setUserName } = useGlobalUidContext();
     const [Name, setName] = useState<string>('');
     console.log({
         'Name': Name,
@@ -22,6 +22,7 @@ export default function workspace() {
         'CompletedTasks': []
     });
     const SaveUser = async () => {
+        setUserName(Name);
         await addDoc(collection(firestore, 'Users'), {
             'Name': Name,
             'Uid': uid,
