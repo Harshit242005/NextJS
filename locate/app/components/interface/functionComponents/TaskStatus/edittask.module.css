@@ -1,3 +1,48 @@
+
+
+.DesktopTaskShowData
+{
+    padding-left: 10px;
+    padding-top: 10px;
+    height: 80vh;
+    max-height: 80vh;
+    overflow-y: auto;
+    scroll-behavior: auto;
+}
+
+.DesktopTaskShowData::-webkit-scrollbar
+{
+    width: none;
+    display: none;
+}
+
+
+/* .datepickerContainer {
+    margin-top: -15px;
+    height: 40px;
+} */
+
+.datepicker {
+    width: 400px;
+    padding-left: 10px;
+    border: 0.5px solid rgba(0, 0, 0, 0.343);
+    border-radius: 5px;
+    color: rgba(0, 0, 0, 0.263);
+    font-family: 'ReadexPro';
+    height: 50px;
+    margin-top: 5px;
+    padding: 5px;
+    padding-left: 10px;
+    background-color: white;
+}
+
+
+
+.datepicker:focus {
+    outline: 1px solid #D99BFF;
+}
+
+
 .assignieImage {
     width: 50px;
     height: 50px;
@@ -5,6 +50,7 @@
     border-radius: 50%;
     margin-left: -25px;
 }
+
 
 .assignieImageRow {
     display: flex;
@@ -327,6 +373,12 @@
 
     }
 
+    .datepicker {
+        width: 87.5vw;
+        height: 40px;
+
+    }
+
 
     .textHeading:focus {
         outline: 0.5px solid black;
@@ -372,7 +424,7 @@
         flex-direction: column;
         justify-content: left;
         align-items: flex-start;
-        margin-left: 15px;
+        margin-left: 25px;
         margin-top: 10px;
     }
 

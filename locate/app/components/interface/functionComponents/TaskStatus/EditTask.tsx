@@ -8,9 +8,10 @@ import { useGlobalUidContext } from '@/app/context/uid';
 interface EditTask {
     taskDocumentId: string;
     isMobile: boolean;
+    deleteTask: () => void;
 }
 
-export default function EditTask({ taskDocumentId, isMobile }: EditTask) {
+export default function EditTask({ taskDocumentId, isMobile, deleteTask }: EditTask) {
     const [taskHeading, setTaskHeading] = useState<string>('');
     const [taskDescription, setTaskDescription] = useState<string>('');
     const [taskDeadline, setTaskDeadline] = useState('');
@@ -283,8 +284,27 @@ export default function EditTask({ taskDocumentId, isMobile }: EditTask) {
 
 
 
+
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const date = event.target.value; // This will give you the date as a string in YYYY-MM-DD format
+        setTaskDeadline(date);
+        console.log('Selected Date type:', typeof date); // Log the selected date
+    };
+
+    const handleFocus = (event: { target: { type: string; }; }) => {
+        event.target.type = 'date';
+    };
+
+    const handleBlur = (event: { target: { value: string; type: string; }; }) => {
+        if (event.target.value === '') {
+            event.target.type = 'text';
+        }
+    };
+
+
+
     return (
-        <main className={`${isMobile ? styles.mobileTaskShowData : ''}`}>
+        <main className={`${isMobile ? styles.mobileTaskShowData : styles.DesktopTaskShowData}`}>
             <div className={styles.headRowData}>
                 {/* column for the doc heading */}
                 <div className={styles.headData}>
@@ -295,11 +315,21 @@ export default function EditTask({ taskDocumentId, isMobile }: EditTask) {
                 <div className={styles.headData}>
                     <p className={styles.heading}>Deadline</p>
                     {/* deadline showing  */}
-                    <div className={styles.deadlineBox} >
-                        <div className={`${uid == createdBy ? styles.deadlineData : styles.nodeadlineData}`}>
-                            <img src='/Calendar.png' /><p className={styles.deadline}>{taskDeadline}</p>
-                        </div>
+
+                    <div className={styles.datepickerContainer}>
+                        <input
+                            placeholder='Select deadline...'
+                            onChange={handleDateChange}
+                            value={taskDeadline}
+                            className={styles.datepicker}
+                            type="text"
+                            onFocus={handleFocus}
+                            onBlur={handleBlur}
+                        />
+                        {/* <input type="date" onChange={handleDateChange} value={deadline} className={styles.datepicker} placeholder='Select deadline...' /> */}
                     </div>
+
+
                 </div>
             </div>
             <div className={`${isMobile ? styles.mobileColData : ''}`}>
@@ -325,7 +355,9 @@ export default function EditTask({ taskDocumentId, isMobile }: EditTask) {
                         </div>
                         <p className={styles.assignieText}>Assignees</p>
                     </div>
+
                     <button className={`${uid == createdBy ? styles.updateTaskButton : styles.noUpdateTaskButton}`}>Update Task</button>
+                    {uid == createdBy && !isMobile && <button onClick={() => deleteTask} className={styles.updateTaskButton}>Delete task</button>}
                 </div>
             </div>
 
@@ -348,14 +380,14 @@ export default function EditTask({ taskDocumentId, isMobile }: EditTask) {
                                 )) :
                                 <p className={styles.noFileToShow}>No file to show!</p>
                         }
-                       
+
                     </div>
                     <input type="file"
-                            style={{ display: 'none' }}
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            multiple />
-                        <button onClick={handleButtonClick} className={`${uid == createdBy ? styles.addFileButton : styles.noAddFileButton}`}>Add files</button>
+                        style={{ display: 'none' }}
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        multiple />
+                    <button onClick={handleButtonClick} className={`${uid == createdBy ? styles.addFileButton : styles.noAddFileButton}`}>Add files</button>
                 </div>
             }
 

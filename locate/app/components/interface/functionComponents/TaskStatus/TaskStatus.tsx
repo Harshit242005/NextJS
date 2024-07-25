@@ -169,8 +169,9 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
         setOpenTask(true);
         setTaskHeading(taskHeading);
         setTaskDocumentId(documentId);
-        setCurrentComponenet('EditTask');
+        
         setTaskAuthor(createdBy);
+        setCurrentComponenet('EditTask');
     }
 
 

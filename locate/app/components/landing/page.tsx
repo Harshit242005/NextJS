@@ -52,7 +52,7 @@ export default function landing() {
     }, []);
 
     useEffect(() => {
-        const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid));
+        const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid ));
 
         // Set up a real-time listener
         const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
@@ -75,14 +75,14 @@ export default function landing() {
 
         return () => unsubscribe();
 
-    }, [uid]);
+    }, [uid ]);
 
     // show the requests 
     const showOldRequests = async () => {
         setShowRequest(true);
         // get the requests map with the project name and boolean value 
         // addingg the project name with false value in the map of the user document
-        const q = query(collection(firestore, 'Users'), where('Uid', '==', uid));
+        const q = query(collection(firestore, 'Users'), where('Uid', '==', uid ));
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
@@ -208,10 +208,10 @@ export default function landing() {
                 const data = documents.docs[0].data();
                 const docRef = doc(firestore, 'Projects', documentId)
                 const requestsList = data.requests;
-                if (requestsList.includes(uid)) {
+                if (requestsList.includes(uid )) {
                     // Remove MemberId from requests list
                     // const updatedRequestsList = arrayRemove(requestsList, MemberId);
-                    const updatedRequestsList = removeFromArray(requestsList, uid);
+                    const updatedRequestsList = removeFromArray(requestsList, uid );
                     console.log('Updated list after removing the id', updatedRequestsList);
 
                     // Update the document with the modified requests list
@@ -230,7 +230,7 @@ export default function landing() {
         // second step 
         // remove from the map as well 
         try {
-            const q = query(collection(firestore, 'Users'), where('Uid', "==", uid))
+            const q = query(collection(firestore, 'Users'), where('Uid', "==", uid ))
             const documents = await getDocs(q)
             if (!documents.empty) {
                 const documentId = documents.docs[0].id;
@@ -263,7 +263,7 @@ export default function landing() {
         if (projectNameCreate.length != 0) {
             const documentData = {
                 'projectName': projectNameCreate,
-                'createdBy': uid,
+                'createdBy': uid ,
                 'requests': [],
                 'TasksIds': [],
                 'members': [],
@@ -285,9 +285,13 @@ export default function landing() {
             // setting the project name for the global context
             setProjectName(projectName);
 
+            localStorage.setItem('ProjectId', document_id);
+            localStorage.setItem('ProjectName', projectName);
+            localStorage.setItem('ProjectCreator', localStorage.getItem('UserId') || '');
+
             // update the user profile to to add the project name in the user document
             const userRef = collection(firestore, 'Users');
-            const querySnapshot = query(userRef, where('Uid', '==', uid));
+            const querySnapshot = query(userRef, where('Uid', '==', uid ));
             const userDocs = await getDocs(querySnapshot);
             if (!userDocs.empty) {
                 const userDocument = userDocs.docs[0];
@@ -316,10 +320,12 @@ export default function landing() {
     const navigateProject = async (projectName: string) => {
 
         setProjectName(projectName);
+        localStorage.setItem('ProjectName', projectName);
         // get the project id from the project name and then set up the context value and then navigate to it 
         // defining the project id for the name 
         const projectDocumentId = await getDocumentId(projectName);
         setProjectId(projectDocumentId);
+        localStorage.setItem('ProjectId', projectDocumentId);
 
         // get the creatorid from the document of the project
         const projectDocRef = doc(firestore, 'Projects', projectDocumentId);
@@ -327,6 +333,7 @@ export default function landing() {
         if (docSnapshot.exists()) {
             const creator = docSnapshot.data().createdBy;
             setProjectCreator(creator)
+            localStorage.setItem('ProjectCreator', creator);
         }
 
         // navigating the landing pagr
@@ -361,7 +368,7 @@ export default function landing() {
                             :
                             <div>
                                 <div className={styles.topSection}>
-                                    <img src={imageUrl} alt="Profile image" className={styles.profileImage} />
+                                    <img src={imageUrl } alt="Profile image" className={styles.profileImage} />
                                     <p className={styles.userPreferenceText}>{userPreference}</p>
 
 

@@ -21,7 +21,7 @@ interface CreateTaskProps {
 }
 
 
-export default function CreateTask({setCurrentComponenet}: CreateTaskProps) {
+export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
 
 
 
@@ -273,13 +273,29 @@ export default function CreateTask({setCurrentComponenet}: CreateTaskProps) {
 
 
 
+
+
         const response = await axios.post('https://fern-ivory-lint.glitch.me/sendTaskCreate', {
             'Headline': heading,
             'Deadline': deadline,
             'CreatedAt': created_at,
-            'CreatedBy': userName,
+            'CreatedBy': userName || localStorage.getItem('UserName'),
             'Members': userGmails
         });
+
+        // clear of the task inputs 
+        SetShowAssigniesOption(false);
+        setAttachedFiles(false);
+        setHeading('');
+        setDescription('');
+        setDeadline('');
+        setAssignies([]);
+        setFileObject(null);
+        setFileObjectForView({});
+        setOpenAttachmentView(false);
+        setSelectedUid([]);
+
+
         console.log(response);
 
         // navigate to the task status page 
@@ -317,13 +333,13 @@ export default function CreateTask({setCurrentComponenet}: CreateTaskProps) {
 
     const handleFocus = (event: { target: { type: string; }; }) => {
         event.target.type = 'date';
-      };
-    
-      const handleBlur = (event: { target: { value: string; type: string; }; }) => {
+    };
+
+    const handleBlur = (event: { target: { value: string; type: string; }; }) => {
         if (event.target.value === '') {
-          event.target.type = 'text';
+            event.target.type = 'text';
         }
-      };
+    };
 
 
 

@@ -8,6 +8,7 @@ import { firestore } from "@/app/firebase"
 import { where, doc, getDoc, collection, query, onSnapshot, getDocs, orderBy, addDoc, updateDoc, deleteDoc } from "firebase/firestore"
 import styles from './members.module.css';
 import Image from "next/image"
+import axios from "axios"
 
 
 
@@ -67,7 +68,7 @@ interface MemberFunctionProps {
 
 export default function Members({ RemoveMessage, setOpenMessage, setTaskId, messageUid, setCurrentComponenet, openMessageMenu, setOpenMessageMenu, setMessageUid, openMessage }: MemberFunctionProps) {
     const { projectId, projectName, projectCreator } = useGlobalProjectIdContext();
-    const { uid } = useGlobalUidContext();
+    const { uid, email } = useGlobalUidContext();
     const [users, setUsers] = useState<userData[]>([]);
     const [selectedButton, setSelectedButton] = useState(projectName);
     const [taskDocument, setTaskDocument] = useState<TaskDocument | null>(null);
@@ -838,6 +839,70 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     }
 
 
+    const RemoveUser = async () => {
+        // removing the chat collection and chats involved with that collction and removing the user from the members and from his projects list as well
+        // getting collection id 
+        const chatCollectionRef = query(collection(firestore, 'Chats'), where('Members', 'array-contains-any', [messageUid, uid]));
+        const getChatCollection = await getDocs(chatCollectionRef);
+        let foundMessageCollectionId = '';
+
+        if (!getChatCollection.empty) {
+            getChatCollection.forEach((doc) => {
+                const memberArray = doc.data().Members;
+                console.log(memberArray);
+                if (memberArray && memberArray.includes(messageUid) && memberArray.includes(uid)) {
+                    foundMessageCollectionId = doc.id;
+                    console.log(foundMessageCollectionId);
+                    
+                }
+            });
+        }
+
+        // remove all the docs from the Messages collection which includes this collection id 
+        const messagesRef = query(collection(firestore, 'Messages'), where("ChatRefId", "==", foundMessageCollectionId));
+        const messageSnapshot = await getDocs(messagesRef);
+        if (!messageSnapshot.empty) {
+            messageSnapshot.forEach(async (document) => {
+                const docRef = doc(firestore, 'Messages', document.id);
+                await deleteDoc(docRef);
+            });
+        }
+
+
+        // remove the chat collection as well
+        const chatCoollectionSnap = doc(firestore, 'Chats', foundMessageCollectionId);
+        await deleteDoc(chatCoollectionSnap);
+
+
+        // reomve user id from the members
+        const projectDoc = doc(firestore, 'Projects', projectId);
+        const projectDocSnap = await getDoc(projectDoc);
+        if (projectDocSnap.exists()) {
+            const project_members = projectDocSnap.data().members || [];
+            const filter_members = project_members.filter((id: string) => id !== messageUid)
+            await updateDoc(projectDoc, {members: filter_members});
+        }
+
+
+        let userEmail = '';
+        // filter the user doument to remove the project name from the projects list of the user
+        const userQuery = query(collection(firestore, 'Users'), where('UserId', "==", messageUid));
+        const userDocs = await getDocs(userQuery);
+        if (!userDocs.empty) {
+            const user_projects = userDocs.docs[0].data()['Projects'];
+            userEmail = userDocs.docs[0].data()['Email'];
+            const filter_projects = user_projects.filter((project_name: string) => project_name !== projectName);
+            await updateDoc(user_projects.docs[0].id, {Projects: filter_projects});
+        }
+
+        // send an axios email for the removal of the projects
+        const send_removal_email_response = await axios.post('https://fern-ivory-lint.glitch.me/removeMember', {
+            ownerEmail: email,  MemberEmail: userEmail,  projectName: projectName
+        });
+        console.log(send_removal_email_response);
+    }
+
+
     return (
         <main className={styles.ChatInterface}>
             {/* need to develop a header in this */}
@@ -1187,7 +1252,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                     {
                         projectCreator == uid ?
                             <div className={styles.chatFunctionButtons}>
-                                <button className={styles.chatFunctionButton}>Remove User</button>
+                                <button onClick={RemoveUser} className={styles.chatFunctionButton}>Remove User</button>
                                 <button onClick={DeleteSelectedChats} className={styles.chatFunctionButton}>Delete Chats</button>
                                 <button onClick={enableChatSelection} className={styles.chatFunctionButton}>{enableSelectChats ? 'Disable Selection' : 'Enable Selection'}</button>
                             </div> :
