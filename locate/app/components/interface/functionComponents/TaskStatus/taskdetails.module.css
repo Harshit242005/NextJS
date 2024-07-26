@@ -3,8 +3,8 @@
     display: flex;
     flex-direction: row;
     justify-content: left;
-    align-items: last baseline;
-    gap: 25px;
+    align-items: center;
+    gap: 66.5vw;
 }
 
 .creatorImage
@@ -19,44 +19,32 @@
 {
     font-family: 'ReadexPro';
     font-size: 17px;
-    max-width: 500px;
+    width: 84vw;
+    max-width: 84vw;
     font-weight: 200;
+    height: 200px;
+    min-height: 200px;
+    padding: 5px;
+    background-color: transparent;
+    max-height: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
     color: rgba(0, 0, 0, 0.75);
 }
 
-.assigneeMap
+.taskDescription:focus
 {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    height: 200px;
-    max-height: 200px;
-    overflow-y: auto;
-    scroll-behavior: auto;
+    outline: none;
 }
 
-.assigneeMap::-webkit-scrollbar
-{
-    display: none;
-}
-
-.assigneeMapRow
-{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-}
 
 .assigneeImage
 {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border: none;
     border-radius: 50%;
+    margin-left: 10px;
+    
 }
 
 .assigneeButton
@@ -64,32 +52,16 @@
     background-color: black;
     color: white;
     font-family: 'ReadexPro';
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 100;
-    width: 150px;
-    height: 50px;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 100%;
     border: none;
-    border-radius: 5px;
+   
 }
 
-.editButton
-{
-    background-color: black;
-    width: 150px;
-    height: 50px;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    color: white;
-    font-family: 'ReadexPro';
-}
-
-.taskButtons
-{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
 
 .finishButton
 {
@@ -108,4 +80,207 @@
 {
     background-color: #D99BFF;
     border: none;
+}
+
+
+.mainBody
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    gap: 25px;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+
+.AssigneesDialog
+{
+    width: 600px;
+    height: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    background-color: white;
+    position: absolute;
+    top: 15%;
+    left: 25%;
+}
+
+.AssigneesDialogHeader
+{
+    display: flex;
+    flex-direction: row;
+    gap: 25vw;
+    justify-content: left;
+    align-items: center;
+    height: 20%;
+    border-bottom: 1px soild rgba(0, 0, 0, 25);
+}
+
+.AssignDialogHeaderHeading
+{
+    width: 20vw;
+    font-family: 'ReadexPro';
+    font-weight: 200;
+    padding-left: 10px;
+    font-size: 16px;
+   
+}
+
+.AssigneeDialogCloseButton
+{
+    background-color: black;
+    width: 50px;
+    border: none;
+    border-top-right-radius: 5px;
+    height: 100%;
+}
+
+.AssigneeDialogCloseButton:focus
+{
+    outline: none;
+}
+
+.assigneeStatusButton
+{
+    height: 50px;
+    width: 84vw;
+    border: none;
+    border-radius: 5px;
+    background-color: black;
+    text-align: center;
+    font-family: 'ReadexPro';
+    color: white;
+    font-size: 15px;
+}
+
+.assigneeStatusButton:focus
+{
+    outline: none;
+}
+
+.assigneeMap
+{
+    height: 240px;
+    max-height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    overflow-y: auto;
+    scroll-behavior: auto;
+}
+
+
+
+
+.assigneeMap::-webkit-scrollbar
+{
+    display: none;
+    width: none;
+}
+
+.assigneeMapRow
+{
+   display: flex;
+   flex-direction: row;
+   justify-content: left;
+   align-items: center;
+   gap: 36.45vw;
+  
+   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.StatusChangeButtons
+{
+    display: flex;
+    flex-direction: column;
+    
+    width: 200px;
+    height: 100px;
+    border: none;
+    border-radius: 5px;
+    background-color: black;
+    position: absolute;
+    z-index: 5;
+    top: 25%;
+    left: 35%;
+    box-shadow: 0px 1px 10px 5px rgba(0, 0, 0, 0.25);
+}
+
+.StatusChangeButton
+{
+    width: 100%;
+    background-color: transparent;
+    border-radius: 0px;
+    border: none;
+    height: 50px;
+    color: rgba(255, 255, 255, 0.502);
+    font-family: 'ReadexPro';
+    font-size: 16px;
+    font-weight: 200;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.StatusChangeButton:hover
+{
+    color: white;
+}
+
+.firstButton
+{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* add responsiveness in this */
+@media (max-width: 430px) {
+    .mainBody
+    {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .finishButton
+    {
+        width: 87.5vw;
+    }
+
+    .assigneeStatusButton
+    {
+        width: 87.5vw;
+    }
+
+    .taskDescription
+    {
+        width: 87.5vw;
+        max-width: 87.5vw;
+    }
+
+
+    .AssigneesDialog
+    {
+        width: 87.5vw;
+        left: 0%;
+        left: 7.5%;
+    }
+
+    .AssignDialogHeaderHeading
+    {
+        width: 49vw;
+    }
+
+    .assigneeMapRow
+    {
+        gap: 52vw;
+    }
+
+    
+    .StatusChangeButtons
+    {
+        left: 7.5%;
+        width: 87.5vw;
+        
+    }
 }
