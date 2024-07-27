@@ -22,7 +22,7 @@ export default function landing() {
     const [showProjectOptions, setShowProjectOptions] = useState<boolean>(false);
     const [joinProjectName, setJoinProject] = useState('');
     const [showNewProject, setShowCreateNewProject] = useState<boolean>(false);
-    const { uid, imageUrl, userName, setEmail, setImageUrl, setUserName, setUid } = useGlobalUidContext();
+    const { uid, imageUrl, userName, setEmail, setImageUrl, setUserName, setUid, setIsProjectMember } = useGlobalUidContext();
     const { projectId, projectName, setProjectId, setProjectName, setProjectCreator } = useGlobalProjectIdContext();
 
 
@@ -334,6 +334,11 @@ export default function landing() {
             const creator = docSnapshot.data().createdBy;
             setProjectCreator(creator)
             localStorage.setItem('ProjectCreator', creator);
+            if (creator != uid) {
+                localStorage.setItem('IsProjectMember', JSON.stringify(true));
+                setIsProjectMember(true);
+
+            }
         }
 
         // navigating the landing pagr
@@ -361,7 +366,7 @@ export default function landing() {
                         projects && projects.length > 0 ?
                             <div className={styles.projectsData}>
 
-                                <button onClick={() => setShowProjectOptions(true)} className={styles.projectExistButton}>Projects</button>
+                                <button onClick={() => setShowProjectOptions(true)} className={`${styles.projectExistButton} ${styles.firstButton}`}>Projects</button>
 
                                 <button onClick={() => setShowCreateNewProject(true)} className={styles.projectExistButton}>Create new project</button>
                             </div>

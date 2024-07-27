@@ -67,8 +67,29 @@ interface MemberFunctionProps {
 }
 
 export default function Members({ RemoveMessage, setOpenMessage, setTaskId, messageUid, setCurrentComponenet, openMessageMenu, setOpenMessageMenu, setMessageUid, openMessage }: MemberFunctionProps) {
-    const { projectId, projectName, projectCreator } = useGlobalProjectIdContext();
-    const { uid, email } = useGlobalUidContext();
+    const { projectId, projectName, projectCreator, setProjectId, setProjectCreator, setProjectName } = useGlobalProjectIdContext();
+    const { uid, email, setUid, setEmail, } = useGlobalUidContext();
+
+
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+            const storedEmail = localStorage.getItem('UserEmail');
+            setProjectId(localStorage.getItem('ProjectId') || '');
+            setProjectName(localStorage.getItem('ProjectName') || '');
+            setProjectCreator(localStorage.getItem('ProjectCreator') || '');
+            
+            if (storedUid) {
+                setUid(storedUid);
+                setEmail(storedEmail || '');
+              
+                
+            }
+        }
+    }, []);
+
+
     const [users, setUsers] = useState<userData[]>([]);
     const [selectedButton, setSelectedButton] = useState(projectName);
     const [taskDocument, setTaskDocument] = useState<TaskDocument | null>(null);

@@ -54,7 +54,30 @@ export default function Interface() {
 
     const [inviteEmailUser, setInviteEmailUser] = useState<string>('');
     const { projectId, projectName, setProjectId, setProjectName } = useGlobalProjectIdContext();
-    const { uid, setImageUrl, imageUrl, userName, email, setIsProjectMember, isProjectMember } = useGlobalUidContext();
+    const { uid, setImageUrl, imageUrl, userName, email, setIsProjectMember, isProjectMember, setUid, setEmail, setUserName } = useGlobalUidContext();
+
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+            const storedEmail = localStorage.getItem('UserEmail');
+            const storedImageUrl = localStorage.getItem('UserImageUrl');
+            const storedUserName = localStorage.getItem('UserName');
+            const storedIsProjectMember = localStorage.getItem('IsProjectMember') || '';
+
+            if (storedUid) {
+                setUid(storedUid);
+                setEmail(storedEmail || '');
+                setImageUrl(storedImageUrl || '');
+                setUserName(storedUserName || '');
+                setIsProjectMember(JSON.parse(storedIsProjectMember));
+            }
+
+
+            // get the project related data as well from the localStorage
+        }
+    }, []);
+
     const [currentComponent, setCurrentComponenet] = useState<string>('Create task');
     const [openProfile, setOpenProfile] = useState<boolean>(false);
     const [showShare, setshowShare] = useState<boolean>(false);
@@ -68,9 +91,9 @@ export default function Interface() {
     const [messageName, setMessageUserName] = useState<string>('');
     const [messageUserStatus, setMessageUserStatus] = useState<boolean>(false);
 
-  
 
- 
+
+
     const [openMessageMenu, setOpenMessageMenu] = useState<boolean>(false);
 
     // for the task status 
@@ -233,6 +256,12 @@ export default function Interface() {
                 const userDocId = userDoc.id;
                 const userDocData = userDoc.data();
 
+                if (typeof window !== 'undefined') {
+                    // clear the project data on the local storage 
+                    localStorage.setItem('ProjectName', '');
+                    localStorage.setItem('ProjectId', '');
+                    localStorage.setItem('ProjectCreator', '');
+                }
                 // Update the Member variable value with an empty string
                 await updateDoc(doc(firestore, 'Users', userDocId), { Member: '' });
 
@@ -575,14 +604,18 @@ export default function Interface() {
 
     // showing data related to the project
     const selectedProject = async (project: string) => {
-        // navigating to the correct output for the application 
-        setProjectName(project);
-        // changing the projectId as well 
-        const docRef = query(collection(firestore, 'Projects'), where('projectName', "==", project));
-        const docSnap = await getDocs(docRef);
-        if (!docSnap.empty) {
-            const docId = docSnap.docs[0].id;
-            setProjectId(docId);
+        if (typeof window !== 'undefined') {
+            // navigating to the correct output for the application 
+            setProjectName(project);
+            localStorage.setItem('ProjectName', project);
+            // changing the projectId as well 
+            const docRef = query(collection(firestore, 'Projects'), where('projectName', "==", project));
+            const docSnap = await getDocs(docRef);
+            if (!docSnap.empty) {
+                const docId = docSnap.docs[0].id;
+                setProjectId(docId);
+                localStorage.setItem('ProjectId', docId);
+            }
         }
     }
 
@@ -716,7 +749,7 @@ export default function Interface() {
 
                             <div className={styles.functionButtons}>
 
-                                <button
+                                {/* <button
                                     className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
                                     onClick={() => handleMenuButtonClick('Create task')}>
                                     Create task
@@ -753,7 +786,68 @@ export default function Interface() {
                                     <img src="/Settings.png" alt="Setting icon" />
                                     Settings
 
+                                </button> */}
+
+                                <button
+                                    className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
+                                    onClick={() => handleMenuButtonClick('Create task')}>
+                                    {
+                                        clickedButton == 'Create task' ?
+                                            <Image src="../CreateTask.svg" alt="create task icon" width={25} height={25} /> :
+                                            <Image src="../UnCreate.svg" alt="create task icon" width={25} height={25} />
+                                    }
+                                    Create task
                                 </button>
+
+                                <button
+                                    className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
+                                    onClick={() => handleMenuButtonClick('Task status')}
+                                >
+                                    {/* adding an image icon on this  */}
+                                    {
+                                        clickedButton == 'Task status' ?
+                                            <Image src="../TaskStatus.svg" alt="task status icon" width={25} height={25} /> :
+                                            <Image src="../UnTaskStatus.svg" alt="task status icon" width={25} height={25} />
+                                    }
+                                    Task status
+                                </button>
+                                <button
+                                    className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
+                                    onClick={() => handleMenuButtonClick('Members')}
+                                >
+                                    {
+                                        clickedButton == 'Members' ?
+                                            <Image src="../Members.svg" alt="members icon" width={25} height={25} /> :
+                                            <Image src="../UnMembers.svg" alt="members icon" width={25} height={25} />
+                                    }
+                                    Members
+                                </button>
+
+                                {
+                                    isProjectMember ? '' :
+                                        <button
+                                            className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
+                                            onClick={() => handleMenuButtonClick('Requests')}
+                                        >
+                                            {
+                                                clickedButton == 'Requests' ?
+                                                    <Image src="../Requests.svg" alt="Task status icon" width={25} height={25} /> :
+                                                    <Image src="../UnRequests.svg" alt="Task status icon" width={25} height={25} />
+                                            }
+                                            Requests
+                                        </button>
+                                }
+
+
+                                <button
+                                    className={`${isProjectMember ? styles.SettingButtonExtra : styles.SettingButton}`}
+                                    onClick={OpenProfile}
+                                >
+                                    <Image src="../Settings.svg" width={25} height={25} alt="Setting icon" />
+                                    Settings
+
+                                </button>
+
 
 
                             </div>
@@ -777,6 +871,11 @@ export default function Interface() {
                             <button
                                 className={`${styles.functionButton} ${clickedButton === 'Create task' ? styles.clickedButton : ''}`}
                                 onClick={() => handleMenuButtonClick('Create task')}>
+                                {
+                                    clickedButton == 'Create task' ?
+                                        <Image src="../CreateTask.svg" alt="create task icon" width={25} height={25} /> :
+                                        <Image src="../UnCreate.svg" alt="create task icon" width={25} height={25} />
+                                }
                                 Create task
                             </button>
 
@@ -784,12 +883,23 @@ export default function Interface() {
                                 className={`${styles.functionButton} ${clickedButton === 'Task status' ? styles.clickedButton : ''}`}
                                 onClick={() => handleMenuButtonClick('Task status')}
                             >
+                                {/* adding an image icon on this  */}
+                                {
+                                    clickedButton == 'Task status' ?
+                                        <Image src="../TaskStatus.svg" alt="task status icon" width={25} height={25} /> :
+                                        <Image src="../UnTaskStatus.svg" alt="task status icon" width={25} height={25} />
+                                }
                                 Task status
                             </button>
                             <button
                                 className={`${styles.functionButton} ${clickedButton === 'Members' ? styles.clickedButton : ''}`}
                                 onClick={() => handleMenuButtonClick('Members')}
                             >
+                                {
+                                    clickedButton == 'Members' ?
+                                        <Image src="../Members.svg" alt="members icon" width={25} height={25} /> :
+                                        <Image src="../UnMembers.svg" alt="members icon" width={25} height={25} />
+                                }
                                 Members
                             </button>
 
@@ -799,6 +909,11 @@ export default function Interface() {
                                         className={`${styles.functionButton} ${clickedButton === 'Requests' ? styles.clickedButton : ''}`}
                                         onClick={() => handleMenuButtonClick('Requests')}
                                     >
+                                        {
+                                            clickedButton == 'Requests' ?
+                                                <Image src="../Requests.svg" alt="Task status icon" width={25} height={25} /> :
+                                                <Image src="../UnRequests.svg" alt="Task status icon" width={25} height={25} />
+                                        }
                                         Requests
                                     </button>
                             }
@@ -808,7 +923,7 @@ export default function Interface() {
                                 className={`${isProjectMember ? styles.SettingButtonExtra : styles.SettingButton}`}
                                 onClick={OpenProfile}
                             >
-                                <img src="/Settings.png" alt="Setting icon" />
+                                <Image className={styles.settingButtonIcon} src="../Settings.svg" width={25} height={25} alt="Setting icon" />
                                 Settings
 
                             </button>
@@ -905,7 +1020,7 @@ export default function Interface() {
                                         <button className={` ${currentComponent == 'EditTask' ? styles.distanceButton : styles.ShareButton}`}
                                             onClick={changeShare}
                                         >Share
-                                            <img src="/Share.png" alt="share icon" />
+                                            <Image src="../Share.svg" alt="share icon" width={25} height={25} />
                                         </button>
                                     </div>
                                 }
@@ -933,7 +1048,7 @@ export default function Interface() {
                                 :
                                 <div>
                                     {/* here the component should be rendered  */}
-                                    {currentComponent === 'Create task' && <CreateTask setCurrentComponenet={setCurrentComponenet}/>}
+                                    {currentComponent === 'Create task' && <CreateTask setCurrentComponenet={setCurrentComponenet} />}
                                     {currentComponent === 'Task status' && <TaskStatus setCurrentComponenet={setCurrentComponenet} setOpenTask={setOpenTask} setTaskHeading={setTaskHeading} setTaskDocumentId={setTaskDocumentId} setTaskAuthor={setTaskAuthor} />}
                                     {currentComponent === 'Members' && <Members RemoveMessage={RemoveMessage} setTaskId={setTaskId} openMessage={openMessage} setCurrentComponenet={setCurrentComponenet} setOpenMessage={setOpenMessage} openMessageMenu={openMessageMenu} setOpenMessageMenu={setOpenMessageMenu} messageUid={messageUid} setMessageUid={setMessageUid} />}
                                     {/* this should be load conditionally */}

@@ -37,8 +37,27 @@ export default function TaskDetails({ taskDocumentId, setOpenTask, setCurrentCom
 
     // creating a array to hold the user object which would include the ImageUrl, Uid, and status level of the user 
     const [asssignies, setAssignies] = useState<string[]>([]);
-    const { uid } = useGlobalUidContext();
-    const { projectName } = useGlobalProjectIdContext();
+    const { uid, setUid } = useGlobalUidContext();
+
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+
+            if (storedUid) {
+                setUid(storedUid);
+                
+            }
+        }
+    }, []);
+
+     
+    const { projectName, setProjectName } = useGlobalProjectIdContext();
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setProjectName(localStorage.getItem('ProjectName') || '');
+        }
+    }, [projectName]);
 
     const getImageUrl = async (userUid: string) => {
         const q = query(collection(firestore, 'Users'), where('Uid', "==", userUid))

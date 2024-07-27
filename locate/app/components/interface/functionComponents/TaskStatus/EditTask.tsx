@@ -21,8 +21,25 @@ export default function EditTask({ taskDocumentId, isMobile, deleteTask }: EditT
     const [assignieImages, setAssignieImage] = useState<string[]>([]);
     const [openFile, setOpenFile] = useState(false);
     const [openAssignie, setOpenAssignie] = useState(false);
-    const { projectId } = useGlobalProjectIdContext();
-    const { uid } = useGlobalUidContext();
+
+    const { projectId, setProjectId } = useGlobalProjectIdContext();
+    const { uid, setUid } = useGlobalUidContext();
+
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+            
+            if (storedUid) {
+                setUid(storedUid);
+                
+            }
+
+            setProjectId(localStorage.getItem('ProjectId') || '')
+        }
+    }, [projectId, uid]);
+
+
     const [createdBy, setCreatedBy] = useState('');
 
     const getUserData = async (userId: string): Promise<string[] | undefined> => {

@@ -41,9 +41,15 @@ interface TaskStatusProps {
 export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumentId, setCurrentComponenet, setTaskAuthor }: TaskStatusProps) {
     // Define state to store the documents
     const [documents, setDocuments] = useState<documentStructure[]>([]);
-    const { projectId } = useGlobalProjectIdContext();
+    const { projectId, setProjectId } = useGlobalProjectIdContext();
     const [showFileDialog, setShowFileDialog] = useState(false);
     const [filesToShow, setFilesToShow] = useState<any>({});
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setProjectId(localStorage.getItem('ProjectId') || '');
+        }
+    }, [projectId]);
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -169,7 +175,7 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
         setOpenTask(true);
         setTaskHeading(taskHeading);
         setTaskDocumentId(documentId);
-        
+
         setTaskAuthor(createdBy);
         setCurrentComponenet('EditTask');
     }
@@ -197,7 +203,7 @@ export default function TaskStatus({ setOpenTask, setTaskHeading, setTaskDocumen
                                     </div>
                                     <div className={`${isMobile ? styles.mobileTaskCardButtons : ''}`}>
                                         {isMobile ? <div><button className={styles.attachmentButton} onClick={() => openFilesDialogs(document.data.Files)}>
-                                        <Image src="../../FilesButton.svg" alt='file icon' width={50} height={50} />
+                                            <Image src="../../FilesButton.svg" alt='file icon' width={50} height={50} />
 
                                         </button></div> : ""}
                                         <button

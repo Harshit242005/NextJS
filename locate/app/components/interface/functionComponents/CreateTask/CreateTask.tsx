@@ -25,8 +25,26 @@ export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
 
 
 
-    const { projectName, projectId } = useGlobalProjectIdContext();
-    const { uid, userName } = useGlobalUidContext();
+    const { projectName, projectId, setProjectName, setProjectId } = useGlobalProjectIdContext();
+    const { uid, userName, setUid, setUserName } = useGlobalUidContext();
+
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+      
+            const storedUserName = localStorage.getItem('UserName');
+
+            setProjectId(localStorage.getItem('ProjectId') || '');
+            setProjectName(localStorage.getItem('ProjectName') || '');
+
+            if (storedUid) {
+                setUid(storedUid);
+                setUserName(storedUserName || '');
+                
+            }
+        }
+    }, []);
 
 
     const [attachedFiles, setAttachedFiles] = useState<boolean>(false);

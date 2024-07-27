@@ -24,8 +24,21 @@ interface AssigniesProps {
 }
 
 export default function Assignies({ setShowAssignOption, selectedId, setSelectedUid, setAssignies }: AssigniesProps) {
-    const { projectId } = useGlobalProjectIdContext();
-    const { uid } = useGlobalUidContext();
+    const { projectId, setProjectId } = useGlobalProjectIdContext();
+    const { uid, setUid } = useGlobalUidContext();
+
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+            setProjectId(localStorage.getItem('ProjectId') || '');
+
+            if (storedUid) {
+                setUid(storedUid);
+            }
+        }
+    }, []);
+
     const [memberData, setMemberData] = useState<memberData[]>([]);
     const [filteredMembers, setFilteredMembers] = useState<memberData[]>([]);
 

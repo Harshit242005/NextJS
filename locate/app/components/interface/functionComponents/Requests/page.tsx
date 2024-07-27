@@ -18,9 +18,16 @@ export default function Requests() {
         Name: string;
     }
 
-    const { projectId, projectName } = useGlobalProjectIdContext();
+    const { projectId, projectName, setProjectId, setProjectName } = useGlobalProjectIdContext();
     const [requestMembersIds, setRequestMembersIds] = useState([]);
     const [requestMembersData, setRequestMembersData] = useState<requestMemberData[]>([]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setProjectId(localStorage.getItem('ProjectId') || '');
+            setProjectName(localStorage.getItem('ProjectName') || '');
+        }
+    }, [projectId, projectName]);
 
 
     const AcceptRequest = async (MemberId: string) => {

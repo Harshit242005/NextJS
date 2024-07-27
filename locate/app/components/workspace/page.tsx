@@ -3,14 +3,36 @@ import styles from './workspace.module.css';
 import { useGlobalUidContext } from "@/app/context/uid";
 import { firestore } from '@/app/firebase';
 import { addDoc, collection } from 'firebase/firestore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function workspace() {
     const router = useRouter();
     // get the data from global context and present here in this 
-    const { imageUrl, uid, email, setUserName } = useGlobalUidContext();
+    const { imageUrl, uid, email, setUserName, setImageUrl, setUid, setEmail, } = useGlobalUidContext();
     const [Name, setName] = useState<string>('');
+
+
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+            const storedEmail = localStorage.getItem('UserEmail');
+            const storedImageUrl = localStorage.getItem('UserImageUrl');
+          
+
+            if (storedUid) {
+                setUid(storedUid);
+                setEmail(storedEmail || '');
+                setImageUrl(storedImageUrl || '');
+          
+                
+            }
+        }
+    }, []);
+
+
+    
     console.log({
         'Name': Name,
         'Uid': uid,
@@ -23,6 +45,7 @@ export default function workspace() {
     });
     const SaveUser = async () => {
         setUserName(Name);
+        localStorage.setItem('UserName', Name);
         await addDoc(collection(firestore, 'Users'), {
             'Name': Name,
             'Uid': uid,

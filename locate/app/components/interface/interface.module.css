@@ -116,9 +116,16 @@
     margin-top: 25px;
 }
 
+
+
 .functionButton {
     width: 100%;
     height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    gap: 5px;
     background-color: rgb(0, 0, 0);
     color: rgba(255, 255, 255, 0.555);
     border: none;
@@ -127,7 +134,10 @@
     font-family: 'ReadexPro';
     font-weight: normal;
     transition: 1s;
+    font-size: 14px;
 }
+
+
 
 .SettingButton {
     width: 100%;
@@ -145,10 +155,15 @@
     font-size: 1.2rem;
     font-family: 'ReadexPro';
     font-weight: 400;
-
+   
     position: relative;
     bottom: -76%;
 
+}
+
+.settingButtonIcon
+{
+    margin-left: 10px;
 }
 
 .SettingButtonExtra {
@@ -167,7 +182,8 @@
     font-size: 1.2rem;
     font-family: 'ReadexPro';
     font-weight: 400;
-    top: 120%;
+    top: 44vh;
+   
 }
 
 .clickedButton {
@@ -176,12 +192,12 @@
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.243);
     border-radius: 10px;
     color: black;
-    width: 95%;
+    width: 100%;
     font-weight: 600;
     transition: 1s;
 }
 
-.distanceButton
+
 
 .messageHeader {
     background-color: white;
@@ -276,10 +292,10 @@
     padding-right: 20px;
     height: fit-content;
     background-color: #D99BFF;
-    color: black;
+    color: white;
     font-family: 'ReadexPro';
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 200;
     text-align: center;
     border: none;
     border-radius: 2px;
@@ -288,11 +304,13 @@
     gap: 5px;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 1px 8px 0px rgb(255, 255, 255);
+    box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.151);
     margin-left: 22.5vw;
     position: relative;
 
 }
+
+
 
 .ShareButton {
     width: fit-content;
@@ -301,10 +319,10 @@
     padding-right: 20px;
     height: fit-content;
     background-color: #D99BFF;
-    color: black;
+    color: white;
     font-family: 'ReadexPro';
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 200;
     text-align: center;
     border: none;
     border-radius: 2px;
@@ -314,7 +332,7 @@
     margin-left: 75vw;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 1px 8px 0px rgb(255, 255, 255);
+    box-shadow: 0px 1px 8px 0px rgba(0, 0, 0, 0.151);
 }
 
 

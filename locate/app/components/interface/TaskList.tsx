@@ -24,8 +24,27 @@ interface TaskDocument {
 }
 
 export default function TaskList({ setShowTaskList, setTaskDocumentId, setCurrentComponent }: TaskListProps) {
-    const { projectId } = useGlobalProjectIdContext();
-    const { uid } = useGlobalUidContext();
+    const { projectId, setProjectId } = useGlobalProjectIdContext();
+
+
+    const { uid, setUid } = useGlobalUidContext();
+    useEffect(() => {
+        // Retrieve user data from localStorage if it exists
+        if (typeof window !== 'undefined') {
+            const storedUid = localStorage.getItem('UserUid');
+
+            setProjectId(localStorage.getItem('ProjectId') || '');
+
+
+            if (storedUid) {
+                setUid(storedUid);
+
+
+            }
+        }
+    }, []);
+
+
     const [taskDocument, setTaskDocument] = useState<TaskDocument[]>([]);
 
     useEffect(() => {

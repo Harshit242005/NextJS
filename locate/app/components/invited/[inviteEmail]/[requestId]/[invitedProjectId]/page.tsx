@@ -49,6 +49,11 @@ export default function invited({ params }: { params: { inviteEmail: string, req
             const projectSnapshot = await getDoc(projectRef);
             if (projectSnapshot.exists()) {
                 const project_data = projectSnapshot.data();
+
+                localStorage.setItem('ProjectId', params.invitedProjectId);
+                localStorage.setItem('ProjectCreator', project_data.createdBy);
+                localStorage.setItem('ProjectName', project_data.projectName);
+
                 setProjectId(params.invitedProjectId);
                 setProjectCreator(project_data.createdBy);
                 setProjectName(project_data.projectName);
@@ -97,38 +102,45 @@ export default function invited({ params }: { params: { inviteEmail: string, req
     const { setUid, setEmail, setImageUrl, setUserName, uid, email } = useGlobalUidContext();
     // function to handle google signup
     const googleSignIn = async () => {
-        const provider = new GoogleAuthProvider();
-        // Set prompt option to select_account
-        provider.setCustomParameters({ prompt: 'select_account' });
-        const result = await signInWithPopup(auth, provider);
+        if (typeof window !== 'undefined') {
+            const provider = new GoogleAuthProvider();
+            // Set prompt option to select_account
+            provider.setCustomParameters({ prompt: 'select_account' });
+            const result = await signInWithPopup(auth, provider);
 
 
-        setUserId(result.user.uid);
-        setUid(result.user.uid);
-        setUserName(result.user.displayName);
-        if (result.user.photoURL != null) {
-            setImageUrl(result.user.photoURL);
+            localStorage.setItem('UserUid', result.user.uid);
+            localStorage.setItem('UserEmail', result.user.email || '');
+            localStorage.setItem('UserName', result.user.displayName || '');
+
+
+            setUserId(result.user.uid);
+            setUid(result.user.uid);
+            setUserName(result.user.displayName);
+            if (result.user.photoURL != null) {
+                setImageUrl(result.user.photoURL);
+                localStorage.setItem('UserImageUrl', result.user.photoURL);
+            }
+            setEmail(result.user.email);
+
+
+            // Fetch the document corresponding to the user's UID
+            const userDocRef = collection(firestore, 'Users');
+            const q = query(userDocRef, where('Uid', '==', result.user.uid));
+            const userDocSnapshot = await getDocs(q);
+
+            if (!userDocSnapshot.empty) {
+                // Set the status to true while signing up 
+                const userDocId = userDocSnapshot.docs[0].id;
+                const user_name = userDocSnapshot.docs[0].data()['Name'] || '';
+                const user_image = userDocSnapshot.docs[0].data()['ImageUrl'] || '';
+                setUserName(user_name);
+                setImageUrl(user_image);
+                const docRef = doc(firestore, 'Users', userDocId);
+                await updateDoc(docRef, { 'Status': true });
+            }
+
         }
-        setEmail(result.user.email);
-
-
-        // Fetch the document corresponding to the user's UID
-        const userDocRef = collection(firestore, 'Users');
-        const q = query(userDocRef, where('Uid', '==', result.user.uid));
-        const userDocSnapshot = await getDocs(q);
-
-        if (!userDocSnapshot.empty) {
-            // Set the status to true while signing up 
-            const userDocId = userDocSnapshot.docs[0].id;
-            const user_name = userDocSnapshot.docs[0].data()['Name'] || '';
-            const user_image = userDocSnapshot.docs[0].data()['ImageUrl'] || '';
-            setUserName(user_name);
-            setImageUrl(user_image);
-            const docRef = doc(firestore, 'Users', userDocId);
-            await updateDoc(docRef, { 'Status': true });
-        }
-
-
 
     }
 
@@ -141,7 +153,7 @@ export default function invited({ params }: { params: { inviteEmail: string, req
         const project_snapshot = await getDoc(project_ref);
         if (project_snapshot.exists()) {
             const members = project_snapshot.data().members;
-            
+
             const new_members = arrayUnion(...members, uid);
             await updateDoc(project_ref, { members: new_members });
         }

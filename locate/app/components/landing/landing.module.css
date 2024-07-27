@@ -16,6 +16,8 @@
     background-color: white;
 }
 
+
+
 .UserData
 {
     display: flex;
@@ -90,13 +92,10 @@
     font-size: 16px;
     font-weight: 100;
     text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.205);
     border: none;
 }
 
-.projectExistButton:first
-{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.205);
-}
 
 .projectExistButton:focus
 {
