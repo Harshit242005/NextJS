@@ -334,11 +334,11 @@ export default function landing() {
             const creator = docSnapshot.data().createdBy;
             setProjectCreator(creator)
             localStorage.setItem('ProjectCreator', creator);
-            if (creator != uid) {
-                localStorage.setItem('IsProjectMember', JSON.stringify(true));
-                setIsProjectMember(true);
+           
+                localStorage.setItem('IsProjectMember', JSON.stringify(creator === uid));
+                setIsProjectMember(creator === uid);
 
-            }
+           
         }
 
         // navigating the landing pagr

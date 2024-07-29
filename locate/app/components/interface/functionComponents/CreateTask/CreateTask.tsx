@@ -14,6 +14,7 @@ import Assignies from './assignies';
 
 import Image from 'next/image';
 import axios from 'axios';
+import Success from '@/app/components/Animations/Success';
 
 
 interface CreateTaskProps {
@@ -24,7 +25,7 @@ interface CreateTaskProps {
 export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
 
 
-
+    const [showCompletedTask, setShowCompletedTask] = useState<boolean>(false);
     const { projectName, projectId, setProjectName, setProjectId } = useGlobalProjectIdContext();
     const { uid, userName, setUid, setUserName } = useGlobalUidContext();
 
@@ -32,7 +33,7 @@ export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
         // Retrieve user data from localStorage if it exists
         if (typeof window !== 'undefined') {
             const storedUid = localStorage.getItem('UserUid');
-      
+
             const storedUserName = localStorage.getItem('UserName');
 
             setProjectId(localStorage.getItem('ProjectId') || '');
@@ -41,7 +42,7 @@ export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
             if (storedUid) {
                 setUid(storedUid);
                 setUserName(storedUserName || '');
-                
+
             }
         }
     }, []);
@@ -225,9 +226,7 @@ export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
     const createTaskFunction = async () => {
         // a check should be added in this to get the details of the deadline and task heading which are not none 
         const UID = await fetchUuid();
-        console.log('file objects are', fileObject);
-        console.log('assignies are', assignies);
-        console.log('uid is', UID);
+ 
         const created_at = getCurrentDate();
         // construct the map
         const assigneeMap: { [key: string]: boolean } = {};
@@ -315,9 +314,11 @@ export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
 
 
         console.log(response);
+        setShowCompletedTask(true);
+        setTimeout(() => {
+            setShowCompletedTask(false)
+        }, 1000);
 
-        // navigate to the task status page 
-        setCurrentComponenet('Task status');
     }
 
 
@@ -447,6 +448,8 @@ export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
             </div>
 
 
+
+
             {
                 showAssignOption &&
                 // call a component to show up
@@ -458,6 +461,13 @@ export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
                     <button onClick={createTaskFunction} disabled className={styles.createButton}>Create</button> :
                     <button onClick={createTaskFunction} className={styles.createButton}>Create</button>
             }
+
+
+            {
+                showCompletedTask &&
+                <Success successMessage='Created task successfully' />
+            }
+
         </main>
     )
 }

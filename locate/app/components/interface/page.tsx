@@ -64,7 +64,7 @@ export default function Interface() {
             const storedImageUrl = localStorage.getItem('UserImageUrl');
             const storedUserName = localStorage.getItem('UserName');
             const storedIsProjectMember = localStorage.getItem('IsProjectMember') || '';
-
+            console.log(typeof storedIsProjectMember, storedIsProjectMember);
             if (storedUid) {
                 setUid(storedUid);
                 setEmail(storedEmail || '');
