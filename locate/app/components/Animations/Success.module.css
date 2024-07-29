@@ -1,0 +1,45 @@
+.SuccessInfo
+{
+    width: fit-content;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 50px;
+    padding-right: 50px;
+    position: absolute;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    animation: SuccessPopup 1s;
+    top: -15%;
+    opacity: 0%;
+    left: 35%;
+    z-index: 5;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    box-shadow: 0px 1px 40px 1px #00000014;
+}
+
+.SuccessInfoText
+{
+    font-family: 'ReadexPro';
+    font-size: 16px;
+    font-weight: 200;
+    margin-top: 15px;
+}
+
+
+@keyframes SuccessPopup {
+    from {
+       opacity: 0%;
+       top: -15%;
+    }
+
+    to
+    {
+        opacity: 100%;
+        top: 5%;
+    }
+}
