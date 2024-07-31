@@ -11,12 +11,18 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
+import Success from "../Animations/Success";
+
+
+
 export default function landing() {
 
     interface RequestsMap {
         [key: string]: boolean;
     }
 
+    const [showCompletedTask, setShowCompletedTask] = useState<boolean>(false);
+    const [showPopupMessage, setShowPopupMessage] = useState<string>('');
 
     const router = useRouter();
     const [showProjectOptions, setShowProjectOptions] = useState<boolean>(false);
@@ -52,7 +58,7 @@ export default function landing() {
     }, []);
 
     useEffect(() => {
-        const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid ));
+        const collectionRef = query(collection(firestore, 'Users'), where('Uid', "==", uid));
 
         // Set up a real-time listener
         const unsubscribe = onSnapshot(collectionRef, (querySnapshot) => {
@@ -75,14 +81,14 @@ export default function landing() {
 
         return () => unsubscribe();
 
-    }, [uid ]);
+    }, [uid]);
 
     // show the requests 
     const showOldRequests = async () => {
         setShowRequest(true);
         // get the requests map with the project name and boolean value 
         // addingg the project name with false value in the map of the user document
-        const q = query(collection(firestore, 'Users'), where('Uid', '==', uid ));
+        const q = query(collection(firestore, 'Users'), where('Uid', '==', uid));
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {
@@ -166,9 +172,24 @@ export default function landing() {
                         setSuccessfulJoinRequest(false);
                     }, 2000);
 
+                    // show popup
+                    setShowCompletedTask(true);
+                    setShowPopupMessage('Request sent sucessfully');
+                    setTimeout(() => {
+                        setShowCompletedTask(false)
+                        setShowPopupMessage('');
+                    }, 1000);
+
 
                 } else {
                     console.log('UID already exists in the requests array.');
+                     // show popup
+                     setShowCompletedTask(true);
+                     setShowPopupMessage('Request already sent sucessfully');
+                     setTimeout(() => {
+                         setShowCompletedTask(false)
+                         setShowPopupMessage('');
+                     }, 1000);
                 }
 
                 // add the project name with the false value in the user Requests map if not already exist
@@ -208,15 +229,23 @@ export default function landing() {
                 const data = documents.docs[0].data();
                 const docRef = doc(firestore, 'Projects', documentId)
                 const requestsList = data.requests;
-                if (requestsList.includes(uid )) {
+                if (requestsList.includes(uid)) {
                     // Remove MemberId from requests list
                     // const updatedRequestsList = arrayRemove(requestsList, MemberId);
-                    const updatedRequestsList = removeFromArray(requestsList, uid );
+                    const updatedRequestsList = removeFromArray(requestsList, uid);
                     console.log('Updated list after removing the id', updatedRequestsList);
 
                     // Update the document with the modified requests list
                     await updateDoc(docRef, { requests: updatedRequestsList });
 
+
+                    // show popup
+                    setShowCompletedTask(true);
+                    setShowPopupMessage('Request removed sucessfully');
+                    setTimeout(() => {
+                        setShowCompletedTask(false)
+                        setShowPopupMessage('');
+                    }, 1000);
 
                 } else {
                     console.log(`Member ID ${uid} not found in requests list.`);
@@ -230,7 +259,7 @@ export default function landing() {
         // second step 
         // remove from the map as well 
         try {
-            const q = query(collection(firestore, 'Users'), where('Uid', "==", uid ))
+            const q = query(collection(firestore, 'Users'), where('Uid', "==", uid))
             const documents = await getDocs(q)
             if (!documents.empty) {
                 const documentId = documents.docs[0].id;
@@ -263,11 +292,11 @@ export default function landing() {
         if (projectNameCreate.length != 0) {
             const documentData = {
                 'projectName': projectNameCreate,
-                'createdBy': uid ,
+                'createdBy': uid,
                 'requests': [],
                 'TasksIds': [],
                 'members': [],
-                
+
             }
 
 
@@ -291,7 +320,7 @@ export default function landing() {
 
             // update the user profile to to add the project name in the user document
             const userRef = collection(firestore, 'Users');
-            const querySnapshot = query(userRef, where('Uid', '==', uid ));
+            const querySnapshot = query(userRef, where('Uid', '==', uid));
             const userDocs = await getDocs(querySnapshot);
             if (!userDocs.empty) {
                 const userDocument = userDocs.docs[0];
@@ -302,8 +331,19 @@ export default function landing() {
             }
 
             setShowCreateNewProject(false);
+
+            // show popup
+            setShowCompletedTask(true);
+            setShowPopupMessage('Project created sucessfully');
+            setTimeout(() => {
+                setShowCompletedTask(false)
+                setShowPopupMessage('');
+            }, 1000);
             // after creating the project navigate the interface pgae 
-            router.push(`/components/interface`);
+            setTimeout(() => {
+                router.push(`/components/interface`);
+            }, 2000)
+            // router.push(`/components/interface`);
 
         }
     }
@@ -334,11 +374,11 @@ export default function landing() {
             const creator = docSnapshot.data().createdBy;
             setProjectCreator(creator)
             localStorage.setItem('ProjectCreator', creator);
-           
-                localStorage.setItem('IsProjectMember', JSON.stringify(creator === uid));
-                setIsProjectMember(creator === uid);
 
-           
+            localStorage.setItem('IsProjectMember', JSON.stringify(creator === uid));
+            setIsProjectMember(creator === uid);
+
+
         }
 
         // navigating the landing pagr
@@ -373,7 +413,7 @@ export default function landing() {
                             :
                             <div>
                                 <div className={styles.topSection}>
-                                    <img src={imageUrl } alt="Profile image" className={styles.profileImage} />
+                                    <img src={imageUrl} alt="Profile image" className={styles.profileImage} />
                                     <p className={styles.userPreferenceText}>{userPreference}</p>
 
 
@@ -493,6 +533,13 @@ export default function landing() {
 
                 </div>
             }
+
+            {
+                showCompletedTask &&
+                <Success successMessage={showPopupMessage} />
+            }
+
+
 
 
             {/* {

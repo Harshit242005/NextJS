@@ -1,6 +1,5 @@
 
 
-
 import { useState, useEffect, SetStateAction, useRef } from "react"
 import { useGlobalProjectIdContext } from "@/app/context/projectId"
 import { useGlobalUidContext } from "@/app/context/uid"
@@ -9,7 +8,7 @@ import { where, doc, getDoc, collection, query, onSnapshot, getDocs, orderBy, ad
 import styles from './members.module.css';
 import Image from "next/image"
 import axios from "axios"
-
+import Success from "../../../Animations/Success";
 
 
 // group chat message 
@@ -70,6 +69,9 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     const { projectId, projectName, projectCreator, setProjectId, setProjectCreator, setProjectName } = useGlobalProjectIdContext();
     const { uid, email, setUid, setEmail, } = useGlobalUidContext();
 
+    const [showCompletedTask, setShowCompletedTask] = useState<boolean>(false);
+    const [showPopupMessage, setShowPopupMessage] = useState<string>('');
+
 
     useEffect(() => {
         // Retrieve user data from localStorage if it exists
@@ -79,12 +81,12 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             setProjectId(localStorage.getItem('ProjectId') || '');
             setProjectName(localStorage.getItem('ProjectName') || '');
             setProjectCreator(localStorage.getItem('ProjectCreator') || '');
-            
+
             if (storedUid) {
                 setUid(storedUid);
                 setEmail(storedEmail || '');
-              
-                
+
+
             }
         }
     }, []);
@@ -839,7 +841,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
     };
 
 
-    const DeleteSelectedChats = async  () => {
+    const DeleteSelectedChats = async () => {
         console.log(selectedMessages);
         // delete the selected chats
         for (const deleteMessageId of selectedMessages) {
@@ -851,6 +853,15 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         setSelectedMessages([]);
         setEnableSelectChats(false);
         setOpenMessageFunctionButtons(false);
+
+        // show popup for the successful delete message
+
+        setShowCompletedTask(true);
+        setShowPopupMessage('Request already sent sucessfully');
+        setTimeout(() => {
+            setShowCompletedTask(false)
+            setShowPopupMessage('');
+        }, 1000);
     }
 
 
@@ -874,7 +885,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                 if (memberArray && memberArray.includes(messageUid) && memberArray.includes(uid)) {
                     foundMessageCollectionId = doc.id;
                     console.log(foundMessageCollectionId);
-                    
+
                 }
             });
         }
@@ -901,7 +912,7 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
         if (projectDocSnap.exists()) {
             const project_members = projectDocSnap.data().members || [];
             const filter_members = project_members.filter((id: string) => id !== messageUid)
-            await updateDoc(projectDoc, {members: filter_members});
+            await updateDoc(projectDoc, { members: filter_members });
         }
 
 
@@ -913,12 +924,12 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
             const user_projects = userDocs.docs[0].data()['Projects'];
             userEmail = userDocs.docs[0].data()['Email'];
             const filter_projects = user_projects.filter((project_name: string) => project_name !== projectName);
-            await updateDoc(user_projects.docs[0].id, {Projects: filter_projects});
+            await updateDoc(user_projects.docs[0].id, { Projects: filter_projects });
         }
 
         // send an axios email for the removal of the projects
         const send_removal_email_response = await axios.post('https://fern-ivory-lint.glitch.me/removeMember', {
-            ownerEmail: email,  MemberEmail: userEmail,  projectName: projectName
+            ownerEmail: email, MemberEmail: userEmail, projectName: projectName
         });
         console.log(send_removal_email_response);
     }
@@ -1301,6 +1312,13 @@ export default function Members({ RemoveMessage, setOpenMessage, setTaskId, mess
                         ))}
                     </div>
                 </div>
+            }
+
+            
+
+            {
+                showCompletedTask &&
+                <Success successMessage={showPopupMessage} />
             }
 
 

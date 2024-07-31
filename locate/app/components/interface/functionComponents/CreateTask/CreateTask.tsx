@@ -26,6 +26,7 @@ export default function CreateTask({ setCurrentComponenet }: CreateTaskProps) {
 
 
     const [showCompletedTask, setShowCompletedTask] = useState<boolean>(false);
+    
     const { projectName, projectId, setProjectName, setProjectId } = useGlobalProjectIdContext();
     const { uid, userName, setUid, setUserName } = useGlobalUidContext();
 

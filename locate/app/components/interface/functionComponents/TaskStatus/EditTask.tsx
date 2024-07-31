@@ -25,6 +25,18 @@ export default function EditTask({ taskDocumentId, isMobile, deleteTask }: EditT
     const { projectId, setProjectId } = useGlobalProjectIdContext();
     const { uid, setUid } = useGlobalUidContext();
 
+    // funnction to update the task with new details 
+    const updateTask = async () => {
+        // task document referencce 
+        const documentRef = doc(firestore, 'Tasks', taskDocumentId);
+        await updateDoc(documentRef, {
+            'Heading': taskHeading,
+            'Description': taskDescription,
+           
+            'Deadline': taskDeadline,
+        });
+    }
+
     useEffect(() => {
         // Retrieve user data from localStorage if it exists
         if (typeof window !== 'undefined') {
@@ -373,7 +385,7 @@ export default function EditTask({ taskDocumentId, isMobile, deleteTask }: EditT
                         <p className={styles.assignieText}>Assignees</p>
                     </div>
 
-                    <button className={`${uid == createdBy ? styles.updateTaskButton : styles.noUpdateTaskButton}`}>Update Task</button>
+                    <button onClick={updateTask} className={`${uid == createdBy ? styles.updateTaskButton : styles.noUpdateTaskButton}`}>Update Task</button>
                     {uid == createdBy && !isMobile && <button onClick={() => deleteTask} className={styles.updateTaskButton}>Delete task</button>}
                 </div>
             </div>
