@@ -24,8 +24,12 @@ import { collection, where, query, getDocs, updateDoc, doc, getDoc, onSnapshot, 
 import { firestore, storage } from "@/app/firebase";
 import { arrayBuffer } from "stream/consumers";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import Success from "../Animations/Success";
 
 export default function Interface() {
+
+    const [showPopup, setShowPopup] = useState<boolean>(false);
+    const [showPopupMessage, setShowPopupMessage] = useState<string>('');
 
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 425);
     const [openMobileMenu, setOpenMobileMenu] = useState(true);
@@ -139,6 +143,15 @@ export default function Interface() {
 
         // removing the current details for the user 
         RemoveTask();
+
+        setShowPopupMessage('Task deleted successfully');
+        setShowPopup(true);
+        setTimeout(() => {
+            setShowPopup(false)
+            setShowPopupMessage('');
+        }, 1000);
+
+
     }
 
 
@@ -298,9 +311,18 @@ export default function Interface() {
             console.log('Error removing UID from the member list of the project:', error);
         }
 
+        setShowPopupMessage('Task deleted successfully');
+        setShowPopup(true);
+        setTimeout(() => {
+            setShowPopup(false)
+            setShowPopupMessage('');
+        }, 1000);
 
-        // reroute back to the same page
-        router.push('/components/landing');
+        setTimeout(() => {
+            // reroute back to the same page
+            router.push('/components/landing');
+        }, 2000);
+
 
     };
 
@@ -354,6 +376,8 @@ export default function Interface() {
             // invite sent successfully
             setshowShare(!showShare);
             setShareStatus('');
+
+
 
         }
 
@@ -496,6 +520,13 @@ export default function Interface() {
                     // Update the local state with the new image URL
                     setImageUrl(fileURL);
                     setDataChange(false);
+
+                    setShowPopupMessage('User data changed successfully');
+                    setShowPopup(true);
+                    setTimeout(() => {
+                        setShowPopup(false)
+                        setShowPopupMessage('');
+                    }, 1000);
                 }
             } catch (error) {
                 console.error('Error uploading file or updating Firestore:', error);
@@ -697,14 +728,21 @@ export default function Interface() {
                     // Push the new UID into the requests array
                     requests.push(uid);
                     console.log('UID added to requests successfully.');
-
-
-
-
-
+                    setShowPopupMessage('Request added successfully');
+                    setShowPopup(true);
+                    setTimeout(() => {
+                        setShowPopup(false)
+                        setShowPopupMessage('');
+                    }, 1000);
 
                 } else {
                     console.log('UID already exists in the requests array.');
+                    setShowPopupMessage('Request already exist');
+                    setShowPopup(true);
+                    setTimeout(() => {
+                        setShowPopup(false)
+                        setShowPopupMessage('');
+                    }, 1000);
                 }
 
                 // add the project name with the false value in the user Requests map if not already exist
@@ -1215,6 +1253,11 @@ export default function Interface() {
                     </div>
                     <button onClick={openJoinDialog} className={styles.joinProjectButton}>Join Project</button>
                 </div>
+            }
+
+            {
+                showPopup &&
+                <Success successMessage={showPopupMessage} />
             }
 
 
